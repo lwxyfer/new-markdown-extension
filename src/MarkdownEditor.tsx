@@ -198,10 +198,10 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ content = defaultConten
   }
 
   return (
-    <div className="markdown-editor">
+    <>
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
-    </div>
+    </>
   )
 }
 

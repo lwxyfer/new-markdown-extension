@@ -9,18 +9,11 @@
   --notion-code-text: #eb5757;
 }
 
-.notion-editor {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 60px 96px;
+/* Editor takes full page */
+body {
+  margin: 0;
+  padding: 0;
   background-color: var(--notion-bg);
-  min-height: 100vh;
-}
-
-@media (max-width: 768px) {
-  .notion-editor {
-    padding: 20px;
-  }
 }
 
 .notion-toolbar {
@@ -31,6 +24,9 @@
   border-bottom: 1px solid var(--notion-border);
   flex-wrap: wrap;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .notion-toolbar-group {
@@ -68,8 +64,14 @@
 
 .ProseMirror {
   outline: none;
-  padding: 16px 0;
-  min-height: 400px;
+  padding: 20px 96px;
+  min-height: calc(100vh - 60px);
+}
+
+@media (max-width: 768px) {
+  .ProseMirror {
+    padding: 20px;
+  }
 }
 
 .ProseMirror h1 {
