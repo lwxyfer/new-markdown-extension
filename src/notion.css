@@ -1,0 +1,476 @@
+:root {
+  --notion-bg: #ffffff;
+  --notion-text: #37352f;
+  --notion-border: #e9e9e7;
+  --notion-toolbar-bg: #f7f6f3;
+  --notion-button-hover: #f1f1ef;
+  --notion-active: #2383e2;
+  --notion-code-bg: #f7f6f3;
+  --notion-code-text: #eb5757;
+}
+
+.notion-editor {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 96px;
+  background-color: var(--notion-bg);
+  min-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .notion-editor {
+    padding: 20px;
+  }
+}
+
+.notion-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: var(--notion-toolbar-bg);
+  border-bottom: 1px solid var(--notion-border);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.notion-toolbar-group {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.notion-button {
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--notion-text);
+  transition: all 0.2s ease;
+}
+
+.notion-button:hover {
+  background-color: var(--notion-button-hover);
+  border-color: var(--notion-border);
+}
+
+.notion-button-active {
+  background-color: var(--notion-active);
+  color: white;
+  border-color: var(--notion-active);
+}
+
+.notion-button-active:hover {
+  background-color: var(--notion-active);
+  color: white;
+}
+
+.ProseMirror {
+  outline: none;
+  padding: 16px 0;
+  min-height: 400px;
+}
+
+.ProseMirror h1 {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 24px 0 8px;
+}
+
+.ProseMirror h2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 20px 0 8px;
+}
+
+.ProseMirror h3 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 16px 0 8px;
+}
+
+.ProseMirror p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  margin: 8px 0;
+  padding-left: 24px;
+}
+
+.ProseMirror li {
+  margin: 4px 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 3px solid var(--notion-border);
+  padding-left: 16px;
+  margin: 16px 0;
+  color: #666;
+}
+
+.ProseMirror code {
+  background-color: var(--notion-code-bg);
+  color: var(--notion-code-text);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+/* Enhanced Code Block Styles */
+.ProseMirror pre {
+  background-color: var(--notion-code-bg);
+  border-radius: 8px;
+  margin: 20px 0;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--notion-border);
+}
+
+.ProseMirror pre code {
+  background: none;
+  color: var(--notion-text);
+  padding: 0;
+  display: block;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Code Block Wrapper */
+.code-block-wrapper {
+  margin: 20px 0;
+}
+
+.code-block-container {
+  background-color: var(--notion-code-bg);
+  border-radius: 8px;
+  border: 1px solid var(--notion-border);
+  overflow: hidden;
+}
+
+/* Code Block Header with Language Label */
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid var(--notion-border);
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+}
+
+.code-language {
+  background-color: var(--notion-active);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.code-block-content {
+  padding: 16px;
+  overflow-x: auto;
+  margin: 0;
+  background: none;
+  border: none;
+}
+
+/* Syntax Highlighting Colors */
+.hljs-comment,
+.hljs-quote {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-type,
+.hljs-addition {
+  color: #d73a49;
+}
+
+.hljs-number,
+.hljs-string,
+.hljs-doctag,
+.hljs-regexp {
+  color: #032f62;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #6f42c1;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-attribute {
+  color: #e36209;
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-meta {
+  color: #005cc5;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #22863a;
+}
+
+.hljs-deletion {
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 16px 0;
+  width: 100%;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  border: 1px solid var(--notion-border);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.ProseMirror table th {
+  background-color: var(--notion-toolbar-bg);
+  font-weight: 600;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.ProseMirror a {
+  color: var(--notion-active);
+  text-decoration: none;
+}
+
+.ProseMirror a:hover {
+  text-decoration: underline;
+}
+
+.ProseMirror .task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.ProseMirror .task-item input[type="checkbox"] {
+  margin-top: 4px;
+}
+
+.suggestion-menu {
+  background: white;
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--notion-border);
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+  background-color: var(--notion-button-hover);
+}
+
+.suggestion-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.suggestion-content {
+  flex: 1;
+}
+
+.suggestion-title {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--notion-text);
+}
+
+.suggestion-description {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* Mermaid Diagram Styles */
+.mermaid-diagram-wrapper {
+  margin: 16px 0;
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mermaid-diagram-container {
+  background: white;
+}
+
+.mermaid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: var(--notion-toolbar-bg);
+  border-bottom: 1px solid var(--notion-border);
+}
+
+.mermaid-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--notion-text);
+}
+
+.mermaid-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.mermaid-toggle-btn {
+  background: var(--notion-active);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mermaid-toggle-btn:hover {
+  background: #1a6dc4;
+  transform: translateY(-1px);
+}
+
+.mermaid-zoom-btn {
+  background: white;
+  color: var(--notion-text);
+  border: 1px solid var(--notion-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 32px;
+}
+
+.mermaid-zoom-btn:hover:not(:disabled) {
+  background-color: var(--notion-button-hover);
+  border-color: var(--notion-active);
+}
+
+.mermaid-zoom-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mermaid-editor {
+  padding: 12px;
+}
+
+.mermaid-code-editor {
+  width: 100%;
+  min-height: 200px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid var(--notion-border);
+  border-radius: 4px;
+  padding: 12px;
+  resize: vertical;
+  background-color: var(--notion-code-bg);
+  color: var(--notion-text);
+}
+
+.mermaid-code-editor:focus {
+  outline: none;
+  border-color: var(--notion-active);
+  box-shadow: 0 0 0 2px rgba(35, 131, 226, 0.1);
+}
+
+.mermaid-content {
+  padding: 12px;
+  min-height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mermaid-diagram {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-loading {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.mermaid-error {
+  padding: 20px;
+  text-align: center;
+  color: #d32f2f;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin: 12px;
+  font-size: 14px;
+}
