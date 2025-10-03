@@ -9,6 +9,7 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(node.textContent)
   const [zoomLevel, setZoomLevel] = useState(1)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const content = node.textContent
 
   // 切换编辑模式
@@ -34,6 +35,34 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
 
   const resetZoom = () => {
     setZoomLevel(1)
+  }
+
+  // 全屏预览
+  const toggleFullscreen = () => {
+    if (!diagramRef.current) return
+
+    if (!isFullscreen) {
+      // 进入全屏
+      const element = diagramRef.current
+      if (element.requestFullscreen) {
+        element.requestFullscreen()
+      } else if ((element as any).webkitRequestFullscreen) {
+        (element as any).webkitRequestFullscreen()
+      } else if ((element as any).msRequestFullscreen) {
+        (element as any).msRequestFullscreen()
+      }
+      setIsFullscreen(true)
+    } else {
+      // 退出全屏
+      if (document.exitFullscreen) {
+        document.exitFullscreen()
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen()
+      } else if ((document as any).msExitFullscreen) {
+        (document as any).msExitFullscreen()
+      }
+      setIsFullscreen(false)
+    }
   }
 
   // 渲染 Mermaid 图表
@@ -119,6 +148,23 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
     }
   }, [zoomLevel, isEditing])
 
+  // 监听全屏状态变化
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+    document.addEventListener('msfullscreenchange', handleFullscreenChange)
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('msfullscreenchange', handleFullscreenChange)
+    }
+  }, [])
+
   return (
     <NodeViewWrapper className="mermaid-diagram-wrapper">
       <div className="mermaid-diagram-container">
@@ -152,6 +198,14 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
                   disabled={zoomLevel >= 2}
                 >
                   +
+                </button>
+                <button
+                  type="button"
+                  className="mermaid-fullscreen-btn"
+                  onClick={toggleFullscreen}
+                  title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen preview'}
+                >
+                  {isFullscreen ? '⛶' : '⛶'}
                 </button>
               </>
             )}

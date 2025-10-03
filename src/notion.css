@@ -417,6 +417,56 @@ body {
   cursor: not-allowed;
 }
 
+.mermaid-fullscreen-btn {
+  background: white;
+  color: var(--notion-text);
+  border: 1px solid var(--notion-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 32px;
+}
+
+.mermaid-fullscreen-btn:hover {
+  background-color: var(--notion-button-hover);
+  border-color: var(--notion-active);
+}
+
+/* 全屏模式下的样式 */
+.mermaid-diagram-container:fullscreen {
+  background: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-diagram-container:fullscreen .mermaid-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.mermaid-diagram-container:fullscreen .mermaid-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.mermaid-diagram-container:fullscreen .mermaid-diagram svg {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
 .mermaid-editor {
   padding: 12px;
 }
