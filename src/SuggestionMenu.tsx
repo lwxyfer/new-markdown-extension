@@ -1,5 +1,48 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { SuggestionMenuProps } from './types'
+import {
+  Heading1,
+  Heading2,
+  Heading3,
+  Type,
+  Bold,
+  Italic,
+  Code,
+  Code2,
+  Quote,
+  List,
+  ListOrdered,
+  SquareCheck,
+  Table,
+  Image,
+  Link,
+  Workflow
+} from 'lucide-react'
+
+// 图标映射函数
+const getIconComponent = (iconString: string) => {
+  const iconMap = {
+    'heading1': () => <Heading1 size={16} />,
+    'heading2': () => <Heading2 size={16} />,
+    'heading3': () => <Heading3 size={16} />,
+    'paragraph': () => <Type size={16} />,
+    'bold': () => <Bold size={16} />,
+    'italic': () => <Italic size={16} />,
+    'code': () => <Code size={16} />,
+    'codeblock': () => <Code2 size={16} />,
+    'quote': () => <Quote size={16} />,
+    'bulletlist': () => <List size={16} />,
+    'orderedlist': () => <ListOrdered size={16} />,
+    'tasklist': () => <SquareCheck size={16} />,
+    'table': () => <Table size={16} />,
+    'image': () => <Image size={16} />,
+    'link': () => <Link size={16} />,
+    'mermaid': () => <Workflow size={16} />
+  }
+
+  const IconComponent = iconMap[iconString as keyof typeof iconMap] || (() => <Type size={16} />)
+  return <IconComponent />
+}
 
 const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selectedIndex = 0, setSelectedIndex }) => {
   const listRef = useRef<HTMLDivElement>(null)
@@ -53,11 +96,8 @@ const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selecte
           className={`suggestion-item ${index === actualSelectedIndex ? 'selected' : ''}`}
           onClick={() => command(item)}
         >
-          <div className="suggestion-icon">{item.icon}</div>
-          <div className="suggestion-content">
-            <div className="suggestion-title">{item.title}</div>
-            <div className="suggestion-description">{item.description}</div>
-          </div>
+          <div className="suggestion-icon">{getIconComponent(item.icon)}</div>
+          <div className="suggestion-title">{item.title}</div>
         </div>
       ))}
     </div>

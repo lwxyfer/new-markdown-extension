@@ -68,6 +68,15 @@ body {
   min-height: calc(100vh - 60px);
 }
 
+/* Placeholder styling */
+.ProseMirror .is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .ProseMirror {
     padding: 20px;
@@ -130,11 +139,10 @@ body {
 /* Enhanced Code Block Styles */
 .ProseMirror pre {
   background-color: var(--notion-code-bg);
-  border-radius: 8px;
-  margin: 20px 0;
+  border-radius: 4px;
+  margin: 12px 0;
   overflow: hidden;
   position: relative;
-  border: 1px solid var(--notion-border);
 }
 
 .ProseMirror pre code {
@@ -149,13 +157,12 @@ body {
 
 /* Code Block Wrapper */
 .code-block-wrapper {
-  margin: 20px 0;
+  margin: 12px 0;
 }
 
 .code-block-container {
   background-color: var(--notion-code-bg);
-  border-radius: 8px;
-  border: 1px solid var(--notion-border);
+  border-radius: 4px;
   overflow: hidden;
 }
 
@@ -164,12 +171,31 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
-  background-color: rgba(0, 0, 0, 0.03);
-  border-bottom: 1px solid var(--notion-border);
+  padding: 6px 12px;
+  background-color: rgba(0, 0, 0, 0.02);
   font-size: 12px;
   font-weight: 500;
   color: #666;
+}
+
+.language-selector {
+  position: relative;
+}
+
+.language-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.language-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .code-language {
@@ -183,8 +209,55 @@ body {
   letter-spacing: 0.5px;
 }
 
+.dropdown-arrow {
+  font-size: 10px;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.language-toggle:hover .dropdown-arrow {
+  transform: translateY(1px);
+}
+
+.language-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  min-width: 80px;
+  margin-top: 4px;
+}
+
+.language-option {
+  background: none;
+  border: none;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.2s ease;
+  color: var(--notion-text);
+}
+
+.language-option:hover {
+  background-color: var(--notion-button-hover);
+}
+
+.language-option.selected {
+  background-color: var(--notion-active);
+  color: white;
+}
+
 .code-block-content {
-  padding: 16px;
+  padding: 12px;
   overflow-x: auto;
   margin: 0;
   background: none;
@@ -252,10 +325,12 @@ body {
   font-weight: bold;
 }
 
+/* Basic Table Styles */
 .ProseMirror table {
   border-collapse: collapse;
-  margin: 16px 0;
+  margin: 24px 0;
   width: 100%;
+  table-layout: fixed;
 }
 
 .ProseMirror table td,
@@ -263,11 +338,40 @@ body {
   border: 1px solid var(--notion-border);
   padding: 8px 12px;
   text-align: left;
+  vertical-align: top;
+  position: relative;
 }
 
 .ProseMirror table th {
   background-color: var(--notion-toolbar-bg);
   font-weight: 600;
+}
+
+/* Table Column Resize Handles */
+.ProseMirror .tableWrapper {
+  position: relative;
+}
+
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--notion-active);
+  cursor: col-resize;
+  z-index: 20;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ProseMirror .column-resize-handle:hover,
+.ProseMirror .column-resize-handle.active {
+  opacity: 1;
+}
+
+.ProseMirror.resize-cursor {
+  cursor: col-resize;
+  cursor: -webkit-col-resize;
 }
 
 .ProseMirror img {
@@ -303,13 +407,15 @@ body {
   max-height: 300px;
   overflow-y: auto;
   z-index: 1000;
+  min-width: 280px;
+  width: auto;
 }
 
 .suggestion-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
+  padding: 10px 16px;
   cursor: pointer;
   border-bottom: 1px solid var(--notion-border);
 }
@@ -329,20 +435,10 @@ body {
   text-align: center;
 }
 
-.suggestion-content {
-  flex: 1;
-}
-
 .suggestion-title {
   font-weight: 500;
   font-size: 14px;
   color: var(--notion-text);
-}
-
-.suggestion-description {
-  font-size: 12px;
-  color: #666;
-  margin-top: 2px;
 }
 
 /* Mermaid Diagram Styles */
@@ -497,6 +593,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+  user-select: none;
 }
 
 .mermaid-diagram {
@@ -525,4 +625,207 @@ body {
   border-radius: 4px;
   margin: 12px;
   font-size: 14px;
+}
+
+/* Mermaid Fullscreen Styles */
+.mermaid-fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-fullscreen-controls {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  z-index: 10000;
+}
+
+.mermaid-fullscreen-close {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.mermaid-fullscreen-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
+}
+
+.mermaid-fullscreen-zoom-controls {
+  display: flex;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-zoom-controls button {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.mermaid-fullscreen-zoom-controls button:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.mermaid-fullscreen-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  touch-action: none;
+  user-select: none;
+}
+
+.mermaid-fullscreen-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.mermaid-fullscreen-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-fullscreen-diagram svg {
+  max-width: 100%;
+  max-height: 100%;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+}
+
+.mermaid-fullscreen-loading {
+  color: white;
+  font-size: 16px;
+  text-align: center;
+  padding: 40px;
+}
+
+.mermaid-fullscreen-error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  max-width: 400px;
+}
+
+/* Floating Toolbar */
+.floating-toolbar {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+.floating-toolbar-content {
+  display: flex;
+  gap: 2px;
+  background: white;
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.floating-toolbar-btn {
+  background: none;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--notion-text);
+  transition: all 0.2s ease;
+  min-width: 32px;
+}
+
+.floating-toolbar-btn:hover {
+  background-color: var(--notion-button-hover);
+}
+
+.floating-toolbar-btn.active {
+  background-color: var(--notion-active);
+  color: white;
+}
+
+/* Bubble Menu Styles */
+.bubble-menu {
+  z-index: 1001;
+}
+
+.bubble-menu-content {
+  display: flex;
+  gap: 2px;
+  background: white;
+  border: 1px solid var(--notion-border);
+  border-radius: 6px;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+.bubble-menu-btn {
+  background: none;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--notion-text);
+  transition: all 0.2s ease;
+  min-width: 32px;
+}
+
+.bubble-menu-btn:hover {
+  background-color: var(--notion-button-hover);
+}
+
+.bubble-menu-btn.active {
+  background-color: var(--notion-active);
+  color: white;
 }

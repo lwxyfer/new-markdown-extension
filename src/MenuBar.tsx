@@ -1,5 +1,26 @@
 import React from 'react'
 import { MenuBarProps } from './types'
+import {
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Code,
+  Highlighter,
+  Type,
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  SquareCheck,
+  Quote,
+  Code2,
+  Table,
+  Image,
+  Link,
+  Workflow
+} from 'lucide-react'
 
 const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
   if (!editor) {
@@ -14,28 +35,28 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className={`notion-button ${editor.isActive('bold') ? 'notion-button-active' : ''}`}
           title="粗体 (Ctrl+B)"
         >
-          B
+          <Bold size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`notion-button ${editor.isActive('italic') ? 'notion-button-active' : ''}`}
           title="斜体 (Ctrl+I)"
         >
-          I
+          <Italic size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={`notion-button ${editor.isActive('underline') ? 'notion-button-active' : ''}`}
           title="下划线 (Ctrl+U)"
         >
-          U
+          <Underline size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={`notion-button ${editor.isActive('strike') ? 'notion-button-active' : ''}`}
           title="删除线"
         >
-          S
+          <Strikethrough size={16} />
         </button>
       </div>
 
@@ -45,14 +66,14 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className={`notion-button ${editor.isActive('code') ? 'notion-button-active' : ''}`}
           title="内联代码"
         >
-          &lt;/&gt;
+          <Code size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           className={`notion-button ${editor.isActive('highlight') ? 'notion-button-active' : ''}`}
           title="高亮"
         >
-          🖍️
+          <Highlighter size={16} />
         </button>
       </div>
 
@@ -62,28 +83,28 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className={`notion-button ${editor.isActive('paragraph') ? 'notion-button-active' : ''}`}
           title="段落"
         >
-          文本
+          <Type size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           className={`notion-button ${editor.isActive('heading', { level: 1 }) ? 'notion-button-active' : ''}`}
           title="标题 1"
         >
-          H1
+          <Heading1 size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className={`notion-button ${editor.isActive('heading', { level: 2 }) ? 'notion-button-active' : ''}`}
           title="标题 2"
         >
-          H2
+          <Heading2 size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           className={`notion-button ${editor.isActive('heading', { level: 3 }) ? 'notion-button-active' : ''}`}
           title="标题 3"
         >
-          H3
+          <Heading3 size={16} />
         </button>
       </div>
 
@@ -93,28 +114,28 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className={`notion-button ${editor.isActive('bulletList') ? 'notion-button-active' : ''}`}
           title="无序列表"
         >
-          •
+          <List size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={`notion-button ${editor.isActive('orderedList') ? 'notion-button-active' : ''}`}
           title="有序列表"
         >
-          1.
+          <ListOrdered size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleTaskList().run()}
           className={`notion-button ${editor.isActive('taskList') ? 'notion-button-active' : ''}`}
           title="任务列表"
         >
-          ☐
+          <SquareCheck size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={`notion-button ${editor.isActive('blockquote') ? 'notion-button-active' : ''}`}
           title="引用"
         >
-          &gt;
+          <Quote size={16} />
         </button>
       </div>
 
@@ -124,14 +145,14 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className={`notion-button ${editor.isActive('codeBlock') ? 'notion-button-active' : ''}`}
           title="代码块"
         >
-          ```
+          <Code2 size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
           className={`notion-button ${editor.isActive('table') ? 'notion-button-active' : ''}`}
           title="表格"
         >
-          📊
+          <Table size={16} />
         </button>
         <button
           onClick={() => {
@@ -143,7 +164,7 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className="notion-button"
           title="插入图片"
         >
-          🖼️
+          <Image size={16} />
         </button>
         <button
           onClick={() => {
@@ -155,7 +176,7 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className={`notion-button ${editor.isActive('link') ? 'notion-button-active' : ''}`}
           title="插入链接"
         >
-          🔗
+          <Link size={16} />
         </button>
         <button
           onClick={() => {
@@ -172,52 +193,10 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           className="notion-button"
           title="插入 Mermaid 图表"
         >
-          📊
+          <Workflow size={16} />
         </button>
       </div>
 
-      <div className="notion-toolbar-group">
-        <button
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          className={`notion-button ${editor.isActive({ textAlign: 'left' }) ? 'notion-button-active' : ''}`}
-          title="左对齐"
-        >
-          ←
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          className={`notion-button ${editor.isActive({ textAlign: 'center' }) ? 'notion-button-active' : ''}`}
-          title="居中对齐"
-        >
-          ↔
-        </button>
-        <button
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          className={`notion-button ${editor.isActive({ textAlign: 'right' }) ? 'notion-button-active' : ''}`}
-          title="右对齐"
-        >
-          →
-        </button>
-      </div>
-
-      <div className="notion-toolbar-group">
-        <button
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
-          className="notion-button"
-          title="撤销 (Ctrl+Z)"
-        >
-          ↩️
-        </button>
-        <button
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
-          className="notion-button"
-          title="重做 (Ctrl+Y)"
-        >
-          ↪️
-        </button>
-      </div>
     </div>
   )
 }

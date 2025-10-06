@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Table } from '@tiptap/extension-table'
@@ -14,12 +14,15 @@ import { Underline } from '@tiptap/extension-underline'
 import { Subscript } from '@tiptap/extension-subscript'
 import { Superscript } from '@tiptap/extension-superscript'
 import { TextAlign } from '@tiptap/extension-text-align'
+import { Placeholder } from '@tiptap/extension-placeholder'
+import { Gapcursor } from '@tiptap/extension-gapcursor'
 import { SlashCommand } from './SlashCommand'
 import MenuBar from './MenuBar'
 import { MarkdownEditorProps } from './types'
 import { markdownToHtml, htmlToMarkdown } from './markdownUtils'
 import { MermaidExtension } from './MermaidExtension'
 import { CodeBlockExtension } from './CodeBlockExtension'
+import BubbleMenuExtension from './BubbleMenuExtension'
 
 const defaultContent = `
 # 欢迎使用 TipTap Markdown 编辑器
@@ -95,6 +98,25 @@ sequenceDiagram
 const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ content = defaultContent, onChange }) => {
   const [isLoading, setIsLoading] = useState(true)
 
+  // 防抖函数
+  const debounce = useCallback((func: Function, delay: number) => {
+    let timeoutId: number
+    return (...args: any[]) => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => func(...args), delay) as unknown as number
+    }
+  }, [])
+
+
+  // 防抖的更新处理
+  const debouncedUpdate = useCallback(
+    debounce((editor: any) => {
+      const html = editor.getHTML()
+      const markdown = htmlToMarkdown(html)
+      onChange?.(markdown)
+    }, 300),
+    [onChange]
+  )
 
   const editor = useEditor({
     extensions: [
@@ -102,7 +124,9 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ content = defaultConten
         codeBlock: false,
       }),
       CodeBlockExtension,
-      Table.configure({ resizable: true }),
+      Table.configure({
+        resizable: true,
+      }),
       TableRow,
       TableHeader,
       TableCell,
@@ -121,14 +145,16 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ content = defaultConten
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
+      Placeholder.configure({
+        placeholder: '使用 / 触发命令',
+      }),
+      Gapcursor,
       MermaidExtension,
       SlashCommand,
     ],
     content: markdownToHtml(content),
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML()
-      const markdown = htmlToMarkdown(html)
-      onChange?.(markdown)
+      debouncedUpdate(editor)
     },
     onCreate: () => {
       setIsLoading(false)
@@ -200,7 +226,10 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ content = defaultConten
   return (
     <>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <div style={{ position: 'relative' }}>
+        <EditorContent editor={editor} />
+        <BubbleMenuExtension editor={editor} />
+      </div>
     </>
   )
 }

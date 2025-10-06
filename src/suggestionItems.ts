@@ -5,7 +5,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '标题 1',
     description: '大号标题',
-    icon: '📝',
+    icon: 'heading1',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run()
     },
@@ -14,7 +14,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '标题 2',
     description: '中号标题',
-    icon: '📝',
+    icon: 'heading2',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run()
     },
@@ -23,7 +23,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '标题 3',
     description: '小号标题',
-    icon: '📝',
+    icon: 'heading3',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run()
     },
@@ -32,7 +32,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '文本',
     description: '普通段落',
-    icon: '📄',
+    icon: 'paragraph',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setParagraph().run()
     },
@@ -41,7 +41,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '粗体',
     description: '加粗文本',
-    icon: '**B**',
+    icon: 'bold',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBold().run()
     },
@@ -50,7 +50,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '斜体',
     description: '斜体文本',
-    icon: '*I*',
+    icon: 'italic',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleItalic().run()
     },
@@ -59,7 +59,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '代码',
     description: '内联代码',
-    icon: '`</>`',
+    icon: 'code',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleCode().run()
     },
@@ -68,7 +68,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '代码块',
     description: '代码块',
-    icon: '```',
+    icon: 'codeblock',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
     },
@@ -77,7 +77,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '引用',
     description: '引用块',
-    icon: '>',
+    icon: 'quote',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run()
     },
@@ -86,7 +86,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '无序列表',
     description: '项目符号列表',
-    icon: '•',
+    icon: 'bulletlist',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run()
     },
@@ -95,7 +95,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '有序列表',
     description: '数字列表',
-    icon: '1.',
+    icon: 'orderedlist',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run()
     },
@@ -104,7 +104,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '任务列表',
     description: '复选框列表',
-    icon: '☐',
+    icon: 'tasklist',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run()
     },
@@ -113,7 +113,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '表格',
     description: '插入表格',
-    icon: '📊',
+    icon: 'table',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
     },
@@ -122,7 +122,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '图片',
     description: '插入图片',
-    icon: '🖼️',
+    icon: 'image',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setImage({ src: '' }).run()
     },
@@ -131,7 +131,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: '链接',
     description: '插入链接',
-    icon: '🔗',
+    icon: 'link',
     command: ({ editor, range }) => {
       const url = window.prompt('请输入链接地址:')
       if (url) {
@@ -143,7 +143,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
   {
     title: 'Mermaid 图表',
     description: '插入 Mermaid 图表',
-    icon: '📊',
+    icon: 'mermaid',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).insertContent({
         type: 'mermaid',

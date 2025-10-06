@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'
+import MermaidFullscreen from './MermaidFullscreen'
 
-const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => {
+const MermaidComponent: React.FC<any> = ({ node, updateAttributes }) => {
   const diagramRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -10,6 +11,9 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
   const [editContent, setEditContent] = useState(node.textContent)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
   const content = node.textContent
 
   // 切换编辑模式
@@ -35,35 +39,132 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
 
   const resetZoom = () => {
     setZoomLevel(1)
+    setPosition({ x: 0, y: 0 })
   }
 
   // 全屏预览
   const toggleFullscreen = () => {
-    if (!diagramRef.current) return
-
-    if (!isFullscreen) {
-      // 进入全屏
-      const element = diagramRef.current
-      if (element.requestFullscreen) {
-        element.requestFullscreen()
-      } else if ((element as any).webkitRequestFullscreen) {
-        (element as any).webkitRequestFullscreen()
-      } else if ((element as any).msRequestFullscreen) {
-        (element as any).msRequestFullscreen()
-      }
-      setIsFullscreen(true)
-    } else {
-      // 退出全屏
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen()
-      } else if ((document as any).msExitFullscreen) {
-        (document as any).msExitFullscreen()
-      }
-      setIsFullscreen(false)
-    }
+    setIsFullscreen(!isFullscreen)
   }
+
+  // 关闭全屏
+  const closeFullscreen = () => {
+    setIsFullscreen(false)
+  }
+
+  // 鼠标拖拽事件
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isEditing) return
+    setIsDragging(true)
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    })
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || isEditing) return
+
+    setPosition({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y
+    })
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  const handleTouchEnd = () => {
+    setIsDragging(false)
+  }
+
+  // 使用 ref 添加非被动事件监听器
+  useEffect(() => {
+    const element = diagramRef.current
+    if (!element) return
+
+    const handleWheelNonPassive = (e: WheelEvent) => {
+      if (isEditing) return
+
+      // 阻止页面缩放
+      e.preventDefault()
+
+      // 检测是否是触控板事件（deltaY 较小）
+      const isTrackpad = Math.abs(e.deltaY) < 100
+
+      if (isTrackpad) {
+        // 触控板缩放
+        const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1
+        setZoomLevel(prev => Math.max(0.5, Math.min(2, prev * zoomFactor)))
+      }
+    }
+
+    const handleTouchStartNonPassive = (e: TouchEvent) => {
+      if (isEditing) return
+
+      if (e.touches.length === 2) {
+        // 双指开始缩放 - 阻止默认行为
+        e.preventDefault()
+        const touch1 = e.touches[0]
+        const touch2 = e.touches[1]
+        const distance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        )
+        ;(e.target as any).initialDistance = distance
+        ;(e.target as any).initialScale = zoomLevel
+      } else if (e.touches.length === 1) {
+        // 单指开始拖拽
+        setIsDragging(true)
+        setDragStart({
+          x: e.touches[0].clientX - position.x,
+          y: e.touches[0].clientY - position.y
+        })
+      }
+    }
+
+    const handleTouchMoveNonPassive = (e: TouchEvent) => {
+      if (isEditing) return
+
+      if (e.touches.length === 2) {
+        // 双指缩放 - 阻止默认行为
+        e.preventDefault()
+        const touch1 = e.touches[0]
+        const touch2 = e.touches[1]
+        const distance = Math.hypot(
+          touch2.clientX - touch1.clientX,
+          touch2.clientY - touch1.clientY
+        )
+
+        const initialDistance = (e.target as any).initialDistance
+        const initialScale = (e.target as any).initialScale
+
+        if (initialDistance) {
+          const newScale = Math.max(0.5, Math.min(2, initialScale * (distance / initialDistance)))
+          setZoomLevel(newScale)
+        }
+      } else if (e.touches.length === 1 && isDragging) {
+        // 单指拖拽
+        setPosition({
+          x: e.touches[0].clientX - dragStart.x,
+          y: e.touches[0].clientY - dragStart.y
+        })
+      }
+    }
+
+    // 添加非被动事件监听器
+    element.addEventListener('wheel', handleWheelNonPassive, { passive: false })
+    element.addEventListener('touchstart', handleTouchStartNonPassive, { passive: false })
+    element.addEventListener('touchmove', handleTouchMoveNonPassive, { passive: false })
+
+    return () => {
+      element.removeEventListener('wheel', handleWheelNonPassive)
+      element.removeEventListener('touchstart', handleTouchStartNonPassive)
+      element.removeEventListener('touchmove', handleTouchMoveNonPassive)
+    }
+  }, [isEditing, zoomLevel, position, isDragging, dragStart])
+
 
   // 渲染 Mermaid 图表
   useEffect(() => {
@@ -137,33 +238,17 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
     }
   }, [isEditing, editContent])
 
-  // 应用缩放效果
+  // 应用缩放和位置效果
   useEffect(() => {
     if (!isEditing && diagramRef.current) {
       const svg = diagramRef.current.querySelector('svg')
       if (svg) {
-        svg.style.transform = `scale(${zoomLevel})`
+        svg.style.transform = `translate(${position.x}px, ${position.y}px) scale(${zoomLevel})`
         svg.style.transformOrigin = 'center'
       }
     }
-  }, [zoomLevel, isEditing])
+  }, [zoomLevel, position, isEditing])
 
-  // 监听全屏状态变化
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement)
-    }
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
-    document.addEventListener('msfullscreenchange', handleFullscreenChange)
-
-    return () => {
-      document.removeEventListener('fullscreenchange', handleFullscreenChange)
-      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
-      document.removeEventListener('msfullscreenchange', handleFullscreenChange)
-    }
-  }, [])
 
   return (
     <NodeViewWrapper className="mermaid-diagram-wrapper">
@@ -249,6 +334,14 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
             <div
               ref={diagramRef}
               className="mermaid-content"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onTouchEnd={handleTouchEnd}
+              style={{
+                cursor: isDragging ? 'grabbing' : 'grab'
+              }}
             />
           </>
         )}
@@ -261,6 +354,12 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes, editor }) => 
           }}
         />
       </div>
+
+      <MermaidFullscreen
+        content={content}
+        isOpen={isFullscreen}
+        onClose={closeFullscreen}
+      />
     </NodeViewWrapper>
   )
 }
