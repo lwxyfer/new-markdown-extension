@@ -1,0 +1,36 @@
+{
+  "name": "new-markdown-editor",
+  "displayName": "New Markdown Editor",
+  "description": "A rich WYSIWYG Markdown editor for VSCode with Mermaid diagram support",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "new-markdown.markdownEditor",
+        "displayName": "New Markdown Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.60.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+}

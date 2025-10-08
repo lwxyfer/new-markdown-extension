@@ -1,0 +1,95 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "build:all",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [
+        "$tsc",
+        "$eslint-stylish"
+      ],
+      "label": "npm: build:all",
+      "detail": "Build extension and webview"
+    },
+    {
+      "type": "npm",
+      "script": "compile",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "label": "npm: compile",
+      "detail": "Compile extension TypeScript"
+    },
+    {
+      "type": "npm",
+      "script": "build:webview",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "label": "npm: build:webview",
+      "detail": "Build webview with Vite"
+    },
+    {
+      "type": "npm",
+      "script": "watch:extension",
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "problemMatcher": [
+        "$tsc-watch"
+      ],
+      "label": "npm: watch:extension",
+      "detail": "Watch extension TypeScript changes"
+    },
+    {
+      "type": "npm",
+      "script": "watch:webview",
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "label": "npm: watch:webview",
+      "detail": "Watch webview changes"
+    }
+  ]
+}

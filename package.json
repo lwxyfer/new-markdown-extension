@@ -1,13 +1,60 @@
 {
-  "name": "new-markdown",
-  "private": true,
+  "name": "new-markdown-editor",
+  "displayName": "New Markdown Editor",
+  "description": "A rich WYSIWYG Markdown editor for VSCode with Mermaid diagram support",
   "version": "1.0.0",
-  "type": "module",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "new-markdown.markdownEditor",
+        "displayName": "New Markdown Editor",
+        "selector": [
+          {
+            "filenamePattern": "*.md"
+          }
+        ]
+      }
+    ]
+  },
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"npm run watch:extension\" \"npm run watch:webview\"",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "package": "vsce package",
+    "compile": "tsc -p tsconfig.extension.json",
+    "build:vscode": "vite build --config vscode-build.config.js",
+    "build:extension": "npm run build:webview && npm run compile",
+    "build:webview": "vite build --config vite.webview.config.js",
+    "build:all": "npm run build:webview && npm run compile && node build.js",
+    "watch:extension": "tsc -watch -p tsconfig.extension.json",
+    "watch:webview": "vite build --config vite.webview.config.js --watch"
+  },
+  "devDependencies": {
+    "@types/mermaid": "^9.1.0",
+    "@types/node": "^20.x",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@types/turndown": "^5.0.5",
+    "@types/vscode": "^1.60.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.0",
+    "terser": "^5.44.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.0",
+    "vsce": "^2.15.0"
   },
   "dependencies": {
     "@tiptap/extension-bubble-menu": "^3.6.5",
@@ -37,19 +84,5 @@
     "react-dom": "^19.0.0",
     "tippy.js": "^6.3.7",
     "turndown": "^7.2.1"
-  },
-  "devDependencies": {
-    "@types/mermaid": "^9.1.0",
-    "@types/react": "^19.0.2",
-    "@types/react-dom": "^19.0.2",
-    "@types/turndown": "^5.0.5",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.0.0",
-    "@vitejs/plugin-react": "^4.3.0",
-    "eslint": "^9.0.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.0",
-    "typescript": "^5.6.3",
-    "vite": "^6.0.0"
   }
 }

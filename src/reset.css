@@ -1,0 +1,17 @@
+html {
+  box-sizing: border-box;
+  font-size: 13px;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: var(--vscode-font-family);
+  font-weight: var(--vscode-font-weight);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-editor-foreground);
+  background-color: var(--vscode-editor-background);
+}

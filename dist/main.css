@@ -1,0 +1,170 @@
+.vscode-markdown-editor {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 适配 VSCode 主题的编辑器样式 */
+.ProseMirror {
+  flex: 1;
+  padding: 20px;
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+  font-family: var(--vscode-editor-font-family);
+  font-size: var(--vscode-editor-font-size);
+  line-height: 1.6;
+  overflow-y: auto;
+}
+
+.ProseMirror p {
+  margin: 0 0 1em 0;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  margin: 1.5em 0 0.5em 0;
+  color: var(--vscode-editor-foreground);
+  font-weight: 600;
+}
+
+.ProseMirror h1 {
+  font-size: 1.8em;
+}
+
+.ProseMirror h2 {
+  font-size: 1.5em;
+}
+
+.ProseMirror h3 {
+  font-size: 1.3em;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  margin: 0 0 1em 0;
+  padding-left: 1.5em;
+}
+
+.ProseMirror li {
+  margin: 0.25em 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 3px solid var(--vscode-input-border);
+  margin: 1em 0;
+  padding-left: 1em;
+  color: var(--vscode-descriptionForeground);
+}
+
+.ProseMirror code {
+  background-color: var(--vscode-textCodeBlock-background);
+  color: var(--vscode-textCodeBlock-foreground);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-family: var(--vscode-editor-font-family);
+}
+
+.ProseMirror pre {
+  background-color: var(--vscode-textCodeBlock-background);
+  color: var(--vscode-textCodeBlock-foreground);
+  padding: 1em;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+  border: 1px solid var(--vscode-input-border);
+  padding: 0.5em;
+  text-align: left;
+}
+
+.ProseMirror table th {
+  background-color: var(--vscode-input-background);
+  font-weight: 600;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ProseMirror a {
+  color: var(--vscode-textLink-foreground);
+  text-decoration: none;
+}
+
+.ProseMirror a:hover {
+  color: var(--vscode-textLink-activeForeground);
+  text-decoration: underline;
+}
+
+/* 工具栏样式适配 VSCode */
+.menu-bar {
+  background-color: var(--vscode-titleBar-activeBackground);
+  border-bottom: 1px solid var(--vscode-panel-border);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.menu-bar button {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--vscode-titleBar-activeForeground);
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.menu-bar button:hover {
+  background-color: var(--vscode-toolbar-hoverBackground);
+  border-color: var(--vscode-input-border);
+}
+
+.menu-bar button.is-active {
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+/* Bubble Menu 样式 */
+.bubble-menu {
+  background-color: var(--vscode-editorWidget-background);
+  border: 1px solid var(--vscode-editorWidget-border);
+  border-radius: 6px;
+  padding: 4px;
+  display: flex;
+  gap: 2px;
+  box-shadow: 0 2px 8px var(--vscode-widget-shadow);
+}
+
+.bubble-menu button {
+  background: transparent;
+  border: none;
+  color: var(--vscode-editorWidget-foreground);
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.bubble-menu button:hover {
+  background-color: var(--vscode-toolbar-hoverBackground);
+}
+
+.bubble-menu button.is-active {
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
