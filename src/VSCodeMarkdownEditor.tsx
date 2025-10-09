@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Table } from '@tiptap/extension-table'
@@ -22,6 +22,8 @@ import { markdownToHtml, htmlToMarkdown } from './markdownUtils'
 import { MermaidExtension } from './MermaidExtension'
 import { CodeBlockExtension } from './CodeBlockExtension'
 import BubbleMenuExtension from './BubbleMenuExtension'
+import { debounce } from './debounce'
+import { isUpdateMessage, isReadyMessage } from './messageTypes'
 
 // 声明全局的 vscode API
 declare global {
@@ -38,6 +40,18 @@ interface VSCodeMarkdownEditorProps {
 
 const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialContent }) => {
   const [isLoading, setIsLoading] = useState(true)
+  const ignoreNextUpdateRef = useRef(false)
+
+  // 防抖发送内容更新到 VSCode
+  const debouncedSendContent = useCallback(
+    debounce((content: string) => {
+      vscode.postMessage({
+        type: 'add',
+        text: content
+      })
+    }, 200),
+    []
+  )
 
   const editor = useEditor({
     extensions: [
@@ -75,14 +89,21 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     ],
     content: markdownToHtml(initialContent),
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML()
-      const markdown = htmlToMarkdown(html)
+      // 如果设置了忽略下一个更新，则跳过
+      if (ignoreNextUpdateRef.current) {
+        console.log('Skipping onUpdate due to ignore flag')
+        ignoreNextUpdateRef.current = false
+        return
+      }
 
-      // 发送内容变化消息给 VSCode
-      vscode.postMessage({
-        type: 'contentChanged',
-        content: markdown
-      })
+      console.log('Editor onUpdate triggered')
+
+      // 使用防抖机制发送内容更新
+      const markdownContent = htmlToMarkdown(editor.getHTML())
+      debouncedSendContent(markdownContent)
+
+      // 保存状态到 VSCode
+      vscode.setState({ content: markdownContent })
     },
     onCreate: () => {
       setIsLoading(false)
@@ -91,6 +112,14 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
       vscode.postMessage({
         type: 'ready'
       })
+
+      // 恢复之前的状态
+      const savedState = vscode.getState()
+      if (savedState?.content) {
+        console.log('Restoring saved state')
+        const htmlContent = markdownToHtml(savedState.content)
+        editor?.commands.setContent(htmlContent)
+      }
     },
     editorProps: {
       attributes: {
@@ -140,14 +169,49 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     const handleMessage = (event: MessageEvent) => {
       const message = event.data
 
-      switch (message.type) {
-        case 'update':
-          // 当文档内容在外部被修改时更新编辑器
-          if (editor && message.content !== undefined) {
-            const htmlContent = markdownToHtml(message.content)
-            editor.commands.setContent(htmlContent)
-          }
-          break
+      if (isUpdateMessage(message)) {
+        // 当文档内容在外部被修改时更新编辑器
+        if (editor && message.text !== undefined) {
+          console.log('Received update message')
+
+          // 保存当前光标位置和选择范围
+          const currentPos = editor.state.selection.anchor
+          const selection = editor.state.selection
+          console.log('Current cursor position:', currentPos, 'Selection:', selection)
+
+          // 获取当前文档内容用于比较
+          const currentMarkdown = htmlToMarkdown(editor.getHTML())
+
+          // 设置忽略下一个更新的标志
+          ignoreNextUpdateRef.current = true
+
+          const htmlContent = markdownToHtml(message.text)
+          editor.commands.setContent(htmlContent)
+
+          // 尝试恢复光标位置 - 使用更智能的方法
+          setTimeout(() => {
+            if (editor) {
+              // 计算新文档的大小
+              const newDocSize = editor.state.doc.content.size
+              console.log('New document size:', newDocSize)
+
+              // 如果文档结构变化不大，尝试恢复原始位置
+              if (currentPos <= newDocSize) {
+                console.log('Restoring cursor to original position:', currentPos)
+                editor.commands.setTextSelection(currentPos)
+              } else {
+                // 如果位置超出范围，将光标放在文档末尾
+                console.log('Cursor position out of bounds, moving to end:', currentPos, 'doc size:', newDocSize)
+                editor.commands.setTextSelection(newDocSize)
+              }
+            }
+          }, 50) // 增加延迟确保内容完全加载
+
+          console.log('External update processing completed')
+        }
+      } else if (isReadyMessage(message)) {
+        // 处理 ready 消息
+        console.log('Webview ready message received')
       }
     }
 

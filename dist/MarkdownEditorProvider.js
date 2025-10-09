@@ -56,8 +56,9 @@ class MarkdownEditorProvider {
         // Handle messages from the webview
         webviewPanel.webview.onDidReceiveMessage(e => {
             switch (e.type) {
-                case 'contentChanged':
-                    this.updateDocument(document, e.content);
+                case 'add':
+                    console.log('Received content update from webview');
+                    this.updateDocument(document, e.text);
                     return;
                 case 'ready':
                     // Webview is ready
@@ -67,9 +68,10 @@ class MarkdownEditorProvider {
         // Update the webview when the document changes
         const changeDocumentSubscription = vscode.workspace.onDidChangeTextDocument(e => {
             if (e.document.uri.toString() === document.uri.toString()) {
+                console.log('Document changed, sending update to webview');
                 webviewPanel.webview.postMessage({
                     type: 'update',
-                    content: document.getText()
+                    text: document.getText()
                 });
             }
         });

@@ -1,4 +1,5 @@
 :root {
+  /* Light theme */
   --notion-bg: #ffffff;
   --notion-text: #37352f;
   --notion-border: #e9e9e7;
@@ -7,6 +8,24 @@
   --notion-active: #2383e2;
   --notion-code-bg: #f7f6f3;
   --notion-code-text: #eb5757;
+  --notion-suggestion-bg: #ffffff;
+  --notion-suggestion-hover: #f1f1ef;
+  --notion-code-header-bg: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="dark"] {
+  /* Dark theme */
+  --notion-bg: #1e1e1e;
+  --notion-text: #e8e8e8;
+  --notion-border: #404040;
+  --notion-toolbar-bg: #2d2d2d;
+  --notion-button-hover: #404040;
+  --notion-active: #4a90e2;
+  --notion-code-bg: #2d2d2d;
+  --notion-code-text: #ff6b6b;
+  --notion-suggestion-bg: #2d2d2d;
+  --notion-suggestion-hover: #404040;
+  --notion-code-header-bg: rgba(255, 255, 255, 0.05);
 }
 
 /* Editor takes full page */
@@ -141,8 +160,10 @@ body {
   background-color: var(--notion-code-bg);
   border-radius: 4px;
   margin: 12px 0;
-  overflow: hidden;
+  overflow-x: auto;
   position: relative;
+  min-height: auto;
+  height: auto;
 }
 
 .ProseMirror pre code {
@@ -164,6 +185,8 @@ body {
   background-color: var(--notion-code-bg);
   border-radius: 4px;
   overflow: hidden;
+  min-height: auto;
+  height: auto;
 }
 
 /* Code Block Header with Language Label */
@@ -172,10 +195,11 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 6px 12px;
-  background-color: rgba(0, 0, 0, 0.02);
+  background-color: var(--notion-code-header-bg);
   font-size: 12px;
   font-weight: 500;
-  color: #666;
+  color: var(--notion-text);
+  opacity: 0.8;
 }
 
 .language-selector {
@@ -223,7 +247,7 @@ body {
   position: absolute;
   top: 100%;
   left: 0;
-  background: white;
+  background: var(--notion-suggestion-bg);
   border: 1px solid var(--notion-border);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -262,6 +286,16 @@ body {
   margin: 0;
   background: none;
   border: none;
+}
+
+.code-block-content pre {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  overflow-x: auto;
+  white-space: pre;
+  word-wrap: normal;
 }
 
 /* Syntax Highlighting Colors */
@@ -400,7 +434,7 @@ body {
 }
 
 .suggestion-menu {
-  background: white;
+  background: var(--notion-suggestion-bg);
   border: 1px solid var(--notion-border);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -426,7 +460,7 @@ body {
 
 .suggestion-item:hover,
 .suggestion-item.selected {
-  background-color: var(--notion-button-hover);
+  background-color: var(--notion-suggestion-hover);
 }
 
 .suggestion-icon {
@@ -576,7 +610,7 @@ body {
   border: 1px solid var(--notion-border);
   border-radius: 4px;
   padding: 12px;
-  resize: vertical;
+  resize: none;
   background-color: var(--notion-code-bg);
   color: var(--notion-text);
 }
@@ -762,7 +796,7 @@ body {
 .floating-toolbar-content {
   display: flex;
   gap: 2px;
-  background: white;
+  background: var(--notion-suggestion-bg);
   border: 1px solid var(--notion-border);
   border-radius: 6px;
   padding: 4px;
@@ -800,7 +834,7 @@ body {
 .bubble-menu-content {
   display: flex;
   gap: 2px;
-  background: white;
+  background: var(--notion-suggestion-bg);
   border: 1px solid var(--notion-border);
   border-radius: 6px;
   padding: 4px;

@@ -14,6 +14,16 @@ const CodeBlockComponent: React.FC<CodeBlockComponentProps> = ({ node, updateAtt
   const language = node.attrs.language || 'plaintext'
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const codeBlockRef = useRef<HTMLDivElement>(null)
+
+  // 调试代码区块高度
+  useEffect(() => {
+    if (codeBlockRef.current) {
+      const height = codeBlockRef.current.offsetHeight
+      console.log('CodeBlock height:', height, 'px')
+    }
+  })
+
 
   // Common programming languages
   const languages = [
@@ -69,7 +79,7 @@ const CodeBlockComponent: React.FC<CodeBlockComponentProps> = ({ node, updateAtt
 
   return (
     <NodeViewWrapper className="code-block-wrapper">
-      <div className="code-block-container">
+      <div className="code-block-container" ref={codeBlockRef}>
         <div className="code-block-header">
           <div className="language-selector" ref={dropdownRef}>
             <button
@@ -97,9 +107,11 @@ const CodeBlockComponent: React.FC<CodeBlockComponentProps> = ({ node, updateAtt
             )}
           </div>
         </div>
-        <pre className="code-block-content">
-          <NodeViewContent as="div" />
-        </pre>
+        <div className="code-block-content">
+          <pre>
+            <NodeViewContent />
+          </pre>
+        </div>
       </div>
     </NodeViewWrapper>
   )
