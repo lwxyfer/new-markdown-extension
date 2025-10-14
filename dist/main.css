@@ -168,3 +168,149 @@
   background-color: var(--vscode-button-background);
   color: var(--vscode-button-foreground);
 }
+
+/* TOC 样式 */
+.editor-container {
+  display: flex;
+  flex: 1;
+  position: relative;
+  height: calc(100vh - 50px); /* 减去 MenuBar 的高度 */
+}
+
+.editor-content {
+  flex: 1;
+  position: relative;
+  overflow: auto;
+  margin-right: 280px; /* TOC 宽度 */
+  transition: margin-right 0.2s ease;
+}
+
+/* 当 TOC 折叠时，移除 margin-right */
+.editor-content.no-toc {
+  margin-right: 0;
+}
+
+.toc-container {
+  position: fixed;
+  right: 0;
+  top: 50px; /* MenuBar 高度 */
+  bottom: 0;
+  width: 280px;
+  background-color: var(--vscode-sideBar-background);
+  border-left: 1px solid var(--vscode-panel-border);
+  z-index: 10;
+}
+
+.toc-toggle-btn {
+  position: fixed;
+  right: 0;
+  top: 60px;
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: none;
+  border-radius: 4px 0 0 4px;
+  padding: 8px 6px;
+  cursor: pointer;
+  z-index: 1000; /* 提高 z-index 确保在最上层 */
+  box-shadow: -2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.toc-toggle-btn:hover {
+  background-color: var(--vscode-button-hoverBackground);
+}
+
+.toc-collapse-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: transparent;
+  border: none;
+  color: var(--vscode-sideBarTitle-foreground);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  z-index: 10;
+}
+
+.toc-collapse-btn:hover {
+  background-color: var(--vscode-toolbar-hoverBackground);
+}
+
+.toc-content {
+  padding: 40px 0 8px 0;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.toc-empty {
+  padding: 16px;
+  text-align: center;
+  color: var(--vscode-descriptionForeground);
+  font-size: 13px;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-item {
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+  border-left: 2px solid transparent;
+}
+
+.toc-item:hover {
+  background-color: var(--vscode-list-hoverBackground);
+}
+
+/* 活跃的 TOC item */
+.toc-item-active {
+  background-color: var(--vscode-list-hoverBackground) !important;
+  color: var(--vscode-list-activeSelectionForeground) !important;
+}
+
+.toc-item-active .toc-item-text {
+  color: var(--vscode-list-activeSelectionForeground) !important;
+}
+
+.toc-item-text {
+  font-size: 12px;
+  color: var(--vscode-sideBar-foreground);
+  line-height: 1.2;
+  display: block;
+}
+
+/* TOC 层级缩进 */
+.toc-level-1 {
+  padding-left: 16px;
+}
+
+.toc-level-2 {
+  padding-left: 28px;
+}
+
+.toc-level-3 {
+  padding-left: 40px;
+}
+
+.toc-level-4 {
+  padding-left: 52px;
+}
+
+.toc-level-5 {
+  padding-left: 64px;
+}
+
+.toc-level-6 {
+  padding-left: 76px;
+}
+
+/* TOC 高亮效果 */
+.toc-highlight {
+  background-color: rgba(255, 255, 0, 0.2) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 0, 0.3) !important;
+  transition: all 0.3s ease;
+}

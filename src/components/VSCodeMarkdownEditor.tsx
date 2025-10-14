@@ -16,8 +16,10 @@ import { Superscript } from '@tiptap/extension-superscript'
 import { TextAlign } from '@tiptap/extension-text-align'
 import { Placeholder } from '@tiptap/extension-placeholder'
 import { Gapcursor } from '@tiptap/extension-gapcursor'
+import { TableOfContents } from '@tiptap/extension-table-of-contents'
 import { SlashCommand } from './SlashCommand'
 import MenuBar from './MenuBar'
+import TOC from './TOC'
 import { markdownToHtml, htmlToMarkdown } from '../utils/markdownUtils'
 import { MermaidExtension } from '../extensions/MermaidExtension'
 import { CodeBlockExtension } from '../extensions/CodeBlockExtension'
@@ -40,6 +42,8 @@ interface VSCodeMarkdownEditorProps {
 
 const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialContent }) => {
   const [isLoading, setIsLoading] = useState(true)
+  const [isTocCollapsed, setIsTocCollapsed] = useState(false)
+  const [tocItems, setTocItems] = useState<any[]>([])
   const ignoreNextUpdateRef = useRef(false)
 
   // 防抖发送内容更新到 VSCode
@@ -57,6 +61,11 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     extensions: [
       StarterKit.configure({
         codeBlock: false,
+        heading: {
+          HTMLAttributes: {
+            class: 'heading',
+          },
+        },
       }),
       CodeBlockExtension,
       Table.configure({
@@ -86,6 +95,11 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
       Gapcursor,
       MermaidExtension,
       SlashCommand,
+      TableOfContents.configure({
+        onUpdate: (content) => {
+          setTocItems(content)
+        },
+      }),
     ],
     content: markdownToHtml(initialContent),
     onUpdate: ({ editor }) => {
@@ -179,9 +193,6 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
           const selection = editor.state.selection
           console.log('Current cursor position:', currentPos, 'Selection:', selection)
 
-          // 获取当前文档内容用于比较
-          const currentMarkdown = htmlToMarkdown(editor.getHTML())
-
           // 设置忽略下一个更新的标志
           ignoreNextUpdateRef.current = true
 
@@ -236,9 +247,16 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
   return (
     <div className="vscode-markdown-editor">
       <MenuBar editor={editor} />
-      <div style={{ position: 'relative' }}>
-        <EditorContent editor={editor} />
-        <BubbleMenuExtension editor={editor} />
+      <div className="editor-container">
+        <TOC
+          editor={editor}
+          tocItems={tocItems}
+          onToggle={(collapsed) => setIsTocCollapsed(collapsed)}
+        />
+        <div className={`editor-content ${isTocCollapsed ? 'no-toc' : ''}`}>
+          <EditorContent editor={editor} />
+          <BubbleMenuExtension editor={editor} />
+        </div>
       </div>
     </div>
   )

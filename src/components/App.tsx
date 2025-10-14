@@ -1,7 +1,7 @@
-import MarkdownEditor from './MarkdownEditor'
+import VSCodeMarkdownEditor from './VSCodeMarkdownEditor'
 
 function App() {
-  return <MarkdownEditor />
+  return <VSCodeMarkdownEditor initialContent="" />
 }
 
 export default App

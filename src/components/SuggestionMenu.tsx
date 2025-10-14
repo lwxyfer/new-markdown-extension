@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { SuggestionMenuProps } from './types'
+import { SuggestionMenuProps } from '../types/types'
 import {
   Heading1,
   Heading2,
@@ -90,7 +90,7 @@ const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selecte
 
   return (
     <div className="suggestion-menu" ref={listRef}>
-      {items.map((item, index) => (
+      {items.map((item: any, index: number) => (
         <div
           key={index}
           className={`suggestion-item ${index === actualSelectedIndex ? 'selected' : ''}`}

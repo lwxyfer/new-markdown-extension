@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/react'
-import { SuggestionItem } from './types'
+import { SuggestionItem } from '../types/types'
 
 export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => [
   {
