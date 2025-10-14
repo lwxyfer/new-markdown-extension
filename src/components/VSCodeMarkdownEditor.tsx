@@ -18,12 +18,12 @@ import { Placeholder } from '@tiptap/extension-placeholder'
 import { Gapcursor } from '@tiptap/extension-gapcursor'
 import { SlashCommand } from './SlashCommand'
 import MenuBar from './MenuBar'
-import { markdownToHtml, htmlToMarkdown } from './markdownUtils'
-import { MermaidExtension } from './MermaidExtension'
-import { CodeBlockExtension } from './CodeBlockExtension'
-import BubbleMenuExtension from './BubbleMenuExtension'
-import { debounce } from './debounce'
-import { isUpdateMessage, isReadyMessage } from './messageTypes'
+import { markdownToHtml, htmlToMarkdown } from '../utils/markdownUtils'
+import { MermaidExtension } from '../extensions/MermaidExtension'
+import { CodeBlockExtension } from '../extensions/CodeBlockExtension'
+import BubbleMenuExtension from '../extensions/BubbleMenuExtension'
+import { debounce } from '../utils/debounce'
+import { isUpdateMessage, isReadyMessage } from '../core/messageTypes'
 
 // 声明全局的 vscode API
 declare global {

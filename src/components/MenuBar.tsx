@@ -1,6 +1,6 @@
 import React from 'react'
-import { MenuBarProps } from './types'
-import { htmlToMarkdown } from './markdownUtils'
+import { MenuBarProps } from '../types/types'
+import { htmlToMarkdown } from '../utils/markdownUtils'
 import {
   Bold,
   Italic,

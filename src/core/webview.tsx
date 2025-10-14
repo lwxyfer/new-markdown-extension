@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import VSCodeMarkdownEditor from './VSCodeMarkdownEditor'
-import './index.css'
-import './notion.css'
+import VSCodeMarkdownEditor from '../components/VSCodeMarkdownEditor'
+import '../styles/index.css'
+import '../styles/notion.css'
 
 // Get the initial content from VSCode
 const initialContent = (window as any).initialContent || '';

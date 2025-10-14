@@ -8,7 +8,7 @@ export default defineConfig({
     outDir: 'dist',
     minify: false, // Disable minification for debugging
     rollupOptions: {
-      input: resolve(__dirname, 'src/webview.tsx'),
+      input: resolve(__dirname, 'src/core/webview.tsx'),
       output: {
         format: 'iife',
         name: 'MarkdownEditor',

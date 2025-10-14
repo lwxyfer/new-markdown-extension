@@ -2,7 +2,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import { Node } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { Fragment } from '@tiptap/pm/model'
-import MermaidComponent from './MermaidComponent'
+import MermaidComponent from '../components/MermaidComponent'
 
 export interface MermaidOptions {
   HTMLAttributes: Record<string, any>

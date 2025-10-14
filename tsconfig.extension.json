@@ -15,9 +15,9 @@
     "moduleResolution": "node"
   },
   "include": [
-    "src/extension.ts",
-    "src/MarkdownEditorProvider.ts",
-    "src/utils.ts"
+    "src/core/extension.ts",
+    "src/core/MarkdownEditorProvider.ts",
+    "src/utils/utils.ts"
   ],
   "exclude": [
     "node_modules",

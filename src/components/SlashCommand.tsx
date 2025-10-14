@@ -2,7 +2,7 @@ import { Extension } from '@tiptap/react'
 import { Suggestion } from '@tiptap/suggestion'
 import { ReactRenderer } from '@tiptap/react'
 import tippy from 'tippy.js'
-import { getSuggestionItems, filterItems } from './suggestionItems'
+import { getSuggestionItems, filterItems } from '../utils/suggestionItems'
 import SuggestionMenu from './SuggestionMenu'
 
 export const SlashCommand = Extension.create({
