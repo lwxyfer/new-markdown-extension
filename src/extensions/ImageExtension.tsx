@@ -1,5 +1,17 @@
 import { Image } from '@tiptap/extension-image'
 
+// 在 VSCode 环境中处理图片 URL
+const processImageUrlForVSCode = (url: string): string => {
+  // 如果是 data URL 或相对路径，直接返回
+  if (url.startsWith('data:') || url.startsWith('./') || url.startsWith('/')) {
+    return url
+  }
+
+  // 对于外部 URL，VSCode Webview 默认允许加载
+  // 但需要确保 CSP 策略允许
+  return url
+}
+
 // 自定义图片扩展，处理 VSCode Webview 的安全限制
 export const ImageExtension = Image.extend({
   addAttributes() {
@@ -19,7 +31,7 @@ export const ImageExtension = Image.extend({
 
           // 在 VSCode Webview 中处理外部图片
           if (typeof window !== 'undefined' && (window as any).vscode) {
-            src = this.processImageUrlForVSCode(src)
+            src = processImageUrlForVSCode(src)
           }
 
           return {
@@ -48,18 +60,6 @@ export const ImageExtension = Image.extend({
         })
       },
     }
-  },
-
-  // 在 VSCode 环境中处理图片 URL
-  processImageUrlForVSCode(url: string): string {
-    // 如果是 data URL 或相对路径，直接返回
-    if (url.startsWith('data:') || url.startsWith('./') || url.startsWith('/')) {
-      return url
-    }
-
-    // 对于外部 URL，VSCode Webview 默认允许加载
-    // 但需要确保 CSP 策略允许
-    return url
   },
 })
 
@@ -93,7 +93,7 @@ export class ImageHelper {
   // 获取图片信息
   static async getImageInfo(url: string): Promise<{ width: number; height: number; type: string } | null> {
     return new Promise((resolve) => {
-      const img = new Image()
+      const img = new window.Image()
       img.onload = () => {
         resolve({
           width: img.width,

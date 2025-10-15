@@ -5,7 +5,6 @@ import { Table } from '@tiptap/extension-table'
 import { TableRow } from '@tiptap/extension-table-row'
 import { TableHeader } from '@tiptap/extension-table-header'
 import { TableCell } from '@tiptap/extension-table-cell'
-import { Image } from '@tiptap/extension-image'
 import { Link } from '@tiptap/extension-link'
 import { TaskList } from '@tiptap/extension-task-list'
 import { TaskItem } from '@tiptap/extension-task-item'
@@ -45,7 +44,6 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
   const [isTocCollapsed, setIsTocCollapsed] = useState(false)
   const [tocItems, setTocItems] = useState<any[]>([])
   const isInitializingRef = useRef(true)
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   const editor = useEditor({
     extensions: [

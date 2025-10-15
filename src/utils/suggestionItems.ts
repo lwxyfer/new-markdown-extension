@@ -124,7 +124,10 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
     description: '插入图片',
     icon: 'image',
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).setImage({ src: '' }).run()
+      const url = window.prompt('请输入图片 URL:')
+      if (url) {
+        editor.chain().focus().deleteRange(range).setImage({ src: url }).run()
+      }
     },
     keywords: ['image', 'img', '图片']
   },
