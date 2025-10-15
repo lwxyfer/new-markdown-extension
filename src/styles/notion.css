@@ -1,31 +1,16 @@
 :root {
-  /* Light theme */
-  --notion-bg: #ffffff;
-  --notion-text: #37352f;
-  --notion-border: #e9e9e7;
-  --notion-toolbar-bg: #f7f6f3;
-  --notion-button-hover: #f1f1ef;
-  --notion-active: #2383e2;
-  --notion-code-bg: #f7f6f3;
-  --notion-code-text: #eb5757;
-  --notion-suggestion-bg: #ffffff;
-  --notion-suggestion-hover: #f1f1ef;
-  --notion-code-header-bg: rgba(0, 0, 0, 0.02);
-}
-
-[data-theme="dark"] {
-  /* Dark theme */
-  --notion-bg: #1e1e1e;
-  --notion-text: #e8e8e8;
-  --notion-border: #404040;
-  --notion-toolbar-bg: #2d2d2d;
-  --notion-button-hover: #404040;
-  --notion-active: #4a90e2;
-  --notion-code-bg: #2d2d2d;
-  --notion-code-text: #ff6b6b;
-  --notion-suggestion-bg: #2d2d2d;
-  --notion-suggestion-hover: #404040;
-  --notion-code-header-bg: rgba(255, 255, 255, 0.05);
+  /* 使用 VSCode CSS 变量 */
+  --notion-bg: var(--vscode-editor-background);
+  --notion-text: var(--vscode-editor-foreground);
+  --notion-border: var(--vscode-input-border);
+  --notion-toolbar-bg: var(--vscode-titleBar-activeBackground);
+  --notion-button-hover: var(--vscode-toolbar-hoverBackground);
+  --notion-active: var(--vscode-button-background);
+  --notion-code-bg: var(--vscode-textCodeBlock-background);
+  --notion-code-text: var(--vscode-textCodeBlock-foreground);
+  --notion-suggestion-bg: var(--vscode-editorWidget-background);
+  --notion-suggestion-hover: var(--vscode-list-hoverBackground);
+  --notion-code-header-bg: var(--vscode-input-background);
 }
 
 /* Editor takes full page */
@@ -38,7 +23,6 @@ body {
 .notion-toolbar {
   display: flex;
   gap: 8px;
-  padding: 12px 16px;
   background-color: var(--notion-toolbar-bg);
   border-bottom: 1px solid var(--notion-border);
   flex-wrap: wrap;
@@ -67,18 +51,10 @@ body {
 
 .notion-button:hover {
   background-color: var(--notion-button-hover);
-  border-color: var(--notion-border);
 }
 
 .notion-button-active {
-  background-color: var(--notion-active);
-  color: white;
-  border-color: var(--notion-active);
-}
-
-.notion-button-active:hover {
-  background-color: var(--notion-active);
-  color: white;
+  /* 移除动态高亮，只保留点击时的 hover 效果 */
 }
 
 .ProseMirror {
@@ -434,10 +410,10 @@ body {
 }
 
 .suggestion-menu {
-  background: var(--notion-suggestion-bg);
-  border: 1px solid var(--notion-border);
+  background: var(--vscode-quickInput-background);
+  border: 1px solid var(--vscode-quickInput-border);
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px var(--vscode-widget-shadow);
   max-height: 300px;
   overflow-y: auto;
   z-index: 1000;
@@ -451,16 +427,19 @@ body {
   gap: 12px;
   padding: 10px 16px;
   cursor: pointer;
-  border-bottom: 1px solid var(--notion-border);
 }
 
-.suggestion-item:last-child {
-  border-bottom: none;
-}
-
-.suggestion-item:hover,
-.suggestion-item.selected {
+.suggestion-item:hover {
   background-color: var(--notion-suggestion-hover);
+}
+
+.suggestion-item.selected {
+  background-color: var(--vscode-list-activeSelectionBackground);
+  color: var(--vscode-list-activeSelectionForeground);
+}
+
+.suggestion-item.selected .suggestion-title {
+  color: var(--vscode-list-activeSelectionForeground);
 }
 
 .suggestion-icon {
@@ -478,13 +457,13 @@ body {
 /* Mermaid Diagram Styles */
 .mermaid-diagram-wrapper {
   margin: 16px 0;
-  border: 1px solid var(--notion-border);
+  border: 1px solid var(--vscode-input-border);
   border-radius: 6px;
   overflow: hidden;
 }
 
 .mermaid-diagram-container {
-  background: white;
+  background: var(--vscode-editor-background);
 }
 
 .mermaid-header {
@@ -492,14 +471,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 8px 12px;
-  background-color: var(--notion-toolbar-bg);
-  border-bottom: 1px solid var(--notion-border);
+  background-color: var(--vscode-titleBar-activeBackground);
+  border-bottom: 1px solid var(--vscode-input-border);
 }
 
 .mermaid-label {
   font-size: 14px;
   font-weight: 500;
-  color: var(--notion-text);
+  color: var(--vscode-titleBar-activeForeground);
 }
 
 .mermaid-actions {
@@ -508,8 +487,8 @@ body {
 }
 
 .mermaid-toggle-btn {
-  background: var(--notion-active);
-  color: white;
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
   border: none;
   border-radius: 4px;
   padding: 4px 12px;
@@ -520,14 +499,14 @@ body {
 }
 
 .mermaid-toggle-btn:hover {
-  background: #1a6dc4;
+  background: var(--vscode-button-hoverBackground);
   transform: translateY(-1px);
 }
 
 .mermaid-zoom-btn {
-  background: white;
-  color: var(--notion-text);
-  border: 1px solid var(--notion-border);
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: 1px solid var(--vscode-input-border);
   border-radius: 4px;
   padding: 4px 8px;
   font-size: 12px;
@@ -538,8 +517,8 @@ body {
 }
 
 .mermaid-zoom-btn:hover:not(:disabled) {
-  background-color: var(--notion-button-hover);
-  border-color: var(--notion-active);
+  background-color: var(--vscode-button-secondaryHoverBackground);
+  border-color: var(--vscode-button-background);
 }
 
 .mermaid-zoom-btn:disabled {
@@ -548,9 +527,9 @@ body {
 }
 
 .mermaid-fullscreen-btn {
-  background: white;
-  color: var(--notion-text);
-  border: 1px solid var(--notion-border);
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: 1px solid var(--vscode-input-border);
   border-radius: 4px;
   padding: 4px 8px;
   font-size: 12px;
@@ -561,8 +540,8 @@ body {
 }
 
 .mermaid-fullscreen-btn:hover {
-  background-color: var(--notion-button-hover);
-  border-color: var(--notion-active);
+  background-color: var(--vscode-button-secondaryHoverBackground);
+  border-color: var(--vscode-button-background);
 }
 
 /* 全屏模式下的样式 */
@@ -834,12 +813,11 @@ body {
 .bubble-menu-content {
   display: flex;
   gap: 2px;
-  background: var(--notion-suggestion-bg);
-  border: 1px solid var(--notion-border);
+  background: var(--vscode-editorWidget-background);
+  border: 1px solid var(--vscode-editorWidget-border);
   border-radius: 6px;
   padding: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px var(--vscode-widget-shadow);
 }
 
 .bubble-menu-btn {
@@ -850,16 +828,16 @@ body {
   font-size: 12px;
   font-weight: 500;
   cursor: pointer;
-  color: var(--notion-text);
+  color: var(--vscode-editorWidget-foreground);
   transition: all 0.2s ease;
   min-width: 32px;
 }
 
 .bubble-menu-btn:hover {
-  background-color: var(--notion-button-hover);
+  background-color: var(--vscode-toolbar-hoverBackground);
 }
 
 .bubble-menu-btn.active {
-  background-color: var(--notion-active);
-  color: white;
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
 }

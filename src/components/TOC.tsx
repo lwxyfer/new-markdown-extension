@@ -9,8 +9,17 @@ interface TOCProps {
 }
 
 const TOC: React.FC<TOCProps> = ({ editor, tocItems, onToggle }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true) // 默认折叠
+  // 有标题数据时默认展开，无标题时默认折叠
+  const [isCollapsed, setIsCollapsed] = useState(tocItems.length === 0)
   const [activeItemId, setActiveItemId] = useState<string | null>(null)
+
+  // 监听标题数据变化，当从无标题变为有标题时自动展开
+  useEffect(() => {
+    if (tocItems.length > 0 && isCollapsed) {
+      setIsCollapsed(false)
+      onToggle?.(false)
+    }
+  }, [tocItems.length, isCollapsed, onToggle])
 
   useEffect(() => {
     if (!editor || tocItems.length === 0) return

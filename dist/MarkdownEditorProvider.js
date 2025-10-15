@@ -56,9 +56,9 @@ class MarkdownEditorProvider {
         // Handle messages from the webview
         webviewPanel.webview.onDidReceiveMessage(e => {
             switch (e.type) {
-                case 'add':
-                    console.log('Received content update from webview');
-                    this.updateDocument(document, e.text);
+                case 'edit':
+                    console.log('Received edit from webview');
+                    this.updateDocument(document, e.content);
                     return;
                 case 'ready':
                     // Webview is ready
@@ -83,7 +83,14 @@ class MarkdownEditorProvider {
     async updateDocument(document, content) {
         const edit = new vscode.WorkspaceEdit();
         edit.replace(document.uri, new vscode.Range(0, 0, document.lineCount, 0), content);
-        await vscode.workspace.applyEdit(edit);
+        // 应用编辑，这会自动设置文档为 dirty 状态
+        const success = await vscode.workspace.applyEdit(edit);
+        if (success) {
+            console.log('Document updated successfully, dirty state should be set');
+        }
+        else {
+            console.log('Failed to update document');
+        }
     }
     getHtmlForWebview(webview, content) {
         // Get the local path to main script run in the webview
@@ -100,7 +107,7 @@ class MarkdownEditorProvider {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}'; img-src ${webview.cspSource} https: data:;">
         <link href="${styleResetUri}" rel="stylesheet">
         <link href="${styleVSCodeUri}" rel="stylesheet">
         <link href="${styleMainUri}" rel="stylesheet">

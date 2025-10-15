@@ -184,10 +184,15 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes }) => {
         const mermaidModule = await import('mermaid')
         const mermaid = mermaidModule.default
 
-        // Initialize mermaid with default configuration
+        // 检测 VSCode 主题并设置相应的 Mermaid 主题
+        const isDarkTheme = document.body.classList.contains('vscode-dark') ||
+                           document.body.classList.contains('vscode-high-contrast')
+        const mermaidTheme = isDarkTheme ? 'dark' : 'default'
+
+        // Initialize mermaid with theme configuration
         mermaid.initialize({
           startOnLoad: false,
-          theme: 'default',
+          theme: mermaidTheme,
           securityLevel: 'loose',
           fontFamily: 'inherit',
         })

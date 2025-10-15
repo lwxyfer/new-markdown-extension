@@ -19,30 +19,12 @@ import {
   Table,
   Image,
   Link,
-  Workflow,
-  Moon,
-  Sun
+  Workflow
 } from 'lucide-react'
 
 const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
-  const [theme, setTheme] = React.useState<'light' | 'dark'>('light')
-
-  // 初始化主题
-  React.useEffect(() => {
-    const savedTheme = localStorage.getItem('notion-editor-theme') as 'light' | 'dark' || 'light'
-    setTheme(savedTheme)
-    document.documentElement.setAttribute('data-theme', savedTheme)
-  }, [])
-
   if (!editor) {
     return null
-  }
-
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
-    setTheme(newTheme)
-    document.documentElement.setAttribute('data-theme', newTheme)
-    localStorage.setItem('notion-editor-theme', newTheme)
   }
 
   return (
@@ -212,16 +194,6 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           title="插入 Mermaid 图表"
         >
           <Workflow size={16} />
-        </button>
-      </div>
-
-      <div className="notion-toolbar-group">
-        <button
-          onClick={toggleTheme}
-          className="notion-button"
-          title={`切换到${theme === 'light' ? '暗黑' : '明亮'}主题`}
-        >
-          {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
         </button>
       </div>
 

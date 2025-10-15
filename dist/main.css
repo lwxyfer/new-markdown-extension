@@ -140,34 +140,6 @@
   color: var(--vscode-button-foreground);
 }
 
-/* Bubble Menu 样式 */
-.bubble-menu {
-  background-color: var(--vscode-editorWidget-background);
-  border: 1px solid var(--vscode-editorWidget-border);
-  border-radius: 6px;
-  padding: 4px;
-  display: flex;
-  gap: 2px;
-  box-shadow: 0 2px 8px var(--vscode-widget-shadow);
-}
-
-.bubble-menu button {
-  background: transparent;
-  border: none;
-  color: var(--vscode-editorWidget-foreground);
-  padding: 4px 8px;
-  border-radius: 3px;
-  font-size: 12px;
-}
-
-.bubble-menu button:hover {
-  background-color: var(--vscode-toolbar-hoverBackground);
-}
-
-.bubble-menu button.is-active {
-  background-color: var(--vscode-button-background);
-  color: var(--vscode-button-foreground);
-}
 
 /* TOC 样式 */
 .editor-container {
@@ -193,7 +165,7 @@
 .toc-container {
   position: fixed;
   right: 0;
-  top: 50px; /* MenuBar 高度 */
+  top: 35px; /* MenuBar 高度 */
   bottom: 0;
   width: 280px;
   background-color: var(--vscode-sideBar-background);
@@ -222,7 +194,7 @@
 .toc-collapse-btn {
   position: absolute;
   top: 8px;
-  left: 8px;
+  left: -24px;
   background: transparent;
   border: none;
   color: var(--vscode-sideBarTitle-foreground);
@@ -237,7 +209,7 @@
 }
 
 .toc-content {
-  padding: 40px 0 8px 0;
+  padding: 8px 0 8px 0;
   overflow-y: auto;
   height: 100%;
 }
@@ -278,7 +250,7 @@
 
 .toc-item-text {
   font-size: 12px;
-  color: var(--vscode-sideBar-foreground);
+  color: var(--vscode-foreground);
   line-height: 1.2;
   display: block;
 }

@@ -24,8 +24,8 @@ import { markdownToHtml, htmlToMarkdown } from '../utils/markdownUtils'
 import { MermaidExtension } from '../extensions/MermaidExtension'
 import { CodeBlockExtension } from '../extensions/CodeBlockExtension'
 import BubbleMenuExtension from '../extensions/BubbleMenuExtension'
-import { debounce } from '../utils/debounce'
-import { isUpdateMessage, isReadyMessage } from '../core/messageTypes'
+import { ImageExtension } from '../extensions/ImageExtension'
+import { isReadyMessage } from '../core/messageTypes'
 
 // 声明全局的 vscode API
 declare global {
@@ -44,18 +44,8 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
   const [isLoading, setIsLoading] = useState(true)
   const [isTocCollapsed, setIsTocCollapsed] = useState(false)
   const [tocItems, setTocItems] = useState<any[]>([])
-  const ignoreNextUpdateRef = useRef(false)
-
-  // 防抖发送内容更新到 VSCode
-  const debouncedSendContent = useCallback(
-    debounce((content: string) => {
-      vscode.postMessage({
-        type: 'add',
-        text: content
-      })
-    }, 200),
-    []
-  )
+  const isInitializingRef = useRef(true)
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   const editor = useEditor({
     extensions: [
@@ -74,7 +64,7 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
       TableRow,
       TableHeader,
       TableCell,
-      Image,
+      ImageExtension,
       Link.configure({
         openOnClick: false,
       }),
@@ -103,24 +93,26 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     ],
     content: markdownToHtml(initialContent),
     onUpdate: ({ editor }) => {
-      // 如果设置了忽略下一个更新，则跳过
-      if (ignoreNextUpdateRef.current) {
-        console.log('Skipping onUpdate due to ignore flag')
-        ignoreNextUpdateRef.current = false
+      console.log('Editor onUpdate triggered')
+
+      // 跳过初始化时的更新
+      if (isInitializingRef.current) {
+        console.log('Skipping initial update')
         return
       }
 
-      console.log('Editor onUpdate triggered')
-
-      // 使用防抖机制发送内容更新
+      // 发送编辑内容到 VSCode
       const markdownContent = htmlToMarkdown(editor.getHTML())
-      debouncedSendContent(markdownContent)
+      sendEdit(markdownContent)
 
       // 保存状态到 VSCode
       vscode.setState({ content: markdownContent })
     },
     onCreate: () => {
       setIsLoading(false)
+
+      // 初始化完成，允许后续的更新
+      isInitializingRef.current = false
 
       // 通知 VSCode webview 已准备就绪
       vscode.postMessage({
@@ -183,44 +175,7 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     const handleMessage = (event: MessageEvent) => {
       const message = event.data
 
-      if (isUpdateMessage(message)) {
-        // 当文档内容在外部被修改时更新编辑器
-        if (editor && message.text !== undefined) {
-          console.log('Received update message')
-
-          // 保存当前光标位置和选择范围
-          const currentPos = editor.state.selection.anchor
-          const selection = editor.state.selection
-          console.log('Current cursor position:', currentPos, 'Selection:', selection)
-
-          // 设置忽略下一个更新的标志
-          ignoreNextUpdateRef.current = true
-
-          const htmlContent = markdownToHtml(message.text)
-          editor.commands.setContent(htmlContent)
-
-          // 尝试恢复光标位置 - 使用更智能的方法
-          setTimeout(() => {
-            if (editor) {
-              // 计算新文档的大小
-              const newDocSize = editor.state.doc.content.size
-              console.log('New document size:', newDocSize)
-
-              // 如果文档结构变化不大，尝试恢复原始位置
-              if (currentPos <= newDocSize) {
-                console.log('Restoring cursor to original position:', currentPos)
-                editor.commands.setTextSelection(currentPos)
-              } else {
-                // 如果位置超出范围，将光标放在文档末尾
-                console.log('Cursor position out of bounds, moving to end:', currentPos, 'doc size:', newDocSize)
-                editor.commands.setTextSelection(newDocSize)
-              }
-            }
-          }, 50) // 增加延迟确保内容完全加载
-
-          console.log('External update processing completed')
-        }
-      } else if (isReadyMessage(message)) {
+      if (isReadyMessage(message)) {
         // 处理 ready 消息
         console.log('Webview ready message received')
       }
@@ -228,7 +183,15 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
 
     window.addEventListener('message', handleMessage)
     return () => window.removeEventListener('message', handleMessage)
-  }, [editor])
+  }, [])
+
+  // 发送编辑内容到 VSCode
+  const sendEdit = useCallback((content: string) => {
+    vscode.postMessage({
+      type: 'edit',
+      content: content
+    })
+  }, [])
 
   if (isLoading) {
     return (
