@@ -4,7 +4,7 @@ export interface SuggestionItem {
   title: string
   description: string
   icon: string
-  command: ({ editor, range }: { editor: Editor; range: any }) => void
+  command: ({ editor, range }: { editor: Editor; range: any }) => void | { type: 'image' } | { type: 'math'; mathType: 'inline' | 'block' }
   keywords: string[]
 }
 
@@ -22,4 +22,6 @@ export interface SuggestionMenuProps {
   command: (item: SuggestionItem) => void
   selectedIndex: number
   setSelectedIndex: (index: number) => void
+  editor?: any
+  range?: any
 }

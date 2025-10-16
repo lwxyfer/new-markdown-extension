@@ -647,12 +647,18 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
+  background: #000000;
   z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+/* Light theme background for Mermaid fullscreen */
+.vscode-light .mermaid-fullscreen-overlay,
+.vscode-high-contrast-light .mermaid-fullscreen-overlay {
+  background: #ffffff;
 }
 
 .mermaid-fullscreen-controls {
@@ -688,6 +694,20 @@ body {
   transform: scale(1.1);
 }
 
+/* Light theme controls */
+.vscode-light .mermaid-fullscreen-close,
+.vscode-high-contrast-light .mermaid-fullscreen-close {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.vscode-light .mermaid-fullscreen-close:hover,
+.vscode-high-contrast-light .mermaid-fullscreen-close:hover {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
 .mermaid-fullscreen-zoom-controls {
   display: flex;
   gap: 8px;
@@ -696,6 +716,13 @@ body {
   padding: 8px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Light theme zoom controls */
+.vscode-light .mermaid-fullscreen-zoom-controls,
+.vscode-high-contrast-light .mermaid-fullscreen-zoom-controls {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .mermaid-fullscreen-zoom-controls button {
@@ -744,7 +771,6 @@ body {
 .mermaid-fullscreen-diagram svg {
   max-width: 100%;
   max-height: 100%;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
 }
 
 .mermaid-fullscreen-loading {

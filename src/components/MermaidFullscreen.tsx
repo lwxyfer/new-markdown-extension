@@ -15,7 +15,7 @@ const MermaidFullscreen: React.FC<MermaidFullscreenProps> = ({
   const diagramRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [scale, setScale] = useState(1)
+  const [scale, setScale] = useState(3)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
@@ -124,7 +124,7 @@ const MermaidFullscreen: React.FC<MermaidFullscreenProps> = ({
   }
 
   const resetView = () => {
-    setScale(1)
+    setScale(3)
     setPosition({ x: 0, y: 0 })
   }
 

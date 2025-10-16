@@ -124,10 +124,7 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
     description: '插入图片',
     icon: 'image',
     command: ({ editor, range }) => {
-      const url = window.prompt('请输入图片 URL:')
-      if (url) {
-        editor.chain().focus().deleteRange(range).setImage({ src: url }).run()
-      }
+      return { type: 'image', editor, range }
     },
     keywords: ['image', 'img', '图片']
   },
@@ -159,6 +156,26 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
       }).run()
     },
     keywords: ['mermaid', 'diagram', 'chart', '图表', '流程图']
+  },
+  {
+    title: '行内数学公式',
+    description: '插入行内数学公式',
+    icon: 'math',
+    command: ({ editor, range }) => {
+      // 返回特殊类型，由 SuggestionMenu 处理
+      return { type: 'math', editor, range, mathType: 'inline' }
+    },
+    keywords: ['math', 'formula', 'latex', '数学', '公式', 'inline', '行内']
+  },
+  {
+    title: '块级数学公式',
+    description: '插入块级数学公式',
+    icon: 'math',
+    command: ({ editor, range }) => {
+      // 返回特殊类型，由 SuggestionMenu 处理
+      return { type: 'math', editor, range, mathType: 'block' }
+    },
+    keywords: ['math', 'formula', 'latex', '数学', '公式', 'block', '块级']
   }
 ]
 

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BubbleMenu } from '@tiptap/react/menus'
+import ImageDialog from '../components/ImageDialog'
 import {
   Bold,
   Italic,
@@ -18,6 +19,8 @@ interface BubbleMenuProps {
 }
 
 const BubbleMenuExtension: React.FC<BubbleMenuProps> = ({ editor }) => {
+  const [showImageDialog, setShowImageDialog] = useState(false)
+
   if (!editor) return null
 
   return (
@@ -81,12 +84,7 @@ const BubbleMenuExtension: React.FC<BubbleMenuProps> = ({ editor }) => {
           <Link size={14} />
         </button>
         <button
-          onClick={() => {
-            const url = window.prompt('请输入图片 URL:')
-            if (url) {
-              editor.chain().focus().setImage({ src: url }).run()
-            }
-          }}
+          onClick={() => setShowImageDialog(true)}
           className="bubble-menu-btn"
           title="插入图片"
         >
@@ -107,6 +105,16 @@ const BubbleMenuExtension: React.FC<BubbleMenuProps> = ({ editor }) => {
           <Code2 size={14} />
         </button>
       </div>
+
+      <ImageDialog
+        isOpen={showImageDialog}
+        onClose={() => setShowImageDialog(false)}
+        onConfirm={(url) => {
+          editor.chain().focus().setImage({ src: url }).run()
+        }}
+        title="插入图片"
+        placeholder="请输入图片 URL"
+      />
     </BubbleMenu>
   )
 }

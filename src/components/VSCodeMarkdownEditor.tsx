@@ -24,6 +24,8 @@ import { MermaidExtension } from '../extensions/MermaidExtension'
 import { CodeBlockExtension } from '../extensions/CodeBlockExtension'
 import BubbleMenuExtension from '../extensions/BubbleMenuExtension'
 import { ImageExtension } from '../extensions/ImageExtension'
+import { MathematicsExtension } from '../extensions/MathematicsExtension'
+import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { isReadyMessage } from '../core/messageTypes'
 
 // 声明全局的 vscode API
@@ -46,6 +48,7 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
   const isInitializingRef = useRef(true)
 
   const editor = useEditor({
+    shouldRerenderOnTransaction: true,
     extensions: [
       StarterKit.configure({
         codeBlock: false,
@@ -82,6 +85,7 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
       }),
       Gapcursor,
       MermaidExtension,
+      MathematicsExtension,
       SlashCommand,
       TableOfContents.configure({
         onUpdate: (content) => {
@@ -91,23 +95,66 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     ],
     content: markdownToHtml(initialContent),
     onUpdate: ({ editor }) => {
-      console.log('Editor onUpdate triggered')
+      console.log('🔧 Editor onUpdate triggered')
 
       // 跳过初始化时的更新
       if (isInitializingRef.current) {
-        console.log('Skipping initial update')
+        console.log('⏭️ Skipping initial update')
         return
       }
 
-      // 发送编辑内容到 VSCode
-      const markdownContent = htmlToMarkdown(editor.getHTML())
+      // 获取编辑器 HTML 内容
+      const htmlContent = editor.getHTML()
+      console.log('📄 === Editor HTML content ===')
+      console.log(htmlContent)
+
+      // 详细检查数学公式元素
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = htmlContent
+
+      // 检查所有可能的数学公式元素
+      const mathElements = tempDiv.querySelectorAll('[data-type*="math"], math-inline, math-display')
+      console.log('🔍 Found math elements:', mathElements.length)
+
+      // 详细检查每个元素
+      mathElements.forEach((el, index) => {
+        console.log(`📊 Math element ${index}:`)
+        console.log('  - Outer HTML:', el.outerHTML)
+        console.log('  - Node name:', el.nodeName)
+        console.log('  - Data type:', el.getAttribute('data-type'))
+        console.log('  - Data latex:', el.getAttribute('data-latex'))
+        console.log('  - Text content:', el.textContent)
+        console.log('  - All attributes:')
+        Array.from(el.attributes).forEach(attr => {
+          console.log(`    ${attr.name}: ${attr.value}`)
+        })
+      })
+
+      // 检查转换过程
+      console.log('🔄 Starting HTML to Markdown conversion...')
+      const markdownContent = htmlToMarkdown(htmlContent)
+      console.log('✅ === Converted Markdown content ===')
+      console.log(markdownContent)
+
+      // 检查转换后的数学公式
+      const mathInMarkdown = markdownContent.match(/\$[^$]+\$|\$\$[\s\S]*?\$\$/g)
+      console.log('🔍 Math formulas found in Markdown:', mathInMarkdown?.length || 0)
+      if (mathInMarkdown) {
+        mathInMarkdown.forEach((math, index) => {
+          console.log(`📊 Math formula ${index}:`, math)
+        })
+      }
+
       sendEdit(markdownContent)
 
       // 保存状态到 VSCode
       vscode.setState({ content: markdownContent })
     },
-    onCreate: () => {
+    onCreate: ({ editor: currentEditor }) => {
       setIsLoading(false)
+
+      // 迁移旧的数学字符串格式
+      migrateMathStrings(currentEditor)
 
       // 初始化完成，允许后续的更新
       isInitializingRef.current = false

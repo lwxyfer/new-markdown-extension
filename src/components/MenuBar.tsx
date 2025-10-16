@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { MenuBarProps } from '../types/types'
+import ImageDialog from './ImageDialog'
+import FormulaDialog from './FormulaDialog'
 import {
   Bold,
   Italic,
@@ -19,10 +21,17 @@ import {
   Table,
   Image,
   Link,
-  Workflow
+  Workflow,
+  Square,
+  Sigma,
+  SquareSigma,
 } from 'lucide-react'
 
 const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
+  const [showImageDialog, setShowImageDialog] = useState(false)
+  const [showMathDialog, setShowMathDialog] = useState(false)
+  const [mathType, setMathType] = useState<'inline' | 'block'>('inline')
+
   if (!editor) {
     return null
   }
@@ -155,16 +164,31 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           <Table size={16} />
         </button>
         <button
-          onClick={() => {
-            const url = window.prompt('请输入图片 URL:')
-            if (url) {
-              editor.chain().focus().setImage({ src: url }).run()
-            }
-          }}
+          onClick={() => setShowImageDialog(true)}
           className="notion-button"
           title="插入图片"
         >
           <Image size={16} />
+        </button>
+        <button
+          onClick={() => {
+            setMathType('inline')
+            setShowMathDialog(true)
+          }}
+          className="notion-button"
+          title="插入行内数学公式"
+        >
+          <Sigma size={16} />
+        </button>
+        <button
+          onClick={() => {
+            setMathType('block')
+            setShowMathDialog(true)
+          }}
+          className="notion-button"
+          title="插入块级数学公式"
+        >
+          <SquareSigma size={16} />
         </button>
         <button
           onClick={() => {
@@ -196,6 +220,31 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
           <Workflow size={16} />
         </button>
       </div>
+
+      <ImageDialog
+        isOpen={showImageDialog}
+        onClose={() => setShowImageDialog(false)}
+        onConfirm={(url) => {
+          editor.chain().focus().setImage({ src: url }).run()
+        }}
+        title="插入图片"
+        placeholder="请输入图片 URL"
+      />
+
+      <FormulaDialog
+        isOpen={showMathDialog}
+        onClose={() => setShowMathDialog(false)}
+        onConfirm={(formula) => {
+          if (mathType === 'inline') {
+            editor.chain().focus().insertInlineMath({ latex: formula }).run()
+          } else {
+            editor.chain().focus().insertBlockMath({ latex: formula }).run()
+          }
+        }}
+        title={mathType === 'inline' ? '插入行内数学公式' : '插入块级数学公式'}
+        placeholder="请输入 LaTeX 公式"
+        mathType={mathType}
+      />
 
     </div>
   )

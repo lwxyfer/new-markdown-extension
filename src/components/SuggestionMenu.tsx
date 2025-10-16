@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { SuggestionMenuProps } from '../types/types'
+import SlashCommandImageHandler from './SlashCommandImageHandler'
+import SlashCommandMathHandler from './SlashCommandMathHandler'
 import {
   Heading1,
   Heading2,
@@ -16,7 +18,8 @@ import {
   Table,
   Image,
   Link,
-  Workflow
+  Workflow,
+  Square
 } from 'lucide-react'
 
 // 图标映射函数
@@ -37,16 +40,21 @@ const getIconComponent = (iconString: string) => {
     'table': () => <Table size={16} />,
     'image': () => <Image size={16} />,
     'link': () => <Link size={16} />,
-    'mermaid': () => <Workflow size={16} />
+    'mermaid': () => <Workflow size={16} />,
+    'math': () => <Square size={16} />
   }
 
   const IconComponent = iconMap[iconString as keyof typeof iconMap] || (() => <Type size={16} />)
   return <IconComponent />
 }
 
-const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selectedIndex = 0, setSelectedIndex }) => {
+const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selectedIndex = 0, setSelectedIndex, editor, range }) => {
   const listRef = useRef<HTMLDivElement>(null)
   const [internalSelectedIndex, setInternalSelectedIndex] = useState(selectedIndex)
+  const [showImageDialog, setShowImageDialog] = useState(false)
+  const [imageCommandData, setImageCommandData] = useState<{ editor: any; range: any } | null>(null)
+  const [showMathDialog, setShowMathDialog] = useState(false)
+  const [mathCommandData, setMathCommandData] = useState<{ editor: any; range: any; mathType: 'inline' | 'block' } | null>(null)
 
   // Use the external setSelectedIndex if provided, otherwise use internal state
   const hasExternalSetSelectedIndex = typeof setSelectedIndex !== 'undefined'
@@ -63,7 +71,28 @@ const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selecte
         actualSetSelectedIndex((actualSelectedIndex + 1) % items.length)
       } else if (event.key === 'Enter') {
         event.preventDefault()
-        command(items[actualSelectedIndex])
+        const selectedItem = items[actualSelectedIndex]
+
+        // 执行命令并检查返回类型
+        const result = command(selectedItem) as any
+
+        // 如果是图片项，显示自定义对话框
+        if (result?.type === 'image' && editor && range) {
+          setImageCommandData({
+            editor,
+            range
+          })
+          setShowImageDialog(true)
+        } else if (result?.type === 'math' && editor && range) {
+          setMathCommandData({
+            editor,
+            range,
+            mathType: result.mathType
+          })
+          setShowMathDialog(true)
+        } else {
+          // 对于普通命令，不需要特殊处理，命令已经执行
+        }
       }
     }
 
@@ -84,23 +113,71 @@ const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selecte
     }
   }, [actualSelectedIndex])
 
+  const handleItemClick = (item: any) => {
+    // 执行命令并检查返回类型
+    const result = command(item) as any
+
+    // 如果是图片项，显示自定义对话框
+    if (result?.type === 'image' && editor && range) {
+      setImageCommandData({
+        editor,
+        range
+      })
+      setShowImageDialog(true)
+    } else if (result?.type === 'math' && editor && range) {
+      setMathCommandData({
+        editor,
+        range,
+        mathType: result.mathType
+      })
+      setShowMathDialog(true)
+    } else {
+      // 对于普通命令，不需要特殊处理，命令已经执行
+    }
+  }
+
   if (items.length === 0) {
     return null
   }
 
   return (
-    <div className="suggestion-menu" ref={listRef}>
-      {items.map((item: any, index: number) => (
-        <div
-          key={index}
-          className={`suggestion-item ${index === actualSelectedIndex ? 'selected' : ''}`}
-          onClick={() => command(item)}
-        >
-          <div className="suggestion-icon">{getIconComponent(item.icon)}</div>
-          <div className="suggestion-title">{item.title}</div>
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="suggestion-menu" ref={listRef}>
+        {items.map((item: any, index: number) => (
+          <div
+            key={index}
+            className={`suggestion-item ${index === actualSelectedIndex ? 'selected' : ''}`}
+            onClick={() => handleItemClick(item)}
+          >
+            <div className="suggestion-icon">{getIconComponent(item.icon)}</div>
+            <div className="suggestion-title">{item.title}</div>
+          </div>
+        ))}
+      </div>
+
+      {showImageDialog && imageCommandData && (
+        <SlashCommandImageHandler
+          editor={imageCommandData.editor}
+          range={imageCommandData.range}
+          onComplete={() => {
+            setShowImageDialog(false)
+            setImageCommandData(null)
+          }}
+        />
+      )}
+
+      {showMathDialog && mathCommandData && (
+        <SlashCommandMathHandler
+          editor={mathCommandData.editor}
+          range={mathCommandData.range}
+          mathType={mathCommandData.mathType}
+          onComplete={() => {
+            setShowMathDialog(false)
+            setMathCommandData(null)
+          }}
+        />
+      )}
+    </>
   )
 }
 

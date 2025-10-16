@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import VSCodeMarkdownEditor from '../components/VSCodeMarkdownEditor'
 import '../styles/index.css'
 import '../styles/notion.css'
+import 'katex/dist/katex.min.css'
 
 // Get the initial content from VSCode
 const initialContent = (window as any).initialContent || '';

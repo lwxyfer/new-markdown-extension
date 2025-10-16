@@ -27,6 +27,75 @@ md.renderer.rules.fence = (tokens, idx, options, env, self) => {
   return originalFence!(tokens, idx, options, env, self)
 }
 
+// 保存原始的 inline 渲染规则
+const originalInline = md.renderer.rules.inline
+
+// 自定义 inline 渲染规则以支持数学公式
+md.renderer.rules.inline = (tokens, idx, options, env, self) => {
+  const token = tokens[idx]
+
+  // 检查是否是数学公式
+  if (token.content.startsWith('$') && token.content.endsWith('$') && token.content.length > 2) {
+    const latex = token.content.slice(1, -1)
+    // 生成 TipTap 兼容的行内数学公式元素
+    return `<span data-latex="${md.utils.escapeHtml(latex)}" data-type="inline-math"></span>`
+  }
+
+  // 对于其他内联元素，使用原始渲染规则
+  return originalInline!(tokens, idx, options, env, self)
+}
+
+// 添加块级数学公式的渲染规则
+md.renderer.rules.blockmath = (tokens, idx) => {
+  const token = tokens[idx]
+  const content = token.content.trim()
+
+  // 移除前后的 $$ 和空白
+  const latex = content.replace(/^\$\$\s*|\s*\$\$$/g, '')
+  // 生成 TipTap 兼容的块级数学公式元素
+  return `<div data-latex="${md.utils.escapeHtml(latex)}" data-type="block-math"></div>`
+}
+
+// 添加块级数学公式的解析规则
+md.block.ruler.before('fence', 'blockmath', (state, startLine, endLine, silent) => {
+  const pos = state.bMarks[startLine] + state.tShift[startLine]
+
+  // 检查是否以 $$ 开头
+  if (state.src.charCodeAt(pos) !== 0x24 /* $ */ || state.src.charCodeAt(pos + 1) !== 0x24 /* $ */) {
+    return false
+  }
+
+  // 查找结束的 $$
+  let nextLine = startLine
+  let haveEndMarker = false
+
+  while (nextLine < endLine) {
+    nextLine++
+    const nextMax = state.eMarks[nextLine]
+
+    if (state.src.charCodeAt(nextMax - 2) === 0x24 /* $ */ &&
+        state.src.charCodeAt(nextMax - 1) === 0x24 /* $ */) {
+      haveEndMarker = true
+      break
+    }
+  }
+
+  if (!haveEndMarker) {
+    return false
+  }
+
+  const content = state.getLines(startLine, nextLine + 1, state.blkIndent, false)
+
+  if (!silent) {
+    const token = state.push('blockmath', '', 0)
+    token.content = content
+    token.map = [startLine, nextLine + 1]
+  }
+
+  state.line = nextLine + 1
+  return true
+})
+
 // 配置 turndown
 const turndownService = new TurndownService({
   headingStyle: 'atx',
@@ -36,7 +105,119 @@ const turndownService = new TurndownService({
   bulletListMarker: '-',
 })
 
-// 添加自定义规则来处理特殊元素
+// 首先添加数学公式规则，确保它们优先处理
+// 添加 TipTap 行内数学公式规则
+turndownService.addRule('tiptapInlineMath', {
+  filter: function (node: HTMLElement) {
+    const isInlineMath = node.nodeName === 'SPAN' && node.getAttribute('data-type') === 'inline-math'
+    if (isInlineMath) {
+      console.log('🔍 [tiptapInlineMath] Filter matched:', {
+        nodeName: node.nodeName,
+        dataType: node.getAttribute('data-type'),
+        dataLatex: node.getAttribute('data-latex'),
+        textContent: node.textContent
+      })
+    }
+    return isInlineMath
+  },
+  replacement: function (_content: string, node: any) {
+    const latex = node.getAttribute('data-latex') || node.textContent || ''
+    console.log('🔄 [tiptapInlineMath] Converting to Markdown:', latex)
+    return `$${latex}$`
+  }
+})
+
+// 添加 TipTap 块级数学公式规则
+turndownService.addRule('tiptapBlockMath', {
+  filter: function (node: HTMLElement) {
+    const isBlockMath = node.nodeName === 'DIV' && node.getAttribute('data-type') === 'block-math'
+    if (isBlockMath) {
+      console.log('🔍 [tiptapBlockMath] Filter matched:', {
+        nodeName: node.nodeName,
+        dataType: node.getAttribute('data-type'),
+        dataLatex: node.getAttribute('data-latex'),
+        textContent: node.textContent
+      })
+    }
+    return isBlockMath
+  },
+  replacement: function (_content: string, node: any) {
+    const latex = node.getAttribute('data-latex') || node.textContent || ''
+    console.log('🔄 [tiptapBlockMath] Converting to Markdown:', latex)
+    return `$$\n${latex}\n$$`
+  }
+})
+
+// 添加备用数学公式规则，处理没有 data-latex 属性的情况
+turndownService.addRule('fallbackInlineMath', {
+  filter: function (node: HTMLElement) {
+    const isInlineMath = node.nodeName === 'SPAN' && node.getAttribute('data-type') === 'inline-math'
+    if (isInlineMath && (!node.getAttribute('data-latex') || node.getAttribute('data-latex') === '')) {
+      console.log('🔍 [fallbackInlineMath] Found inline math without data-latex:', {
+        nodeName: node.nodeName,
+        dataType: node.getAttribute('data-type'),
+        textContent: node.textContent,
+        innerHTML: node.innerHTML
+      })
+      return true
+    }
+    return false
+  },
+  replacement: function (_content: string, node: any) {
+    const latex = node.textContent || ''
+    console.log('🔄 [fallbackInlineMath] Converting to Markdown:', latex)
+    return `$${latex}$`
+  }
+})
+
+// 添加备用块级数学公式规则
+turndownService.addRule('fallbackBlockMath', {
+  filter: function (node: HTMLElement) {
+    const isBlockMath = node.nodeName === 'DIV' && node.getAttribute('data-type') === 'block-math'
+    if (isBlockMath && (!node.getAttribute('data-latex') || node.getAttribute('data-latex') === '')) {
+      console.log('🔍 [fallbackBlockMath] Found block math without data-latex:', {
+        nodeName: node.nodeName,
+        dataType: node.getAttribute('data-type'),
+        textContent: node.textContent,
+        innerHTML: node.innerHTML
+      })
+      return true
+    }
+    return false
+  },
+  replacement: function (_content: string, node: any) {
+    const latex = node.textContent || ''
+    console.log('🔄 [fallbackBlockMath] Converting to Markdown:', latex)
+    return `$$\n${latex}\n$$`
+  }
+})
+
+// 添加调试规则来检查所有数学元素
+turndownService.addRule('debugMathElements', {
+  filter: function (node: HTMLElement) {
+    const isMathElement = node.nodeName === 'SPAN' && node.getAttribute('data-type') === 'inline-math' ||
+                         node.nodeName === 'DIV' && node.getAttribute('data-type') === 'block-math'
+    if (isMathElement) {
+      console.log('🔍 [debugMathElements] Found math element:', {
+        nodeName: node.nodeName,
+        dataType: node.getAttribute('data-type'),
+        dataLatex: node.getAttribute('data-latex'),
+        textContent: node.textContent,
+        innerHTML: node.innerHTML,
+        outerHTML: node.outerHTML
+      })
+    }
+    return false // 不处理，只用于调试
+  },
+  replacement: function () {
+    return ''
+  }
+})
+
+// 调试：检查所有已添加的规则
+console.log('🔍 [turndownSetup] All rules added:', Object.keys(turndownService.options.rules))
+
+// 然后添加其他自定义规则来处理特殊元素
 turndownService.addRule('taskList', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'UL' && node.getAttribute('data-type') === 'taskList'
@@ -88,6 +269,28 @@ turndownService.addRule('mermaid', {
   }
 })
 
+// 添加行内数学公式规则
+turndownService.addRule('inlineMath', {
+  filter: function (node: HTMLElement) {
+    return node.nodeName === 'MATH-INLINE'
+  },
+  replacement: function (_content: string, node: any) {
+    const latex = node.getAttribute('latex') || ''
+    return `$${latex}$`
+  }
+})
+
+// 添加块级数学公式规则
+turndownService.addRule('blockMath', {
+  filter: function (node: HTMLElement) {
+    return node.nodeName === 'MATH-DISPLAY'
+  },
+  replacement: function (_content: string, node: any) {
+    const latex = node.getAttribute('latex') || ''
+    return `$$\n${latex}\n$$`
+  }
+})
+
 // 添加代码块规则
 turndownService.addRule('codeBlock', {
   filter: function (node: HTMLElement) {
@@ -104,9 +307,121 @@ turndownService.addRule('codeBlock', {
 
 // 导出工具函数
 export const markdownToHtml = (markdown: string): string => {
-  return md.render(markdown)
+  console.log('🔄 [markdownToHtml] Starting conversion...')
+  console.log('📄 Input Markdown:', markdown)
+
+  const result = md.render(markdown)
+
+  console.log('✅ [markdownToHtml] Conversion completed')
+  console.log('📝 Output HTML:', result)
+
+  // 检查数学公式元素
+  const tempDiv = document.createElement('div')
+  tempDiv.innerHTML = result
+  const mathElements = tempDiv.querySelectorAll('[data-type="inline-math"], [data-type="block-math"]')
+  console.log('🔍 Math elements found in HTML:', mathElements.length)
+  mathElements.forEach((el, index) => {
+    console.log(`📊 Math element ${index}:`, el.outerHTML)
+  })
+
+  return result
+}
+
+// 简单的 HTML 到 Markdown 转换器（避免 turndown 的问题）
+const simpleHtmlToMarkdown = (html: string): string => {
+  let markdown = html
+
+  // 处理标题
+  markdown = markdown.replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (match, level, content) => {
+    const hashes = '#'.repeat(parseInt(level))
+    return `${hashes} ${content}\n\n`
+  })
+
+  // 处理段落
+  markdown = markdown.replace(/<p[^>]*>(.*?)<\/p>/g, (match, content) => {
+    return `${content}\n\n`
+  })
+
+  // 处理换行
+  markdown = markdown.replace(/<br\s*\/?>/g, '\n')
+
+  // 移除其他 HTML 标签，但保留数学公式
+  markdown = markdown.replace(/<[^>]*>/g, '')
+
+  // 处理 HTML 实体
+  markdown = markdown.replace(/&amp;/g, '&')
+  markdown = markdown.replace(/&lt;/g, '<')
+  markdown = markdown.replace(/&gt;/g, '>')
+  markdown = markdown.replace(/&quot;/g, '"')
+  markdown = markdown.replace(/&#39;/g, "'")
+
+  return markdown.trim()
 }
 
 export const htmlToMarkdown = (html: string): string => {
-  return turndownService.turndown(html)
+  console.log('🔄 [htmlToMarkdown] Starting conversion...')
+  console.log('📄 Input HTML:', html)
+
+  // 检查 turndown 服务是否有我们的规则
+  console.log('🔍 [htmlToMarkdown] Checking turndown rules...')
+  const rules = turndownService.options.rules
+  console.log('📋 Available turndown rules:', Object.keys(rules))
+
+  // 手动处理数学公式作为备用方案
+  let processedHtml = html
+
+  // 处理行内数学公式
+  processedHtml = processedHtml.replace(/<span data-latex="([^"]+)" data-type="inline-math"><\/span>/g, (match, latex) => {
+    console.log('🔄 [manualInlineMath] Converting to Markdown:', latex)
+    return `$${latex}$`
+  })
+
+  // 处理块级数学公式
+  processedHtml = processedHtml.replace(/<div data-latex="([^"]+)" data-type="block-math"><\/div>/g, (match, latex) => {
+    console.log('🔄 [manualBlockMath] Converting to Markdown:')
+    console.log('  - Original latex:', latex)
+
+    // 更全面的转义处理
+    let unescapedLatex = latex
+    // 处理 HTML 实体转义
+    unescapedLatex = unescapedLatex.replace(/&amp;/g, '&')
+    unescapedLatex = unescapedLatex.replace(/&lt;/g, '<')
+    unescapedLatex = unescapedLatex.replace(/&gt;/g, '>')
+    unescapedLatex = unescapedLatex.replace(/&quot;/g, '"')
+    unescapedLatex = unescapedLatex.replace(/&#39;/g, "'")
+    // 注意：不要处理双反斜杠，因为 LaTeX 需要 \\ 来表示换行
+
+    console.log('  - After unescaping:', unescapedLatex)
+    // 返回块级公式格式
+    return `$$\n${unescapedLatex}\n$$`
+  })
+
+  console.log('🔄 [htmlToMarkdown] After manual processing:')
+  console.log('📄 Processed HTML:', processedHtml)
+
+  // 直接返回手动处理的结果，跳过 HTML 清理
+  // 因为我们已经手动处理了所有数学公式
+  const result = processedHtml
+    .replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (match, level, content) => {
+      const hashes = '#'.repeat(parseInt(level))
+      return `${hashes} ${content}\n\n`
+    })
+    .replace(/<p[^>]*>(.*?)<\/p>/g, (match, content) => {
+      return `${content}\n\n`
+    })
+    .replace(/<[^>]*>/g, '') // 移除剩余的 HTML 标签
+
+  console.log('✅ [htmlToMarkdown] Conversion completed')
+  console.log('📝 Output Markdown:', result)
+
+  // 检查块级公式格式
+  const blockMathMatches = result.match(/\$\$[\s\S]*?\$\$/g)
+  if (blockMathMatches) {
+    console.log('🔍 Block math formulas found:', blockMathMatches.length)
+    blockMathMatches.forEach((math, index) => {
+      console.log(`📊 Block math ${index}:`, math)
+    })
+  }
+
+  return result
 }
