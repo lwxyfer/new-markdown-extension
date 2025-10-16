@@ -8,18 +8,18 @@ const MermaidComponent: React.FC<any> = ({ node, updateAttributes }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [editContent, setEditContent] = useState(node.textContent)
+  const [editContent, setEditContent] = useState(node.attrs.content || node.textContent)
   const [zoomLevel, setZoomLevel] = useState(1)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
-  const content = node.textContent
+  const content = node.attrs.content || node.textContent
 
   // 切换编辑模式
   const toggleEditMode = () => {
     if (isEditing) {
-      // 保存更改
+      // 保存更改 - 更新属性
       updateAttributes({ content: editContent })
     } else {
       // 进入编辑模式，设置编辑内容

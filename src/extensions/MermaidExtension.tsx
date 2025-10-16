@@ -38,7 +38,7 @@ export const MermaidExtension = Node.create<MermaidOptions>({
     return {
       content: {
         default: '',
-        parseHTML: element => element.textContent,
+        parseHTML: element => element.getAttribute('data-content') || element.textContent,
         renderHTML: attributes => ({
           'data-content': attributes.content,
         }),
@@ -64,9 +64,10 @@ export const MermaidExtension = Node.create<MermaidOptions>({
       'div',
       {
         'data-type': 'mermaid',
-        'data-content': node.textContent,
+        'data-content': node.attrs.content,
         class: 'mermaid-diagram',
       },
+      node.attrs.content,
     ]
   },
 
