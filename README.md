@@ -1,71 +1,118 @@
-# New Markdown Editor - VSCode Extension
+# New Markdown Editor - Rich WYSIWYG Markdown Editor for VSCode
 
-一个功能丰富的所见即所得 Markdown 编辑器，专为 VSCode 设计，支持 Mermaid 图表和代码高亮。
+<div align="center">
 
-## 功能特性
+![VSCode](https://img.shields.io/badge/VSCode-1.60+-blue?logo=visualstudiocode)
+![React](https://img.shields.io/badge/React-19.0-blue?logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-- ✅ 富文本编辑（粗体、斜体、下划线等）
-- ✅ 标题层级（H1-H6）
-- ✅ 列表（有序、无序、任务列表）
-- ✅ 代码块和语法高亮
-- ✅ 表格支持
-- ✅ 图片和链接
-- ✅ 斜杠命令快速插入
-- ✅ Mermaid 图表渲染
-- ✅ 全屏预览
-- ✅ 实时预览
+**A modern, feature-rich WYSIWYG Markdown editor that brings the power of rich text editing to VSCode**
 
-## 安装
+[Features](#-features) • [Installation](#-installation) • [Quick Start](#-quick-start) • [Screenshots](#-screenshots)
 
-1. 在 VSCode 中打开扩展面板 (Ctrl+Shift+X)
-2. 搜索 "New Markdown Editor"
-3. 点击安装
+</div>
 
-或者从 VSIX 文件安装：
+## ✨ Why New Markdown Editor?
 
+Tired of switching between source code and preview mode? **New Markdown Editor** revolutionizes your Markdown workflow by providing a true WYSIWYG (What You See Is What You Get) experience directly in VSCode.
+
+### 🚀 Key Benefits
+
+- **No More Preview Tabs**: Edit and see the final result simultaneously
+- **Rich Visual Editing**: Bold, italics, tables, and more with intuitive controls
+- **Advanced Features**: Mermaid diagrams, mathematical formulas, and code highlighting
+- **Seamless Integration**: Native VSCode experience with full extension compatibility
+
+## 🎯 Features
+
+### Rich Text Editing
+- **Bold, Italic, Underline**: Format text with familiar shortcuts
+- **Headings (H1-H6)**: Structure your documents with proper hierarchy
+- **Lists**: Ordered, unordered, and task lists
+- **Tables**: Create and edit tables visually
+- **Links & Images**: Insert and manage with ease
+
+### Advanced Markdown Support
+- **Code Blocks**: Syntax highlighting for 100+ programming languages
+- **Mermaid Diagrams**: Render flowcharts, sequence diagrams, and more
+- **Mathematical Formulas**: LaTeX support with KaTeX rendering
+- **Slash Commands**: Quick insertion of common elements
+
+### Enhanced User Experience
+- **Floating Toolbar**: Context-aware formatting tools
+- **Bubble Menus**: Quick access to formatting options
+- **Full-Screen Preview**: Focus on your content
+- **Real-time Updates**: Instant visual feedback
+
+## 📦 Installation
+
+### From VSCode Marketplace
+1. Open VSCode Extensions panel (`Ctrl+Shift+X` / `Cmd+Shift+X`)
+2. Search for "New Markdown Editor"
+3. Click **Install**
+
+### From VSIX File
 ```bash
 code --install-extension new-markdown-editor-1.0.0.vsix
 ```
 
-## 使用方法
+## 🚀 Quick Start
 
-1. 打开一个 `.md` 文件
-2. 右键点击文件，选择 "Open With"
-3. 选择 "New Markdown Editor"
-4. 或者，在文件标签页右键选择 "Reopen Editor With" > "New Markdown Editor"
+1. **Open a Markdown file** (`.md` extension)
+2. **Right-click** the file and select "Open With"
+3. **Choose "New Markdown Editor"**
+4. **Start editing** with rich text controls!
 
-## 快捷键
+### 🎹 Quick Actions
+- `Ctrl+B` / `Cmd+B` - **Bold** text
+- `Ctrl+I` / `Cmd+I` - **Italic** text
+- `Ctrl+K` / `Cmd+K` - Insert **link**
+- `/` - Open **slash command** menu
+- `Ctrl+Shift+P` - **Full-screen** preview
 
-- `Ctrl+B` / `Cmd+B` - 粗体
-- `Ctrl+I` / `Cmd+I` - 斜体
-- `Ctrl+K` / `Cmd+K` - 插入链接
-- `/` - 打开命令菜单
+## 📊 Mermaid Diagram Support
 
-## 支持的 Mermaid 图表类型
+Create beautiful diagrams directly in your Markdown:
 
-- 流程图 (Flowchart)
-- 序列图 (Sequence Diagram)
-- 类图 (Class Diagram)
-- 状态图 (State Diagram)
-- 甘特图 (Gantt)
-- 饼图 (Pie Chart)
-- 等等...
+- **Flowcharts** - Process flows and decision trees
+- **Sequence Diagrams** - System interactions
+- **Class Diagrams** - Object-oriented designs
+- **State Diagrams** - State transitions
+- **Gantt Charts** - Project timelines
+- **Pie Charts** - Data visualization
 
-## 开发
+## 🎨 Screenshots
 
-### 构建扩展
+### Rich Text Editor Interface
+![Rich Text Editor](./demo1.png)
+*Experience seamless WYSIWYG editing with intuitive formatting controls*
 
-```bash
-npm run build:all
-npm run package
-```
+### Advanced Features & Diagrams
+![Advanced Features](./demo2.png)
+*Create Mermaid diagrams, mathematical formulas, and code blocks with syntax highlighting*
 
-### 调试
+## 🔧 Technical Highlights
 
-1. 在 VSCode 中打开此项目
-2. 按 F5 启动调试
-3. 在扩展开发主机中测试扩展
+- **Modern Stack**: Built with React 19, TypeScript, and TipTap
+- **VSCode Native**: Full integration with VSCode APIs
+- **Performance Optimized**: Fast rendering and smooth editing
+- **Extensible**: Plugin-based architecture for easy customization
 
-## 许可证
+## 🤝 Contributing
 
-MIT
+We welcome contributions! Feel free to submit issues, feature requests, or pull requests.
+
+## 📄 License
+
+MIT License - feel free to use this project in your own work.
+
+---
+
+<div align="center">
+
+**Transform your Markdown editing experience in VSCode today!**
+
+⭐ **Star this project** if you find it useful!
+
+</div>

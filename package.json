@@ -1,8 +1,13 @@
 {
   "name": "new-markdown-editor",
   "displayName": "New Markdown Editor",
+  "publisher": "lwxyfer",
   "description": "A rich WYSIWYG Markdown editor for VSCode with Mermaid diagram support",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lwxyfer/new-markdown-extension"
+  },
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -10,6 +15,9 @@
     "Other"
   ],
   "main": "./dist/extension.js",
+  "activationEvents": [
+    "onCustomEditor:new-markdown.markdownEditor"
+  ],
   "contributes": {
     "customEditors": [
       {
