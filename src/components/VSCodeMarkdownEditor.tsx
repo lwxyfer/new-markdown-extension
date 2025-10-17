@@ -180,36 +180,132 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
         const clipboardData = event.clipboardData
         if (!clipboardData) return false
 
-        const text = clipboardData.getData('text/plain')
+        // 智能粘贴处理：支持三种主要场景
 
-        let markdownContent = text
+        // 1. 优先检查HTML格式
+        const html = clipboardData.getData('text/html')
+        if (html) {
+          // 场景1：检测是否为TipTap编辑器复制的内容
+          const isTipTapContent = html.includes('data-type="inline-math"') ||
+                                 html.includes('data-type="block-math"') ||
+                                 html.includes('data-type="mermaid"') ||
+                                 html.includes('data-type="taskList"') ||
+                                 html.includes('data-type="taskItem"') ||
+                                 // 检测TipTap特有的HTML结构
+                                 html.includes('class="ProseMirror"') ||
+                                 html.includes('data-tiptap-node') ||
+                                 // 检测TipTap常规格式
+                                 html.includes('data-type="image"') ||
+                                 html.includes('class="code-block"') ||
+                                 html.includes('class="heading"') ||
+                                 // 检测列表格式 - 更精确的检测
+                                 html.includes('data-type="bulletList"') ||
+                                 html.includes('data-type="orderedList"') ||
+                                 html.includes('role="list"') ||
+                                 html.includes('<ul ') ||
+                                 html.includes('<ol ')
 
-        // Check if the pasted content is wrapped in ```markdown code block
-        const markdownCodeBlockRegex = /^```(?:markdown|md)\s*\n([\s\S]*?)\n```$/m
-        const match = text.match(markdownCodeBlockRegex)
+          if (isTipTapContent) {
+            console.log('🔍 [Paste] 场景1：TipTap编辑器内容，直接插入')
+            event.preventDefault()
 
-        if (match) {
-          // Extract the actual markdown content from code block
-          markdownContent = match[1]
+            // 直接插入HTML内容，保持格式完整性
+            const { state, dispatch } = view
+            const { from } = state.selection
+
+            // 清除当前选区
+            const clearTr = state.tr.delete(from, from)
+            dispatch(clearTr)
+
+            // 直接插入HTML内容
+            editor?.commands.insertContent(html)
+            return true
+          }
+
+          // 场景2：网页HTML内容，转换为Markdown
+          console.log('🔍 [Paste] 场景2：网页HTML内容，转换为Markdown')
+          event.preventDefault()
+
+          // 使用turndown转换HTML为Markdown
+          const markdownContent = htmlToMarkdown(html)
+          const convertedHtml = markdownToHtml(markdownContent)
+
+          // 插入转换后的内容
+          const { state, dispatch } = view
+          const { from } = state.selection
+
+          // 清除当前选区
+          const clearTr = state.tr.delete(from, from)
+          dispatch(clearTr)
+
+          // 插入转换后的HTML
+          editor?.commands.insertContent(convertedHtml)
+          return true
         }
 
-        // Override the clipboard data
+        // 2. 检查图片粘贴
+        const files = Array.from(clipboardData.files)
+        const imageFiles = files.filter(file => file.type.startsWith('image/'))
+
+        if (imageFiles.length > 0) {
+          console.log('🔍 [Paste] 检测到图片文件，处理中...')
+          event.preventDefault()
+
+          // 处理图片文件
+          for (const imageFile of imageFiles) {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+              const dataUrl = e.target?.result as string
+              if (dataUrl) {
+                // 插入图片到编辑器
+                editor?.commands.setImage({ src: dataUrl })
+              }
+            }
+            reader.readAsDataURL(imageFile)
+          }
+          return true
+        }
+
+        // 3. 检查纯文本格式
+        const text = clipboardData.getData('text/plain')
+
+        // 场景3：检测是否为Markdown语法内容
+        const isMarkdownContent = /^#+\s|\*\*.*\*\*|__.*__|\[.*\]\(.*\)|\`.*\`|\$\$.*\$\$|^\s*[-*+]\s|^\s*\d+\.\s|^```[\w]*\s*\n|^\s*-\s|^\s*\*\s|^\s*\+\s/.test(text)
+
+        if (isMarkdownContent) {
+          console.log('🔍 [Paste] 场景3：Markdown语法内容，解析为HTML')
+          event.preventDefault()
+
+          // 转换Markdown为HTML
+          const htmlContent = markdownToHtml(text)
+
+          // 插入转换后的内容
+          const { state, dispatch } = view
+          const { from } = state.selection
+
+          // 清除当前选区
+          const clearTr = state.tr.delete(from, from)
+          dispatch(clearTr)
+
+          // 插入HTML内容
+          editor?.commands.insertContent(htmlContent)
+          return true
+        }
+
+        // 4. 兜底：纯文本插入
+        console.log('🔍 [Paste] 场景4：纯文本内容，直接插入')
         event.preventDefault()
 
-        // Convert Markdown to HTML using our markdownUtils
-        const htmlContent = markdownToHtml(markdownContent)
-
-        // Use TipTap's insertContent method with the HTML content
+        // 直接插入纯文本
         const { state, dispatch } = view
         const { from } = state.selection
 
-        // Clear the current selection first
+        // 清除当前选区
         const clearTr = state.tr.delete(from, from)
         dispatch(clearTr)
 
-        // Use insertContent to insert the HTML
-        editor?.commands.insertContent(htmlContent)
-
+        // 插入纯文本
+        editor?.commands.insertContent(text)
         return true
       },
     },

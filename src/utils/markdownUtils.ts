@@ -215,7 +215,7 @@ turndownService.addRule('debugMathElements', {
 })
 
 // 调试：检查所有已添加的规则
-console.log('🔍 [turndownSetup] All rules added:', Object.keys(turndownService.options.rules))
+// console.log('🔍 [turndownSetup] All rules added:', Object.keys(turndownService.options.rules))
 
 // 然后添加其他自定义规则来处理特殊元素
 turndownService.addRule('taskList', {
@@ -255,6 +255,32 @@ turndownService.addRule('table', {
     }
 
     return markdownRows.join('\n') + '\n'
+  }
+})
+
+// 添加列表规则 - 增强网页HTML列表转换
+turndownService.addRule('enhancedList', {
+  filter: ['ul', 'ol'],
+  replacement: function (content: string, node: any) {
+    const isOrdered = node.nodeName === 'OL'
+
+    // 使用DOM解析器更可靠地提取列表项
+    const tempDiv = document.createElement('div')
+    tempDiv.innerHTML = content
+
+    const listItems = Array.from(tempDiv.querySelectorAll('li'))
+    if (listItems.length === 0) return content
+
+    const markdownItems = listItems.map((item, index) => {
+      const text = item.textContent?.trim() || ''
+      if (isOrdered) {
+        return `${index + 1}. ${text}`
+      } else {
+        return `- ${text}`
+      }
+    })
+
+    return markdownItems.join('\n') + '\n\n'
   }
 })
 
@@ -328,56 +354,56 @@ export const markdownToHtml = (markdown: string): string => {
 }
 
 // 简单的 HTML 到 Markdown 转换器（避免 turndown 的问题）
-const simpleHtmlToMarkdown = (html: string): string => {
-  let markdown = html
-
-  // 处理标题
-  markdown = markdown.replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (match, level, content) => {
-    const hashes = '#'.repeat(parseInt(level))
-    return `${hashes} ${content}\n\n`
-  })
-
-  // 处理段落
-  markdown = markdown.replace(/<p[^>]*>(.*?)<\/p>/g, (match, content) => {
-    return `${content}\n\n`
-  })
-
-  // 处理换行
-  markdown = markdown.replace(/<br\s*\/?>/g, '\n')
-
-  // 移除其他 HTML 标签，但保留数学公式
-  markdown = markdown.replace(/<[^>]*>/g, '')
-
-  // 处理 HTML 实体
-  markdown = markdown.replace(/&amp;/g, '&')
-  markdown = markdown.replace(/&lt;/g, '<')
-  markdown = markdown.replace(/&gt;/g, '>')
-  markdown = markdown.replace(/&quot;/g, '"')
-  markdown = markdown.replace(/&#39;/g, "'")
-
-  return markdown.trim()
-}
+// const simpleHtmlToMarkdown = (html: string): string => {
+//   let markdown = html
+//
+//   // 处理标题
+//   markdown = markdown.replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (_match, level, content) => {
+//     const hashes = '#'.repeat(parseInt(level))
+//     return `${hashes} ${content}\n\n`
+//   })
+//
+//   // 处理段落
+//   markdown = markdown.replace(/<p[^>]*>(.*?)<\/p>/g, (_match, content) => {
+//     return `${content}\n\n`
+//   })
+//
+//   // 处理换行
+//   markdown = markdown.replace(/<br\s*\/?>/g, '\n')
+//
+//   // 移除其他 HTML 标签，但保留数学公式
+//   markdown = markdown.replace(/<[^>]*>/g, '')
+//
+//   // 处理 HTML 实体
+//   markdown = markdown.replace(/&amp;/g, '&')
+//   markdown = markdown.replace(/&lt;/g, '<')
+//   markdown = markdown.replace(/&gt;/g, '>')
+//   markdown = markdown.replace(/&quot;/g, '"')
+//   markdown = markdown.replace(/&#39;/g, "'")
+//
+//   return markdown.trim()
+// }
 
 export const htmlToMarkdown = (html: string): string => {
   console.log('🔄 [htmlToMarkdown] Starting conversion...')
   console.log('📄 Input HTML:', html)
 
   // 检查 turndown 服务是否有我们的规则
-  console.log('🔍 [htmlToMarkdown] Checking turndown rules...')
-  const rules = turndownService.options.rules
-  console.log('📋 Available turndown rules:', Object.keys(rules))
+  // console.log('🔍 [htmlToMarkdown] Checking turndown rules...')
+  // const rules = turndownService.options.rules
+  // console.log('📋 Available turndown rules:', Object.keys(rules))
 
   // 手动处理数学公式作为备用方案
   let processedHtml = html
 
   // 处理行内数学公式
-  processedHtml = processedHtml.replace(/<span data-latex="([^"]+)" data-type="inline-math"><\/span>/g, (match, latex) => {
+  processedHtml = processedHtml.replace(/<span data-latex="([^"]+)" data-type="inline-math"><\/span>/g, (_match, latex) => {
     console.log('🔄 [manualInlineMath] Converting to Markdown:', latex)
     return `$${latex}$`
   })
 
   // 处理块级数学公式
-  processedHtml = processedHtml.replace(/<div data-latex="([^"]+)" data-type="block-math"><\/div>/g, (match, latex) => {
+  processedHtml = processedHtml.replace(/<div data-latex="([^"]+)" data-type="block-math"><\/div>/g, (_match, latex) => {
     console.log('🔄 [manualBlockMath] Converting to Markdown:')
     console.log('  - Original latex:', latex)
 
@@ -402,11 +428,11 @@ export const htmlToMarkdown = (html: string): string => {
   // 直接返回手动处理的结果，跳过 HTML 清理
   // 因为我们已经手动处理了所有数学公式
   const result = processedHtml
-    .replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (match, level, content) => {
+    .replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (_match, level, content) => {
       const hashes = '#'.repeat(parseInt(level))
       return `${hashes} ${content}\n\n`
     })
-    .replace(/<p[^>]*>(.*?)<\/p>/g, (match, content) => {
+    .replace(/<p[^>]*>(.*?)<\/p>/g, (_match, content) => {
       return `${content}\n\n`
     })
     .replace(/<[^>]*>/g, '') // 移除剩余的 HTML 标签

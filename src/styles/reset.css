@@ -9,7 +9,7 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--vscode-font-family);
+  font-family: var(--vscode-font-family) !important;
   font-weight: var(--vscode-font-weight);
   font-size: var(--vscode-font-size);
   color: var(--vscode-editor-foreground);

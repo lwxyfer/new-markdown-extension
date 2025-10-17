@@ -52,7 +52,7 @@ export const MermaidExtension = Node.create<MermaidOptions>({
         tag: 'div[data-type="mermaid"]',
         preserveWhitespace: 'full',
         getContent: (node, schema) => {
-          const content = (node as HTMLElement).getAttribute('data-content') || ''
+          const content = (node as HTMLElement).getAttribute('data-content') || (node as HTMLElement).textContent || ''
           return Fragment.from(schema.text(content))
         },
       },
