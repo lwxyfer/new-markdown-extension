@@ -333,19 +333,19 @@ turndownService.addRule('codeBlock', {
 
 // 导出工具函数
 export const markdownToHtml = (markdown: string): string => {
-  console.log('🔄 [markdownToHtml] Starting conversion...')
-  console.log('📄 Input Markdown:', markdown)
+  // console.log('🔄 [markdownToHtml] Starting conversion...')
+  // console.log('📄 Input Markdown:', markdown)
 
   const result = md.render(markdown)
 
-  console.log('✅ [markdownToHtml] Conversion completed')
-  console.log('📝 Output HTML:', result)
+  // console.log('✅ [markdownToHtml] Conversion completed')
+  // console.log('📝 Output HTML:', result)
 
   // 检查数学公式元素
   const tempDiv = document.createElement('div')
   tempDiv.innerHTML = result
   const mathElements = tempDiv.querySelectorAll('[data-type="inline-math"], [data-type="block-math"]')
-  console.log('🔍 Math elements found in HTML:', mathElements.length)
+  // console.log('🔍 Math elements found in HTML:', mathElements.length)
   mathElements.forEach((el, index) => {
     console.log(`📊 Math element ${index}:`, el.outerHTML)
   })

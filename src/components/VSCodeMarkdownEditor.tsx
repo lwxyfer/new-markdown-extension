@@ -19,12 +19,14 @@ import { TableOfContents } from '@tiptap/extension-table-of-contents'
 import { SlashCommand } from './SlashCommand'
 import MenuBar from './MenuBar'
 import TOC from './TOC'
+import SearchBox from './SearchBox'
 import { markdownToHtml, htmlToMarkdown } from '../utils/markdownUtils'
 import { MermaidExtension } from '../extensions/MermaidExtension'
 import { CodeBlockExtension } from '../extensions/CodeBlockExtension'
 import BubbleMenuExtension from '../extensions/BubbleMenuExtension'
 import { ImageExtension } from '../extensions/ImageExtension'
 import { MathematicsExtension } from '../extensions/MathematicsExtension'
+import { SearchHighlightExtension } from '../extensions/SearchHighlightExtension'
 import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { isReadyMessage } from '../core/messageTypes'
 
@@ -45,6 +47,10 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
   const [isLoading, setIsLoading] = useState(true)
   const [isTocCollapsed, setIsTocCollapsed] = useState(false)
   const [tocItems, setTocItems] = useState<any[]>([])
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<Array<{ start: number; end: number }>>([])
+  const [currentMatchIndex, setCurrentMatchIndex] = useState(0)
   const isInitializingRef = useRef(true)
 
   const editor = useEditor({
@@ -91,6 +97,11 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
         onUpdate: (content) => {
           setTocItems(content)
         },
+      }),
+      SearchHighlightExtension.configure({
+        searchQuery: searchQuery,
+        currentMatchIndex: currentMatchIndex,
+        searchResults: searchResults,
       }),
     ],
     content: markdownToHtml(initialContent),
@@ -326,12 +337,238 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     return () => window.removeEventListener('message', handleMessage)
   }, [])
 
+  // 监听键盘快捷键
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+F 打开搜索
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault()
+        setIsSearchOpen(true)
+      }
+
+      // ESC 关闭搜索
+      if (e.key === 'Escape' && isSearchOpen) {
+        e.preventDefault()
+        setIsSearchOpen(false)
+        setSearchQuery('')
+        setSearchResults([])
+        setCurrentMatchIndex(0)
+      }
+
+      // F3 下一个匹配项
+      if (e.key === 'F3' && isSearchOpen) {
+        e.preventDefault()
+        if (searchResults.length > 0) {
+          const newIndex = (currentMatchIndex + 1) % searchResults.length
+          setCurrentMatchIndex(newIndex)
+          const match = searchResults[newIndex]
+          if (editor && match) {
+            editor.commands.setTextSelection({
+              from: match.start,
+              to: match.end
+            })
+            setTimeout(() => {
+              // 方法1: 使用TipTap的视图滚动
+              const view = editor.view
+              if (view && view.dom) {
+                const coords = view.coordsAtPos(match.start)
+                if (coords) {
+                  const editorElement = view.dom.closest('.editor-content')
+                  if (editorElement) {
+                    const targetY = coords.top - editorElement.getBoundingClientRect().top + editorElement.scrollTop - 100
+                    editorElement.scrollTo({
+                      top: targetY,
+                      behavior: 'smooth'
+                    })
+                  }
+                }
+              }
+
+              // 方法2: 备用方案 - 使用DOM选择器
+              const editorElement = document.querySelector('.editor-content')
+              if (editorElement) {
+                const selection = window.getSelection()
+                if (selection && selection.rangeCount > 0) {
+                  const range = selection.getRangeAt(0)
+                  const element = range.startContainer.parentElement
+                  if (element) {
+                    element.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'center'
+                    })
+                  }
+                }
+              }
+            }, 100)
+          }
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isSearchOpen, searchResults, currentMatchIndex, editor])
+
   // 发送编辑内容到 VSCode
   const sendEdit = useCallback((content: string) => {
     vscode.postMessage({
       type: 'edit',
       content: content
     })
+  }, [])
+
+  // 搜索功能
+  const performSearch = useCallback((query: string) => {
+    console.log('🔍 [Search] performSearch called:', query)
+
+    if (!editor || !query.trim()) {
+      console.log('🔍 [Search] No query or editor, clearing results')
+      setSearchResults([])
+      setCurrentMatchIndex(0)
+
+      // 清除高亮
+      if (editor) {
+        editor.commands.updateSearchHighlight({
+          searchQuery: '',
+          currentMatchIndex: -1,
+          searchResults: []
+        })
+      }
+      return
+    }
+
+    // 使用 TipTap 的文档搜索方法，避免位置偏移问题
+    const matches: Array<{ start: number; end: number }> = []
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const regex = new RegExp(escapedQuery, 'gi')
+
+    // 遍历文档的所有文本节点
+    editor.state.doc.descendants((node, pos) => {
+      if (node.isText) {
+        const text = node.text || ''
+        let match
+
+        while ((match = regex.exec(text)) !== null) {
+          const start = pos + match.index
+          const end = start + match[0].length
+
+          matches.push({
+            start: start,
+            end: end
+          })
+
+          console.log('🔍 [Search] Found match in text node:', {
+            text: match[0],
+            nodeText: text,
+            nodePos: pos,
+            start: start,
+            end: end
+          })
+        }
+      }
+    })
+
+    console.log('🔍 [Search] Found matches:', matches.length)
+    console.log('🔍 [Search] Matches:', matches)
+
+    setSearchResults(matches)
+    setCurrentMatchIndex(matches.length > 0 ? 0 : -1)
+
+    // 更新高亮
+    if (editor) {
+      editor.commands.updateSearchHighlight({
+        searchQuery: query,
+        currentMatchIndex: matches.length > 0 ? 0 : -1,
+        searchResults: matches
+      })
+    }
+  }, [editor])
+
+  // 导航到匹配项
+  const navigateToMatch = useCallback((direction: 'next' | 'prev') => {
+    if (searchResults.length === 0) return
+
+    let newIndex
+    if (direction === 'next') {
+      newIndex = (currentMatchIndex + 1) % searchResults.length
+    } else {
+      newIndex = (currentMatchIndex - 1 + searchResults.length) % searchResults.length
+    }
+
+    setCurrentMatchIndex(newIndex)
+
+    // 更新当前匹配项的高亮
+    if (editor) {
+      editor.commands.updateSearchHighlight({
+        searchQuery: searchQuery,
+        currentMatchIndex: newIndex,
+        searchResults: searchResults
+      })
+    }
+
+    // 滚动到匹配项
+    const match = searchResults[newIndex]
+    if (editor && match) {
+      // 设置选区并滚动到视图
+      editor.commands.setTextSelection({
+        from: match.start,
+        to: match.end
+      })
+
+      // 确保编辑器滚动到选区位置
+      setTimeout(() => {
+        // 方法1: 使用TipTap的视图滚动
+        const view = editor.view
+        if (view && view.dom) {
+          const coords = view.coordsAtPos(match.start)
+          if (coords) {
+            const editorElement = view.dom.closest('.editor-content')
+            if (editorElement) {
+              const targetY = coords.top - editorElement.getBoundingClientRect().top + editorElement.scrollTop - 100
+              editorElement.scrollTo({
+                top: targetY,
+                behavior: 'smooth'
+              })
+            }
+          }
+        }
+
+        // 方法2: 备用方案 - 使用DOM选择器
+        const editorElement = document.querySelector('.editor-content')
+        if (editorElement) {
+          const selection = window.getSelection()
+          if (selection && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0)
+            const element = range.startContainer.parentElement
+            if (element) {
+              element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+              })
+            }
+          }
+        }
+      }, 100)
+    }
+  }, [searchResults, currentMatchIndex, editor])
+
+  // 处理搜索查询变化
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query)
+    performSearch(query)
+  }, [performSearch])
+
+  // 处理搜索导航
+  const handleNavigate = useCallback((direction: 'next' | 'prev') => {
+    navigateToMatch(direction)
+  }, [navigateToMatch])
+
+  // 关闭搜索
+  const handleCloseSearch = useCallback(() => {
+    setIsSearchOpen(false)
+    setSearchQuery('')
+    setSearchResults([])
+    setCurrentMatchIndex(0)
   }, [])
 
   if (isLoading) {
@@ -362,6 +599,15 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
           <BubbleMenuExtension editor={editor} />
         </div>
       </div>
+
+      <SearchBox
+        isOpen={isSearchOpen}
+        onClose={handleCloseSearch}
+        onSearch={handleSearch}
+        onNavigate={handleNavigate}
+        currentMatch={currentMatchIndex + 1}
+        totalMatches={searchResults.length}
+      />
     </div>
   )
 }

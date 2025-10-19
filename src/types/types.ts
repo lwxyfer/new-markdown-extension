@@ -25,3 +25,17 @@ export interface SuggestionMenuProps {
   editor?: any
   range?: any
 }
+
+export interface SearchHighlightOptions {
+  searchQuery: string
+  currentMatchIndex: number
+  searchResults: Array<{ start: number; end: number }>
+}
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    updateSearchHighlight: {
+      updateSearchHighlight: (options: Partial<SearchHighlightOptions>) => ReturnType
+    }
+  }
+}
