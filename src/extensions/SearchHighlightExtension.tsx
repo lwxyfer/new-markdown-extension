@@ -43,17 +43,10 @@ export const SearchHighlightExtension = Extension.create<SearchHighlightOptions>
 
             // 如果存在元数据，使用元数据中的值
             if (searchMeta) {
-              console.log('🔍 [SearchHighlight] Search metadata found:', searchMeta)
               searchQuery = searchMeta.searchQuery || searchQuery
               currentMatchIndex = searchMeta.currentMatchIndex ?? currentMatchIndex
               searchResults = searchMeta.searchResults || searchResults
             }
-
-            console.log('🔍 [SearchHighlight] Plugin apply called:', {
-              searchQuery,
-              currentMatchIndex,
-              searchResultsCount: searchResults.length
-            })
 
             // 如果文档没有变化且没有搜索元数据，返回旧状态
             if (!tr.docChanged && !searchMeta) {
@@ -61,7 +54,6 @@ export const SearchHighlightExtension = Extension.create<SearchHighlightOptions>
             }
 
             if (!searchQuery || searchResults.length === 0) {
-              console.log('🔍 [SearchHighlight] No search results, returning empty')
               return DecorationSet.empty
             }
 
@@ -69,12 +61,6 @@ export const SearchHighlightExtension = Extension.create<SearchHighlightOptions>
 
             searchResults.forEach((match, index) => {
               const isCurrent = index === currentMatchIndex
-              console.log(`🔍 [SearchHighlight] Creating decoration for match ${index}:`, {
-                start: match.start,
-                end: match.end,
-                isCurrent,
-                matchText: tr.doc.textBetween(match.start, match.end)
-              })
 
               const decoration = Decoration.inline(
                 match.start,
@@ -91,15 +77,12 @@ export const SearchHighlightExtension = Extension.create<SearchHighlightOptions>
               decorations.push(decoration)
             })
 
-            console.log('🔍 [SearchHighlight] Created decorations:', decorations.length)
             return DecorationSet.create(tr.doc, decorations)
           },
         },
         props: {
           decorations(state) {
-            const decorations = this.getState(state)
-            console.log('🔍 [SearchHighlight] Decorations requested:', decorations?.find().length || 0)
-            return decorations
+            return this.getState(state)
           },
         },
       }),
@@ -109,8 +92,6 @@ export const SearchHighlightExtension = Extension.create<SearchHighlightOptions>
   addCommands() {
     return {
       updateSearchHighlight: (options: Partial<SearchHighlightOptions>) => ({ chain }: { chain: any }) => {
-        console.log('🔍 [SearchHighlight] updateSearchHighlight command called:', options)
-
         return chain()
           .command(({ tr, dispatch }: { tr: any; dispatch: any }) => {
             if (dispatch) {

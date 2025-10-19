@@ -419,10 +419,7 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
 
   // 搜索功能
   const performSearch = useCallback((query: string) => {
-    console.log('🔍 [Search] performSearch called:', query)
-
     if (!editor || !query.trim()) {
-      console.log('🔍 [Search] No query or editor, clearing results')
       setSearchResults([])
       setCurrentMatchIndex(0)
 
@@ -457,19 +454,9 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
             end: end
           })
 
-          console.log('🔍 [Search] Found match in text node:', {
-            text: match[0],
-            nodeText: text,
-            nodePos: pos,
-            start: start,
-            end: end
-          })
         }
       }
     })
-
-    console.log('🔍 [Search] Found matches:', matches.length)
-    console.log('🔍 [Search] Matches:', matches)
 
     setSearchResults(matches)
     setCurrentMatchIndex(matches.length > 0 ? 0 : -1)
