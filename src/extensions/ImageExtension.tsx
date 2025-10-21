@@ -1,9 +1,18 @@
 import { Image } from '@tiptap/extension-image'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import LocalImage from '../components/LocalImage'
 
 // 在 VSCode 环境中处理图片 URL
 const processImageUrlForVSCode = (url: string): string => {
   // 如果是 data URL 或相对路径，直接返回
   if (url.startsWith('data:') || url.startsWith('./') || url.startsWith('/')) {
+    return url
+  }
+
+  // 处理本地文件路径 (file:// 或绝对路径)
+  if (url.startsWith('file://') || /^[a-zA-Z]:\\|^\//.test(url)) {
+    // 在 VSCode Webview 中，本地文件路径需要通过 vscode API 转换为可访问的 URI
+    // 这里返回原始路径，由前端组件处理转换
     return url
   }
 
@@ -14,6 +23,10 @@ const processImageUrlForVSCode = (url: string): string => {
 
 // 自定义图片扩展，处理 VSCode Webview 的安全限制
 export const ImageExtension = Image.extend({
+  addNodeView() {
+    return ReactNodeViewRenderer(LocalImage)
+  },
+
   addAttributes() {
     return {
       ...this.parent?.(),
@@ -62,49 +75,3 @@ export const ImageExtension = Image.extend({
     }
   },
 })
-
-// 图片插入工具类
-export class ImageHelper {
-  // 验证图片 URL 是否可访问
-  static async validateImageUrl(url: string): Promise<boolean> {
-    try {
-      const response = await fetch(url, { method: 'HEAD' })
-      return response.ok
-    } catch {
-      return false
-    }
-  }
-
-  // 创建占位符图片
-  static createPlaceholderImage(width: number = 200, height: number = 150): string {
-    return `data:image/svg+xml;base64,${btoa(`
-      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-        <rect width="100%" height="100%" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
-        <text x="50%" y="50%" text-anchor="middle" dy=".3em" fill="#999" font-family="sans-serif" font-size="12">
-          图片预览
-        </text>
-        <text x="50%" y="60%" text-anchor="middle" fill="#666" font-family="sans-serif" font-size="10">
-          ${width}×${height}
-        </text>
-      </svg>
-    `)}`
-  }
-
-  // 获取图片信息
-  static async getImageInfo(url: string): Promise<{ width: number; height: number; type: string } | null> {
-    return new Promise((resolve) => {
-      const img = new window.Image()
-      img.onload = () => {
-        resolve({
-          width: img.width,
-          height: img.height,
-          type: url.split('.').pop()?.toLowerCase() || 'unknown'
-        })
-      }
-      img.onerror = () => {
-        resolve(null)
-      }
-      img.src = url
-    })
-  }
-}
