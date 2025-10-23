@@ -72,11 +72,21 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
 
       if (message.type === 'imagePathConverted' && message.originalPath === src) {
         console.log('🖼️ Image path converted:', src, '->', message.convertedPath)
+
+        // 检查转换后的路径是否与原始路径相同（表示转换失败）
+        if (message.convertedPath === src) {
+          console.log('❌ Image path conversion failed, using placeholder')
+          setHasError(true)
+          setIsConverting(false)
+          setIsLoading(false)
+          return
+        }
+
         // 缓存转换结果
         imageUrlCache.set(src, message.convertedPath)
         setImageUrl(message.convertedPath)
         setIsConverting(false)
-        setIsLoading(false)
+        // 保持 loading 状态，等待图片实际加载结果
       }
     }
 
@@ -110,6 +120,23 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
     return `data:image/svg+xml;base64,${btoa(svgContent)}`
   }
 
+  // 检查是否是 badge 图片
+  const isBadge = src.includes('shields.io') ||
+                  src.includes('badge.fury.io') ||
+                  src.includes('badges.gitter') ||
+                  src.includes('badgen.net')
+
+  const badgeStyle = isBadge ? {
+    height: '20px',
+    maxWidth: 'none',
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    margin: '0 4px 4px 0'
+  } : {
+    maxWidth: '100%',
+    height: 'auto'
+  }
+
   return (
     <NodeViewWrapper>
       <img
@@ -120,8 +147,7 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
         onLoad={handleImageLoad}
         onError={handleImageError}
         style={{
-          maxWidth: '100%',
-          height: 'auto',
+          ...badgeStyle,
           opacity: isLoading ? 0.7 : 1,
           transition: 'opacity 0.3s ease'
         }}

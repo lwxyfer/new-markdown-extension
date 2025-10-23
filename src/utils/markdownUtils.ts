@@ -56,6 +56,53 @@ md.renderer.rules.blockmath = (tokens, idx) => {
   return `<div data-latex="${md.utils.escapeHtml(latex)}" data-type="block-math"></div>`
 }
 
+// 添加 GitHub badge 自定义渲染规则
+md.renderer.rules.image = (tokens, idx, options, _env, self) => {
+  const token = tokens[idx]
+  const src = token.attrGet('src') || ''
+  const alt = token.attrGet('alt') || ''
+
+  // 检查是否是 badge 图片
+  const isBadge = src.includes('shields.io') ||
+                  src.includes('badge.fury.io') ||
+                  src.includes('badges.gitter') ||
+                  src.includes('badgen.net')
+
+  if (isBadge) {
+    return `<img src="${src}" alt="${alt}" data-badge="true" />`
+  }
+
+  return self.renderToken(tokens, idx, options)
+}
+
+// 添加图片链接渲染规则
+md.renderer.rules.link_open = (tokens, idx, options, _env, self) => {
+  const token = tokens[idx]
+
+  // 检查链接是否包含图片
+  if (idx + 2 < tokens.length) {
+    const nextToken = tokens[idx + 1]
+    const nextNextToken = tokens[idx + 2]
+
+    if (nextToken.type === 'image' && nextNextToken.type === 'link_close') {
+      const src = nextToken.attrGet('src') || ''
+      const isBadge = src.includes('shields.io') ||
+                      src.includes('badge.fury.io') ||
+                      src.includes('badges.gitter') ||
+                      src.includes('badgen.net')
+
+      if (isBadge) {
+        token.attrSet('data-github-badge', 'true')
+      } else {
+        // 普通图片链接，确保链接正常渲染
+        token.attrSet('data-image-link', 'true')
+      }
+    }
+  }
+
+  return self.renderToken(tokens, idx, options)
+}
+
 // 添加块级数学公式的解析规则
 md.block.ruler.before('fence', 'blockmath', (state, startLine, endLine, silent) => {
   const pos = state.bMarks[startLine] + state.tShift[startLine]
@@ -317,6 +364,40 @@ turndownService.addRule('blockMath', {
   }
 })
 
+// 添加 GitHub badge 规则
+turndownService.addRule('githubBadge', {
+  filter: function (node: HTMLElement) {
+    return node.nodeName === 'A' && node.getAttribute('data-github-badge') === 'true'
+  },
+  replacement: function (_content: string, node: any) {
+    const href = node.getAttribute('href') || ''
+    const img = node.querySelector('img')
+    if (img) {
+      const src = img.getAttribute('src') || ''
+      const alt = img.getAttribute('alt') || ''
+      return `[![${alt}](${src})](${href})`
+    }
+    return _content
+  }
+})
+
+// 添加链接图片规则
+turndownService.addRule('linkedImage', {
+  filter: function (node: HTMLElement) {
+    return node.nodeName === 'A' && node.querySelector('img') !== null
+  },
+  replacement: function (_content: string, node: any) {
+    const img = node.querySelector('img')
+    if (!img) return _content
+
+    const href = node.getAttribute('href') || ''
+    const src = img.getAttribute('src') || ''
+    const alt = img.getAttribute('alt') || ''
+
+    return `[![${alt}](${src})](${href})`
+  }
+})
+
 // 添加代码块规则
 turndownService.addRule('codeBlock', {
   filter: function (node: HTMLElement) {
@@ -428,6 +509,16 @@ export const htmlToMarkdown = (html: string): string => {
   // 直接返回手动处理的结果，跳过 HTML 清理
   // 因为我们已经手动处理了所有数学公式
   const result = processedHtml
+    // 移除尾部空白元素
+    .replace(/<p><br><br class="ProseMirror-trailingBreak"><\/p>/g, '')
+    .replace(/<p><br class="ProseMirror-trailingBreak"><\/p>/g, '')
+    .replace(/<p[^>]*><br[^>]*><\/p>/g, '')
+    // 移除组件之间的尾部空白
+    .replace(/<\/div><p><br><br class="ProseMirror-trailingBreak"><\/p><div/g, '</div><div')
+    // 处理图片链接之间的 br 标签 - 完全移除
+    .replace(/<a[^>]*data-github-badge[^>]*>.*?<\/a>\s*<br>\s*<a[^>]*data-github-badge[^>]*>/g, (match) => {
+      return match.replace(/<br>/g, '')
+    })
     .replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (_match, level, content) => {
       const hashes = '#'.repeat(parseInt(level))
       return `${hashes} ${content}\n\n`
@@ -435,7 +526,19 @@ export const htmlToMarkdown = (html: string): string => {
     .replace(/<p[^>]*>(.*?)<\/p>/g, (_match, content) => {
       return `${content}\n\n`
     })
-    .replace(/<[^>]*>/g, '') // 移除剩余的 HTML 标签
+    // 保留有用的 HTML 标签（div、span 等）
+    .replace(/<(\/?(span|center|font|table|tr|td|th|thead|tbody|tfoot))[^>]*>/gi, '') // 移除这些标签但保留内容
+    // 保留 div 标签及其属性
+    .replace(/<div[^>]*>(.*?)<\/div>/g, (_match, content) => {
+      // 提取 div 的属性
+      const alignMatch = _match.match(/align="([^"]*)"/)
+      if (alignMatch) {
+        return `<div align="${alignMatch[1]}">${content}<\/div>`
+      }
+      return `<div>${content}<\/div>`
+    })
+    // 移除剩余的 HTML 标签，但保留 div 标签
+    .replace(/<(?!\/?div)[^>]*>/g, '')
 
   console.log('✅ [htmlToMarkdown] Conversion completed')
   console.log('📝 Output Markdown:', result)

@@ -135,9 +135,18 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
           }
         }
 
-        // 转换为 Webview 可访问的 URI
-        convertedPath = webviewPanel.webview.asWebviewUri(absolutePath).toString();
-        console.log('🔗 Converted to webview URI:', convertedPath);
+        // 检查文件是否存在
+        try {
+          await vscode.workspace.fs.stat(absolutePath);
+          console.log('✅ Image file exists:', absolutePath.toString());
+          // 转换为 Webview 可访问的 URI
+          convertedPath = webviewPanel.webview.asWebviewUri(absolutePath).toString();
+          console.log('🔗 Converted to webview URI:', convertedPath);
+        } catch (error) {
+          console.error('❌ Image file does not exist:', absolutePath.toString());
+          // 文件不存在，返回原始路径表示转换失败
+          convertedPath = imagePath;
+        }
       }
       // 处理绝对路径或 file:// 路径
       else if (imagePath.startsWith('file://') || /^[a-zA-Z]:\\|^\//.test(imagePath)) {
@@ -152,12 +161,21 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
 
         console.log('📄 File URI:', fileUri.toString());
 
-        // 转换为 Webview 可访问的 URI
-        convertedPath = webviewPanel.webview.asWebviewUri(fileUri).toString();
-        console.log('🔗 Converted to webview URI:', convertedPath);
+        // 检查文件是否存在
+        try {
+          await vscode.workspace.fs.stat(fileUri);
+          console.log('✅ Image file exists:', fileUri.toString());
+          // 转换为 Webview 可访问的 URI
+          convertedPath = webviewPanel.webview.asWebviewUri(fileUri).toString();
+          console.log('🔗 Converted to webview URI:', convertedPath);
+        } catch (error) {
+          console.error('❌ Image file does not exist:', fileUri.toString());
+          // 文件不存在，返回原始路径表示转换失败
+          convertedPath = imagePath;
+        }
       }
 
-      console.log('✅ Image path converted:', imagePath, '->', convertedPath);
+      console.log('✅ Image path conversion result:', imagePath, '->', convertedPath);
 
       // 发送转换后的路径回 Webview
       webviewPanel.webview.postMessage({
@@ -173,7 +191,7 @@ export class MarkdownEditorProvider implements vscode.CustomTextEditorProvider {
       webviewPanel.webview.postMessage({
         type: 'imagePathConverted',
         originalPath: imagePath,
-        convertedPath: imagePath // 返回原始路径作为兜底
+        convertedPath: imagePath // 返回原始路径表示转换失败
       });
     }
   }

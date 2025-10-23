@@ -100,6 +100,91 @@
   height: auto;
 }
 
+/* GitHub badge 样式 */
+.ProseMirror a[data-github-badge="true"] {
+  display: inline-block !important;
+  margin: 0 4px 4px 0 !important;
+  text-decoration: none !important;
+}
+
+.ProseMirror a[data-github-badge="true"] img {
+  max-width: none !important;
+  height: 20px !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+}
+
+/* 检测 GitHub badges 的图片样式 */
+.ProseMirror img[data-badge="true"],
+.ProseMirror img[src*="shields.io"],
+.ProseMirror img[src*="badge.fury.io"],
+.ProseMirror img[src*="badges.gitter"],
+.ProseMirror img[src*="img.shields.io"],
+.ProseMirror img[src*="badgen.net"] {
+  height: 20px !important;
+  max-width: none !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin: 0 4px 4px 0 !important;
+}
+
+/* 处理 div align="center" 样式 */
+.ProseMirror div[align="center"] {
+  text-align: center !important;
+}
+
+.ProseMirror div[align="center"] a[data-github-badge="true"],
+.ProseMirror div[align="center"] img[data-badge="true"] {
+  display: inline-block !important;
+  margin: 0 4px 4px 0 !important;
+}
+
+/* 普通图片链接样式 */
+.ProseMirror a[data-image-link="true"] {
+  display: inline-block !important;
+  text-decoration: none !important;
+}
+
+.ProseMirror a[data-image-link="true"] img {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin: 0 4px 4px 0 !important;
+}
+
+/* TipTap React 图片组件外层 div 样式 */
+.ProseMirror .react-renderer.node-image {
+  display: inline-block !important;
+  white-space: normal !important;
+}
+/* TipTap React 图片组件外层 div 样式 */
+.ProseMirror .react-renderer.node-linkedImage {
+  display: inline-block !important;
+  white-space: normal !important;
+}
+
+.ProseMirror .react-renderer.node-image [data-node-view-wrapper] {
+  display: inline-block !important;
+  white-space: normal !important;
+}
+.ProseMirror .react-renderer.node-linkedImage [data-node-view-wrapper] {
+  display: inline-block !important;
+  white-space: normal !important;
+}
+
+/* GitHub badge 图片的特殊处理 */
+.ProseMirror .react-renderer.node-image a[data-github-badge="true"] {
+  display: inline-block !important;
+  margin: 0 4px 4px 0 !important;
+  text-decoration: none !important;
+}
+
+.ProseMirror .react-renderer.node-image a[data-github-badge="true"] img {
+  max-width: none !important;
+  height: 20px !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+}
+
 .ProseMirror a {
   color: var(--vscode-textLink-foreground);
   text-decoration: none;
@@ -377,4 +462,24 @@
   background-color: rgba(255, 165, 0, 0.5);
   border: 1px solid rgba(255, 165, 0, 0.8);
   border-radius: 2px;
+}
+
+/* 隐藏尾部空白元素 */
+.ProseMirror .ProseMirror-trailingBreak {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 隐藏空的段落 */
+.ProseMirror p:empty,
+.ProseMirror p:has(> br:only-child),
+.ProseMirror p:has(> .ProseMirror-trailingBreak) {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }

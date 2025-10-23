@@ -24,7 +24,7 @@ import { markdownToHtml, htmlToMarkdown } from '../utils/markdownUtils'
 import { MermaidExtension } from '../extensions/MermaidExtension'
 import { CodeBlockExtension } from '../extensions/CodeBlockExtension'
 import BubbleMenuExtension from '../extensions/BubbleMenuExtension'
-import { ImageExtension } from '../extensions/ImageExtension'
+import { LinkedImageExtension } from '../extensions/LinkedImageExtension'
 import { MathematicsExtension } from '../extensions/MathematicsExtension'
 import { SearchHighlightExtension } from '../extensions/SearchHighlightExtension'
 import { migrateMathStrings } from '@tiptap/extension-mathematics'
@@ -71,7 +71,7 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
       TableRow,
       TableHeader,
       TableCell,
-      ImageExtension,
+      LinkedImageExtension,
       Link.configure({
         openOnClick: false,
       }),
