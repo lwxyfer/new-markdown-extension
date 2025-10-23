@@ -11,6 +11,8 @@
 
 [Features](#-features) • [Installation](#-installation) • [Quick Start](#-quick-start) • [Screenshots](#-screenshots)
 
+🌐 **Read in other languages**: [中文](README.zh-CN.md) • [日本語](README.ja-JP.md) • [한국어](README.ko-KR.md) • [Deutsch](README.de-DE.md)
+
 </div>
 
 ## ✨ Why New Markdown Editor?
