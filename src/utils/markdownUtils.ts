@@ -1,7 +1,7 @@
 import MarkdownIt from 'markdown-it'
 import TurndownService from 'turndown'
 
-// 配置 markdown-it
+// Configure markdown-it
 const md = new MarkdownIt({
   html: true,
   linkify: true,
@@ -9,60 +9,60 @@ const md = new MarkdownIt({
   breaks: true,
 })
 
-// 保存原始的 fence 渲染规则
+// Save original fence rendering rule
 const originalFence = md.renderer.rules.fence
 
-// 自定义 fence 渲染规则以支持 Mermaid
+// Custom fence rendering rule to support Mermaid
 md.renderer.rules.fence = (tokens, idx, options, env, self) => {
   const token = tokens[idx]
   const info = token.info.trim()
 
-  // 如果是 mermaid 代码块，渲染为特殊的 div
+  // If it's a mermaid code block, render as special div
   if (info === 'mermaid') {
     const content = token.content
     return `<div data-type="mermaid" data-content="${md.utils.escapeHtml(content)}"></div>`
   }
 
-  // 对于其他代码块，使用原始渲染规则
+  // For other code blocks, use original rendering rule
   return originalFence!(tokens, idx, options, env, self)
 }
 
-// 保存原始的 inline 渲染规则
+// Save original inline rendering rule
 const originalInline = md.renderer.rules.inline
 
 // 自定义 inline 渲染规则以支持数学公式
 md.renderer.rules.inline = (tokens, idx, options, env, self) => {
   const token = tokens[idx]
 
-  // 检查是否是数学公式
+  // Check if it's a math formula
   if (token.content.startsWith('$') && token.content.endsWith('$') && token.content.length > 2) {
     const latex = token.content.slice(1, -1)
-    // 生成 TipTap 兼容的行内数学公式元素
+    // Generate TipTap-compatible inline math formula element
     return `<span data-latex="${md.utils.escapeHtml(latex)}" data-type="inline-math"></span>`
   }
 
-  // 对于其他内联元素，使用原始渲染规则
+  // For other inline elements, use original rendering rule
   return originalInline!(tokens, idx, options, env, self)
 }
 
-// 添加块级数学公式的渲染规则
+// Add rendering rule for block math formula
 md.renderer.rules.blockmath = (tokens, idx) => {
   const token = tokens[idx]
   const content = token.content.trim()
 
-  // 移除前后的 $$ 和空白
+  // Remove $$ and whitespace from front and back
   const latex = content.replace(/^\$\$\s*|\s*\$\$$/g, '')
-  // 生成 TipTap 兼容的块级数学公式元素
+  // Generate TipTap-compatible block math formula element
   return `<div data-latex="${md.utils.escapeHtml(latex)}" data-type="block-math"></div>`
 }
 
-// 添加 GitHub badge 自定义渲染规则
+// Add GitHub badge custom rendering rule
 md.renderer.rules.image = (tokens, idx, options, _env, self) => {
   const token = tokens[idx]
   const src = token.attrGet('src') || ''
   const alt = token.attrGet('alt') || ''
 
-  // 检查是否是 badge 图片
+  // Check if it's a badge image
   const isBadge = src.includes('shields.io') ||
                   src.includes('badge.fury.io') ||
                   src.includes('badges.gitter') ||
@@ -75,11 +75,11 @@ md.renderer.rules.image = (tokens, idx, options, _env, self) => {
   return self.renderToken(tokens, idx, options)
 }
 
-// 添加图片链接渲染规则
+// Add image link rendering rule
 md.renderer.rules.link_open = (tokens, idx, options, _env, self) => {
   const token = tokens[idx]
 
-  // 检查链接是否包含图片
+  // Check if link contains image
   if (idx + 2 < tokens.length) {
     const nextToken = tokens[idx + 1]
     const nextNextToken = tokens[idx + 2]
@@ -94,7 +94,7 @@ md.renderer.rules.link_open = (tokens, idx, options, _env, self) => {
       if (isBadge) {
         token.attrSet('data-github-badge', 'true')
       } else {
-        // 普通图片链接，确保链接正常渲染
+        // Normal image link, ensure link renders correctly
         token.attrSet('data-image-link', 'true')
       }
     }
@@ -103,16 +103,16 @@ md.renderer.rules.link_open = (tokens, idx, options, _env, self) => {
   return self.renderToken(tokens, idx, options)
 }
 
-// 添加块级数学公式的解析规则
+// Add parsing rule for block math formula
 md.block.ruler.before('fence', 'blockmath', (state, startLine, endLine, silent) => {
   const pos = state.bMarks[startLine] + state.tShift[startLine]
 
-  // 检查是否以 $$ 开头
+  // Check if starts with $$
   if (state.src.charCodeAt(pos) !== 0x24 /* $ */ || state.src.charCodeAt(pos + 1) !== 0x24 /* $ */) {
     return false
   }
 
-  // 查找结束的 $$
+  // Find closing $$
   let nextLine = startLine
   let haveEndMarker = false
 
@@ -143,7 +143,7 @@ md.block.ruler.before('fence', 'blockmath', (state, startLine, endLine, silent) 
   return true
 })
 
-// 配置 turndown
+// Configure turndown
 const turndownService = new TurndownService({
   headingStyle: 'atx',
   codeBlockStyle: 'fenced',
@@ -152,8 +152,8 @@ const turndownService = new TurndownService({
   bulletListMarker: '-',
 })
 
-// 首先添加数学公式规则，确保它们优先处理
-// 添加 TipTap 行内数学公式规则
+// Add math formula rule first, ensure they are processed with priority
+// Add TipTap inline math formula rule
 turndownService.addRule('tiptapInlineMath', {
   filter: function (node: HTMLElement) {
     const isInlineMath = node.nodeName === 'SPAN' && node.getAttribute('data-type') === 'inline-math'
@@ -174,7 +174,7 @@ turndownService.addRule('tiptapInlineMath', {
   }
 })
 
-// 添加 TipTap 块级数学公式规则
+// Add TipTap block math formula rule
 turndownService.addRule('tiptapBlockMath', {
   filter: function (node: HTMLElement) {
     const isBlockMath = node.nodeName === 'DIV' && node.getAttribute('data-type') === 'block-math'
@@ -195,7 +195,7 @@ turndownService.addRule('tiptapBlockMath', {
   }
 })
 
-// 添加备用数学公式规则，处理没有 data-latex 属性的情况
+// Add fallback math formula rule to handle cases without data-latex attribute
 turndownService.addRule('fallbackInlineMath', {
   filter: function (node: HTMLElement) {
     const isInlineMath = node.nodeName === 'SPAN' && node.getAttribute('data-type') === 'inline-math'
@@ -217,7 +217,7 @@ turndownService.addRule('fallbackInlineMath', {
   }
 })
 
-// 添加备用块级数学公式规则
+// Add fallback block math formula rule
 turndownService.addRule('fallbackBlockMath', {
   filter: function (node: HTMLElement) {
     const isBlockMath = node.nodeName === 'DIV' && node.getAttribute('data-type') === 'block-math'
@@ -239,7 +239,7 @@ turndownService.addRule('fallbackBlockMath', {
   }
 })
 
-// 添加调试规则来检查所有数学元素
+// Add debug rule to check all math elements
 turndownService.addRule('debugMathElements', {
   filter: function (node: HTMLElement) {
     const isMathElement = node.nodeName === 'SPAN' && node.getAttribute('data-type') === 'inline-math' ||
@@ -254,17 +254,17 @@ turndownService.addRule('debugMathElements', {
         outerHTML: node.outerHTML
       })
     }
-    return false // 不处理，只用于调试
+    return false // Don't process, only for debugging
   },
   replacement: function () {
     return ''
   }
 })
 
-// 调试：检查所有已添加的规则
+// Debug: Check all added rules
 // console.log('🔍 [turndownSetup] All rules added:', Object.keys(turndownService.options.rules))
 
-// 然后添加其他自定义规则来处理特殊元素
+// Then add other custom rules to handle special elements
 turndownService.addRule('taskList', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'UL' && node.getAttribute('data-type') === 'taskList'
@@ -280,7 +280,7 @@ turndownService.addRule('taskList', {
   }
 })
 
-// 添加表格规则
+// Add table rule
 turndownService.addRule('table', {
   filter: ['table'],
   replacement: function (_content: string, node: any) {
@@ -305,13 +305,13 @@ turndownService.addRule('table', {
   }
 })
 
-// 添加列表规则 - 增强网页HTML列表转换
+// Add list rule - Enhanced HTML list to conversion
 turndownService.addRule('enhancedList', {
   filter: ['ul', 'ol'],
   replacement: function (content: string, node: any) {
     const isOrdered = node.nodeName === 'OL'
 
-    // 使用DOM解析器更可靠地提取列表项
+    // Use DOM parser to more reliably extract list items
     const tempDiv = document.createElement('div')
     tempDiv.innerHTML = content
 
@@ -331,7 +331,7 @@ turndownService.addRule('enhancedList', {
   }
 })
 
-// 添加 Mermaid 规则
+// Add Mermaid rule
 turndownService.addRule('mermaid', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'DIV' && node.getAttribute('data-type') === 'mermaid'
@@ -342,7 +342,7 @@ turndownService.addRule('mermaid', {
   }
 })
 
-// 添加行内数学公式规则
+// Add inline math formula rule
 turndownService.addRule('inlineMath', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'MATH-INLINE'
@@ -353,7 +353,7 @@ turndownService.addRule('inlineMath', {
   }
 })
 
-// 添加块级数学公式规则
+// Add block math formula rule
 turndownService.addRule('blockMath', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'MATH-DISPLAY'
@@ -364,7 +364,7 @@ turndownService.addRule('blockMath', {
   }
 })
 
-// 添加 GitHub badge 规则
+// Add GitHub badge rule
 turndownService.addRule('githubBadge', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'A' && node.getAttribute('data-github-badge') === 'true'
@@ -381,7 +381,7 @@ turndownService.addRule('githubBadge', {
   }
 })
 
-// 添加链接图片规则
+// Add linked image rule
 turndownService.addRule('linkedImage', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'A' && node.querySelector('img') !== null
@@ -398,7 +398,7 @@ turndownService.addRule('linkedImage', {
   }
 })
 
-// 添加代码块规则
+// Add code block rule
 turndownService.addRule('codeBlock', {
   filter: function (node: HTMLElement) {
     return node.nodeName === 'PRE' && node.firstChild?.nodeName === 'CODE'
@@ -412,7 +412,7 @@ turndownService.addRule('codeBlock', {
 })
 
 
-// 导出工具函数
+// Export utility functions
 export const markdownToHtml = (markdown: string): string => {
   // console.log('🔄 [markdownToHtml] Starting conversion...')
   // console.log('📄 Input Markdown:', markdown)
@@ -422,7 +422,7 @@ export const markdownToHtml = (markdown: string): string => {
   // console.log('✅ [markdownToHtml] Conversion completed')
   // console.log('📝 Output HTML:', result)
 
-  // 检查数学公式元素
+  // Check for math formula elements
   const tempDiv = document.createElement('div')
   tempDiv.innerHTML = result
   const mathElements = tempDiv.querySelectorAll('[data-type="inline-math"], [data-type="block-math"]')
@@ -434,28 +434,28 @@ export const markdownToHtml = (markdown: string): string => {
   return result
 }
 
-// 简单的 HTML 到 Markdown 转换器（避免 turndown 的问题）
+// Simple HTML to Markdown converter (avoid turndown issues)
 // const simpleHtmlToMarkdown = (html: string): string => {
 //   let markdown = html
 //
-//   // 处理标题
+//   // Handle headings
 //   markdown = markdown.replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (_match, level, content) => {
 //     const hashes = '#'.repeat(parseInt(level))
 //     return `${hashes} ${content}\n\n`
 //   })
 //
-//   // 处理段落
+//   // Handle paragraphs
 //   markdown = markdown.replace(/<p[^>]*>(.*?)<\/p>/g, (_match, content) => {
 //     return `${content}\n\n`
 //   })
 //
-//   // 处理换行
+//   // Handle line breaks
 //   markdown = markdown.replace(/<br\s*\/?>/g, '\n')
 //
-//   // 移除其他 HTML 标签，但保留数学公式
+//   // Remove other HTML tags but preserve math formulas
 //   markdown = markdown.replace(/<[^>]*>/g, '')
 //
-//   // 处理 HTML 实体
+//   // Handle HTML entities
 //   markdown = markdown.replace(/&amp;/g, '&')
 //   markdown = markdown.replace(/&lt;/g, '<')
 //   markdown = markdown.replace(/&gt;/g, '>')

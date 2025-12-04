@@ -14,8 +14,8 @@ const FormulaDialog: React.FC<FormulaDialogProps> = ({
   isOpen,
   onClose,
   onConfirm,
-  title = '插入公式',
-  placeholder = '请输入 LaTeX 公式',
+  title = 'Insert Formula',
+  placeholder = 'Enter LaTeX formula',
   initialValue = '',
   mathType = 'inline'
 }) => {
@@ -33,7 +33,7 @@ const FormulaDialog: React.FC<FormulaDialogProps> = ({
     e.preventDefault()
 
     if (!formula.trim()) {
-      setError('请输入有效的公式')
+      setError('Please enter a valid formula')
       return
     }
 
@@ -144,7 +144,7 @@ const FormulaDialog: React.FC<FormulaDialogProps> = ({
               color: '#666',
               marginTop: '8px'
             }}>
-              支持 LaTeX 语法，例如: <code>E = mc^2</code>, <code>{"\\sum_{i=1}^n i"}</code>
+              Supports LaTeX syntax, e.g.: <code>E = mc^2</code>, <code>{"\\sum_{i=1}^n i"}</code>
             </div>
           </div>
 
@@ -166,7 +166,7 @@ const FormulaDialog: React.FC<FormulaDialogProps> = ({
                 fontSize: '14px'
               }}
             >
-              取消
+              Cancel
             </button>
             <button
               type="submit"
@@ -180,7 +180,7 @@ const FormulaDialog: React.FC<FormulaDialogProps> = ({
                 fontSize: '14px'
               }}
             >
-              确认
+              Confirm
             </button>
           </div>
         </form>

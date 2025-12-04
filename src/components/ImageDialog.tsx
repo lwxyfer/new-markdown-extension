@@ -12,8 +12,8 @@ const ImageDialog: React.FC<ImageDialogProps> = ({
   isOpen,
   onClose,
   onConfirm,
-  title = '插入图片',
-  placeholder = '请输入图片 URL'
+  title = 'Insert Image',
+  placeholder = 'Enter image URL'
 }) => {
   const [url, setUrl] = useState('')
   const [error, setError] = useState('')
@@ -29,17 +29,17 @@ const ImageDialog: React.FC<ImageDialogProps> = ({
     e.preventDefault()
 
     if (!url.trim()) {
-      setError('请输入有效的图片 URL')
+      setError('Please enter a valid image URL')
       return
     }
 
-    // 简单的 URL 验证
+    // Simple URL validation
     try {
       new URL(url)
       onConfirm(url.trim())
       onClose()
     } catch {
-      setError('请输入有效的 URL 地址')
+      setError('Please enter a valid URL')
     }
   }
 
@@ -135,7 +135,7 @@ const ImageDialog: React.FC<ImageDialogProps> = ({
                 fontSize: '14px'
               }}
             >
-              取消
+              Cancel
             </button>
             <button
               type="submit"
@@ -149,7 +149,7 @@ const ImageDialog: React.FC<ImageDialogProps> = ({
                 fontSize: '14px'
               }}
             >
-              确认
+              Confirm
             </button>
           </div>
         </form>

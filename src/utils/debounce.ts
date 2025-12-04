@@ -1,4 +1,4 @@
-// 防抖函数实现
+// Debounce function implementation
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number

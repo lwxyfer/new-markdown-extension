@@ -1,4 +1,4 @@
-// VSCode 与 Webview 通信消息类型定义
+// VSCode and Webview communication message type definitions
 
 export interface VSCodeMessage {
   type: string;
@@ -31,7 +31,7 @@ export interface SaveMessage extends VSCodeMessage {
   content: string;
 }
 
-// 消息类型守卫
+// Message type guards
 export function isUpdateMessage(message: VSCodeMessage): message is UpdateMessage {
   return message.type === 'update';
 }

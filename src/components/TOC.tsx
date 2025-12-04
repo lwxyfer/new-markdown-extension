@@ -98,7 +98,7 @@ const TOC: React.FC<TOCProps> = ({ editor, tocItems, onToggle }) => {
       <button
         className="toc-toggle-btn"
         onClick={toggleCollapse}
-        title={isCollapsed ? "展开目录" : "折叠目录"}
+        title={isCollapsed ? "Expand TOC" : "Collapse TOC"}
         style={{ display: isCollapsed ? 'block' : 'none' }}
       >
         <List size={16} />
@@ -111,14 +111,14 @@ const TOC: React.FC<TOCProps> = ({ editor, tocItems, onToggle }) => {
           <button
             className="toc-collapse-btn"
             onClick={toggleCollapse}
-            title="折叠目录"
+            title="Collapse TOC"
           >
             <ChevronRight size={16} />
           </button>
 
           <div className="toc-content">
             {tocItems.length === 0 ? (
-              <div className="toc-empty">暂无标题</div>
+              <div className="toc-empty">No headings</div>
             ) : (
               <ul className="toc-list">
                 {tocItems.map((item) => (

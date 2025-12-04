@@ -5,985 +5,985 @@ var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "sy
   "use strict";
   var _a2, _b, _c, _d, _e2, _f, _g, _h, _i6, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T, _U, _V, _W, _X, _Y, _Z, __, _$, _aa, _ba, _ca, _da;
   var __vite_style__ = document.createElement("style");
-  __vite_style__.textContent = `* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: var(--vscode-font-family);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--vscode-editor-background);
-  color: var(--vscode-editor-foreground);
-}
-
-#root {
-  min-height: 100vh;
-}
-
-/* Mermaid Diagram Styles */
-.mermaid-diagram-wrapper {
-  margin: 1rem 0;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
-  background: white;
-  overflow: hidden;
-}
-
-.mermaid-diagram-container {
-  position: relative;
-}
-
-.mermaid-header {
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #e1e1e1;
-  font-size: 12px;
-  font-weight: 500;
-  color: #666;
-}
-
-.mermaid-label {
-  font-weight: 600;
-  color: #333;
-}
-
-.mermaid-content {
-  padding: 16px;
-  min-height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.mermaid-loading {
-  color: #666;
-  font-style: italic;
-}
-
-.mermaid-error {
-  color: #d32f2f;
-  background: #ffebee;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-/* Mermaid diagram specific styles */
-.mermaid-diagram-wrapper .mermaid {
-  text-align: center;
-}
-
-.mermaid-diagram-wrapper .mermaid svg {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Mathematics (KaTeX) Styles */
-.math-block {
-  margin: 16px 0;
-  padding: 8px 0;
-  text-align: center;
-}
-
-.math-content {
-  display: inline-block;
-  padding: 8px 16px;
-  background: #f8f9fa;
-  border-radius: 4px;
-  border: 1px solid #e1e1e1;
-}
-
-.math-content .katex {
-  font-size: 1.1em;
-}
-
-.math-content .katex-display {
-  margin: 0;
-}
-
-/* KaTeX specific styles */
-.katex {
-  font: normal 1.21em KaTeX_Main, Times New Roman, serif;
-  line-height: 1.2;
-  text-indent: 0;
-}
-
-.katex * {
-  -ms-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-}:root {
-  /* 使用 VSCode CSS 变量 */
-  --notion-bg: var(--vscode-editor-background);
-  --notion-text: var(--vscode-editor-foreground);
-  --notion-border: var(--vscode-input-border);
-  --notion-toolbar-bg: var(--vscode-titleBar-activeBackground);
-  --notion-button-hover: var(--vscode-toolbar-hoverBackground);
-  --notion-active: var(--vscode-button-background);
-  --notion-code-bg: var(--vscode-textCodeBlock-background);
-  --notion-code-text: var(--vscode-textCodeBlock-foreground);
-  --notion-suggestion-bg: var(--vscode-editorWidget-background);
-  --notion-suggestion-hover: var(--vscode-list-hoverBackground);
-  --notion-code-header-bg: var(--vscode-input-background);
-}
-
-/* Editor takes full page */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--notion-bg);
-}
-
-.notion-toolbar {
-  display: flex;
-  gap: 8px;
-  background-color: var(--notion-toolbar-bg);
-  border-bottom: 1px solid var(--notion-border);
-  flex-wrap: wrap;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.notion-toolbar-group {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.notion-button {
-  background: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  padding: 6px 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--notion-text);
-  transition: all 0.2s ease;
-}
-
-.notion-button:hover {
-  background-color: var(--notion-button-hover);
-}
-
-.notion-button-active {
-  /* 移除动态高亮，只保留点击时的 hover 效果 */
-}
-
-.ProseMirror {
-  outline: none;
-  padding: 20px 96px;
-  min-height: calc(100vh - 60px);
-}
-
-/* Placeholder styling */
-.ProseMirror .is-editor-empty:first-child::before {
-  color: #adb5bd;
-  content: attr(data-placeholder);
-  float: left;
-  height: 0;
-  pointer-events: none;
-}
-
-@media (max-width: 768px) {
-  .ProseMirror {
-    padding: 20px;
-  }
-}
-
-.ProseMirror h1 {
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 24px 0 8px;
-}
-
-.ProseMirror h2 {
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1.3;
-  margin: 20px 0 8px;
-}
-
-.ProseMirror h3 {
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.4;
-  margin: 16px 0 8px;
-}
-
-.ProseMirror p {
-  font-size: 16px;
-  line-height: 1.6;
-  margin: 8px 0;
-}
-
-.ProseMirror ul,
-.ProseMirror ol {
-  margin: 8px 0;
-  padding-left: 24px;
-}
-
-.ProseMirror li {
-  margin: 4px 0;
-}
-
-.ProseMirror blockquote {
-  border-left: 3px solid var(--notion-border);
-  padding-left: 16px;
-  margin: 16px 0;
-  color: #666;
-}
-
-.ProseMirror code {
-  background-color: var(--notion-code-bg);
-  color: var(--notion-code-text);
-  padding: 2px 4px;
-  border-radius: 3px;
-  font-size: 14px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-}
-
-/* Enhanced Code Block Styles */
-.ProseMirror pre {
-  background-color: var(--notion-code-bg);
-  border-radius: 4px;
-  margin: 12px 0;
-  overflow-x: auto;
-  position: relative;
-  min-height: auto;
-  height: auto;
-}
-
-.ProseMirror pre code {
-  background: none;
-  color: var(--notion-text);
-  padding: 0;
-  display: block;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Code Block Wrapper */
-.code-block-wrapper {
-  margin: 12px 0;
-}
-
-.code-block-container {
-  background-color: var(--notion-code-bg);
-  border-radius: 4px;
-  overflow: hidden;
-  min-height: auto;
-  height: auto;
-}
-
-/* Code Block Header with Language Label */
-.code-block-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 12px;
-  background-color: var(--notion-code-header-bg);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--notion-text);
-  opacity: 0.8;
-}
-
-.language-selector {
-  position: relative;
-}
-
-.language-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  transition: background-color 0.2s ease;
-}
-
-.language-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-.code-language {
-  background-color: var(--notion-active);
-  color: white;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.dropdown-arrow {
-  font-size: 10px;
-  color: #666;
-  transition: transform 0.2s ease;
-}
-
-.language-toggle:hover .dropdown-arrow {
-  transform: translateY(1px);
-}
-
-.language-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: var(--notion-suggestion-bg);
-  border: 1px solid var(--notion-border);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-  min-width: 80px;
-  margin-top: 4px;
-}
-
-.language-option {
-  background: none;
-  border: none;
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 500;
-  text-align: left;
-  cursor: pointer;
-  width: 100%;
-  transition: background-color 0.2s ease;
-  color: var(--notion-text);
-}
-
-.language-option:hover {
-  background-color: var(--notion-button-hover);
-}
-
-.language-option.selected {
-  background-color: var(--notion-active);
-  color: white;
-}
-
-.code-block-content {
-  padding: 12px;
-  overflow-x: auto;
-  margin: 0;
-  background: none;
-  border: none;
-}
-
-.code-block-content pre {
-  margin: 0;
-  padding: 0;
-  background: none;
-  border: none;
-  overflow-x: auto;
-  white-space: pre;
-  word-wrap: normal;
-}
-
-/* Syntax Highlighting Colors */
-.hljs-comment,
-.hljs-quote {
-  color: #6a737d;
-  font-style: italic;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-literal,
-.hljs-type,
-.hljs-addition {
-  color: #d73a49;
-}
-
-.hljs-number,
-.hljs-string,
-.hljs-doctag,
-.hljs-regexp {
-  color: #032f62;
-}
-
-.hljs-title,
-.hljs-section,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class {
-  color: #6f42c1;
-}
-
-.hljs-variable,
-.hljs-template-variable,
-.hljs-attribute {
-  color: #e36209;
-}
-
-.hljs-symbol,
-.hljs-bullet,
-.hljs-link,
-.hljs-meta {
-  color: #005cc5;
-}
-
-.hljs-built_in,
-.hljs-builtin-name {
-  color: #22863a;
-}
-
-.hljs-deletion {
-  color: #b31d28;
-  background-color: #ffeef0;
-}
-
-.hljs-emphasis {
-  font-style: italic;
-}
-
-.hljs-strong {
-  font-weight: bold;
-}
-
-/* Basic Table Styles */
-.ProseMirror table {
-  border-collapse: collapse;
-  margin: 24px 0;
-  width: 100%;
-  table-layout: fixed;
-}
-
-.ProseMirror table td,
-.ProseMirror table th {
-  border: 1px solid var(--notion-border);
-  padding: 8px 12px;
-  text-align: left;
-  vertical-align: top;
-  position: relative;
-}
-
-.ProseMirror table th {
-  background-color: var(--notion-toolbar-bg);
-  font-weight: 600;
-}
-
-/* Table Column Resize Handles */
-.ProseMirror .tableWrapper {
-  position: relative;
-}
-
-.ProseMirror .column-resize-handle {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background-color: var(--notion-active);
-  cursor: col-resize;
-  z-index: 20;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.ProseMirror .column-resize-handle:hover,
-.ProseMirror .column-resize-handle.active {
-  opacity: 1;
-}
-
-.ProseMirror.resize-cursor {
-  cursor: col-resize;
-  cursor: -webkit-col-resize;
-}
-
-.ProseMirror img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-.ProseMirror a {
-  color: var(--notion-active);
-  text-decoration: none;
-}
-
-.ProseMirror a:hover {
-  text-decoration: underline;
-}
-
-.ProseMirror .task-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-}
-
-.ProseMirror .task-item input[type="checkbox"] {
-  margin-top: 4px;
-}
-
-.suggestion-menu {
-  background: var(--vscode-quickInput-background);
-  border: 1px solid var(--vscode-quickInput-border);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px var(--vscode-widget-shadow);
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 1000;
-  min-width: 280px;
-  width: auto;
-}
-
-.suggestion-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  cursor: pointer;
-}
-
-.suggestion-item:hover {
-  background-color: var(--notion-suggestion-hover);
-}
-
-.suggestion-item.selected {
-  background-color: var(--vscode-list-activeSelectionBackground);
-  color: var(--vscode-list-activeSelectionForeground);
-}
-
-.suggestion-item.selected .suggestion-title {
-  color: var(--vscode-list-activeSelectionForeground);
-}
-
-.suggestion-icon {
-  font-size: 16px;
-  width: 20px;
-  text-align: center;
-}
-
-.suggestion-title {
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--notion-text);
-}
-
-/* Mermaid Diagram Styles */
-.mermaid-diagram-wrapper {
-  margin: 16px 0;
-  border: 1px solid var(--vscode-input-border);
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.mermaid-diagram-container {
-  background: var(--vscode-editor-background);
-}
-
-.mermaid-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background-color: var(--vscode-titleBar-activeBackground);
-  border-bottom: 1px solid var(--vscode-input-border);
-}
-
-.mermaid-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--vscode-titleBar-activeForeground);
-}
-
-.mermaid-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.mermaid-toggle-btn {
-  background: var(--vscode-button-background);
-  color: var(--vscode-button-foreground);
-  border: none;
-  border-radius: 4px;
-  padding: 4px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.mermaid-toggle-btn:hover {
-  background: var(--vscode-button-hoverBackground);
-  transform: translateY(-1px);
-}
-
-.mermaid-zoom-btn {
-  background: var(--vscode-button-secondaryBackground);
-  color: var(--vscode-button-secondaryForeground);
-  border: 1px solid var(--vscode-input-border);
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 32px;
-}
-
-.mermaid-zoom-btn:hover:not(:disabled) {
-  background-color: var(--vscode-button-secondaryHoverBackground);
-  border-color: var(--vscode-button-background);
-}
-
-.mermaid-zoom-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.mermaid-fullscreen-btn {
-  background: var(--vscode-button-secondaryBackground);
-  color: var(--vscode-button-secondaryForeground);
-  border: 1px solid var(--vscode-input-border);
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 32px;
-}
-
-.mermaid-fullscreen-btn:hover {
-  background-color: var(--vscode-button-secondaryHoverBackground);
-  border-color: var(--vscode-button-background);
-}
-
-/* 全屏模式下的样式 */
-.mermaid-diagram-container:fullscreen {
-  background: white;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.mermaid-diagram-container:fullscreen .mermaid-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-}
-
-.mermaid-diagram-container:fullscreen .mermaid-content {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.mermaid-diagram-container:fullscreen .mermaid-diagram svg {
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-.mermaid-editor {
-  padding: 12px;
-}
-
-.mermaid-code-editor {
-  width: 100%;
-  min-height: 200px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  border: 1px solid var(--notion-border);
-  border-radius: 4px;
-  padding: 12px;
-  resize: none;
-  background-color: var(--notion-code-bg);
-  color: var(--notion-text);
-}
-
-.mermaid-code-editor:focus {
-  outline: none;
-  border-color: var(--notion-active);
-  box-shadow: 0 0 0 2px rgba(35, 131, 226, 0.1);
-}
-
-.mermaid-content {
-  padding: 12px;
-  min-height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  touch-action: none;
-  user-select: none;
-}
-
-.mermaid-diagram {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.mermaid-diagram svg {
-  max-width: 100%;
-  height: auto;
-}
-
-.mermaid-loading {
-  padding: 20px;
-  text-align: center;
-  color: #666;
-  font-size: 14px;
-}
-
-.mermaid-error {
-  padding: 20px;
-  text-align: center;
-  color: #d32f2f;
-  background-color: #ffebee;
-  border-radius: 4px;
-  margin: 12px;
-  font-size: 14px;
-}
-
-/* Mermaid Fullscreen Styles */
-.mermaid-fullscreen-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #000000;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Light theme background for Mermaid fullscreen */
-.vscode-light .mermaid-fullscreen-overlay,
-.vscode-high-contrast-light .mermaid-fullscreen-overlay {
-  background: #ffffff;
-}
-
-.mermaid-fullscreen-controls {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  z-index: 10000;
-}
-
-.mermaid-fullscreen-close {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bold;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(10px);
-}
-
-.mermaid-fullscreen-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
-}
-
-/* Light theme controls */
-.vscode-light .mermaid-fullscreen-close,
-.vscode-high-contrast-light .mermaid-fullscreen-close {
-  background: rgba(0, 0, 0, 0.1);
-  color: #333;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-}
-
-.vscode-light .mermaid-fullscreen-close:hover,
-.vscode-high-contrast-light .mermaid-fullscreen-close:hover {
-  background: rgba(0, 0, 0, 0.2);
-  border-color: rgba(0, 0, 0, 0.5);
-}
-
-.mermaid-fullscreen-zoom-controls {
-  display: flex;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 8px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Light theme zoom controls */
-.vscode-light .mermaid-fullscreen-zoom-controls,
-.vscode-high-contrast-light .mermaid-fullscreen-zoom-controls {
-  background: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.mermaid-fullscreen-zoom-controls button {
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
-
-.mermaid-fullscreen-zoom-controls button:hover {
-  background: white;
-  transform: scale(1.1);
-}
-
-.mermaid-fullscreen-container {
-  position: relative;
-  max-width: 90vw;
-  max-height: 90vh;
-  touch-action: none;
-  user-select: none;
-}
-
-.mermaid-fullscreen-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.mermaid-fullscreen-diagram {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mermaid-fullscreen-diagram svg {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.mermaid-fullscreen-loading {
-  color: white;
-  font-size: 16px;
-  text-align: center;
-  padding: 40px;
-}
-
-.mermaid-fullscreen-error {
-  color: #ff6b6b;
-  background: rgba(255, 107, 107, 0.1);
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  font-size: 14px;
-  max-width: 400px;
-}
-
-/* Floating Toolbar */
-.floating-toolbar {
-  position: absolute;
-  z-index: 1000;
-  pointer-events: auto;
-}
-
-.floating-toolbar-content {
-  display: flex;
-  gap: 2px;
-  background: var(--notion-suggestion-bg);
-  border: 1px solid var(--notion-border);
-  border-radius: 6px;
-  padding: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(10px);
-}
-
-.floating-toolbar-btn {
-  background: none;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 8px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--notion-text);
-  transition: all 0.2s ease;
-  min-width: 32px;
-}
-
-.floating-toolbar-btn:hover {
-  background-color: var(--notion-button-hover);
-}
-
-.floating-toolbar-btn.active {
-  background-color: var(--notion-active);
-  color: white;
-}
-
-/* Bubble Menu Styles */
-.bubble-menu {
-  z-index: 1001;
-}
-
-.bubble-menu-content {
-  display: flex;
-  gap: 2px;
-  background: var(--vscode-editorWidget-background);
-  border: 1px solid var(--vscode-editorWidget-border);
-  border-radius: 6px;
-  padding: 4px;
-  box-shadow: 0 4px 12px var(--vscode-widget-shadow);
-}
-
-.bubble-menu-btn {
-  background: none;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 8px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--vscode-editorWidget-foreground);
-  transition: all 0.2s ease;
-  min-width: 32px;
-}
-
-.bubble-menu-btn:hover {
-  background-color: var(--vscode-toolbar-hoverBackground);
-}
-
-.bubble-menu-btn.active {
-  background-color: var(--vscode-button-background);
-  color: var(--vscode-button-foreground);
+  __vite_style__.textContent = `* {\r
+  margin: 0;\r
+  padding: 0;\r
+  box-sizing: border-box;\r
+}\r
+\r
+body {\r
+  font-family: var(--vscode-font-family);\r
+  -webkit-font-smoothing: antialiased;\r
+  -moz-osx-font-smoothing: grayscale;\r
+  background-color: var(--vscode-editor-background);\r
+  color: var(--vscode-editor-foreground);\r
+}\r
+\r
+#root {\r
+  min-height: 100vh;\r
+}\r
+\r
+/* Mermaid Diagram Styles */\r
+.mermaid-diagram-wrapper {\r
+  margin: 1rem 0;\r
+  border: 1px solid #e1e1e1;\r
+  border-radius: 8px;\r
+  background: white;\r
+  overflow: hidden;\r
+}\r
+\r
+.mermaid-diagram-container {\r
+  position: relative;\r
+}\r
+\r
+.mermaid-header {\r
+  padding: 8px 12px;\r
+  background: #f8f9fa;\r
+  border-bottom: 1px solid #e1e1e1;\r
+  font-size: 12px;\r
+  font-weight: 500;\r
+  color: #666;\r
+}\r
+\r
+.mermaid-label {\r
+  font-weight: 600;\r
+  color: #333;\r
+}\r
+\r
+.mermaid-content {\r
+  padding: 16px;\r
+  min-height: 100px;\r
+  display: flex;\r
+  justify-content: center;\r
+  align-items: center;\r
+}\r
+\r
+.mermaid-loading {\r
+  color: #666;\r
+  font-style: italic;\r
+}\r
+\r
+.mermaid-error {\r
+  color: #d32f2f;\r
+  background: #ffebee;\r
+  padding: 8px 12px;\r
+  border-radius: 4px;\r
+  font-size: 14px;\r
+}\r
+\r
+/* Mermaid diagram specific styles */\r
+.mermaid-diagram-wrapper .mermaid {\r
+  text-align: center;\r
+}\r
+\r
+.mermaid-diagram-wrapper .mermaid svg {\r
+  max-width: 100%;\r
+  height: auto;\r
+}\r
+\r
+/* Mathematics (KaTeX) Styles */\r
+.math-block {\r
+  margin: 16px 0;\r
+  padding: 8px 0;\r
+  text-align: center;\r
+}\r
+\r
+.math-content {\r
+  display: inline-block;\r
+  padding: 8px 16px;\r
+  background: #f8f9fa;\r
+  border-radius: 4px;\r
+  border: 1px solid #e1e1e1;\r
+}\r
+\r
+.math-content .katex {\r
+  font-size: 1.1em;\r
+}\r
+\r
+.math-content .katex-display {\r
+  margin: 0;\r
+}\r
+\r
+/* KaTeX specific styles */\r
+.katex {\r
+  font: normal 1.21em KaTeX_Main, Times New Roman, serif;\r
+  line-height: 1.2;\r
+  text-indent: 0;\r
+}\r
+\r
+.katex * {\r
+  -ms-box-sizing: border-box;\r
+  -moz-box-sizing: border-box;\r
+  -webkit-box-sizing: border-box;\r
+  box-sizing: border-box;\r
+}:root {\r
+  /* 使用 VSCode CSS 变量 */\r
+  --notion-bg: var(--vscode-editor-background);\r
+  --notion-text: var(--vscode-editor-foreground);\r
+  --notion-border: var(--vscode-input-border);\r
+  --notion-toolbar-bg: var(--vscode-titleBar-activeBackground);\r
+  --notion-button-hover: var(--vscode-toolbar-hoverBackground);\r
+  --notion-active: var(--vscode-button-background);\r
+  --notion-code-bg: var(--vscode-textCodeBlock-background);\r
+  --notion-code-text: var(--vscode-textCodeBlock-foreground);\r
+  --notion-suggestion-bg: var(--vscode-editorWidget-background);\r
+  --notion-suggestion-hover: var(--vscode-list-hoverBackground);\r
+  --notion-code-header-bg: var(--vscode-input-background);\r
+}\r
+\r
+/* Editor takes full page */\r
+body {\r
+  margin: 0;\r
+  padding: 0;\r
+  background-color: var(--notion-bg);\r
+}\r
+\r
+.notion-toolbar {\r
+  display: flex;\r
+  gap: 8px;\r
+  background-color: var(--notion-toolbar-bg);\r
+  border-bottom: 1px solid var(--notion-border);\r
+  flex-wrap: wrap;\r
+  align-items: center;\r
+  position: sticky;\r
+  top: 0;\r
+  z-index: 100;\r
+}\r
+\r
+.notion-toolbar-group {\r
+  display: flex;\r
+  gap: 4px;\r
+  align-items: center;\r
+}\r
+\r
+.notion-button {\r
+  background: none;\r
+  border: 1px solid transparent;\r
+  border-radius: 4px;\r
+  padding: 6px 8px;\r
+  cursor: pointer;\r
+  font-size: 14px;\r
+  color: var(--notion-text);\r
+  transition: all 0.2s ease;\r
+}\r
+\r
+.notion-button:hover {\r
+  background-color: var(--notion-button-hover);\r
+}\r
+\r
+.notion-button-active {\r
+  /* 移除动态高亮，只保留点击时的 hover 效果 */\r
+}\r
+\r
+.ProseMirror {\r
+  outline: none;\r
+  padding: 20px 96px;\r
+  min-height: calc(100vh - 60px);\r
+}\r
+\r
+/* Placeholder styling */\r
+.ProseMirror .is-editor-empty:first-child::before {\r
+  color: #adb5bd;\r
+  content: attr(data-placeholder);\r
+  float: left;\r
+  height: 0;\r
+  pointer-events: none;\r
+}\r
+\r
+@media (max-width: 768px) {\r
+  .ProseMirror {\r
+    padding: 20px;\r
+  }\r
+}\r
+\r
+.ProseMirror h1 {\r
+  font-size: 30px;\r
+  font-weight: 700;\r
+  line-height: 1.2;\r
+  margin: 24px 0 8px;\r
+}\r
+\r
+.ProseMirror h2 {\r
+  font-size: 24px;\r
+  font-weight: 600;\r
+  line-height: 1.3;\r
+  margin: 20px 0 8px;\r
+}\r
+\r
+.ProseMirror h3 {\r
+  font-size: 20px;\r
+  font-weight: 600;\r
+  line-height: 1.4;\r
+  margin: 16px 0 8px;\r
+}\r
+\r
+.ProseMirror p {\r
+  font-size: 16px;\r
+  line-height: 1.6;\r
+  margin: 8px 0;\r
+}\r
+\r
+.ProseMirror ul,\r
+.ProseMirror ol {\r
+  margin: 8px 0;\r
+  padding-left: 24px;\r
+}\r
+\r
+.ProseMirror li {\r
+  margin: 4px 0;\r
+}\r
+\r
+.ProseMirror blockquote {\r
+  border-left: 3px solid var(--notion-border);\r
+  padding-left: 16px;\r
+  margin: 16px 0;\r
+  color: #666;\r
+}\r
+\r
+.ProseMirror code {\r
+  background-color: var(--notion-code-bg);\r
+  color: var(--notion-code-text);\r
+  padding: 2px 4px;\r
+  border-radius: 3px;\r
+  font-size: 14px;\r
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;\r
+}\r
+\r
+/* Enhanced Code Block Styles */\r
+.ProseMirror pre {\r
+  background-color: var(--notion-code-bg);\r
+  border-radius: 4px;\r
+  margin: 12px 0;\r
+  overflow-x: auto;\r
+  position: relative;\r
+  min-height: auto;\r
+  height: auto;\r
+}\r
+\r
+.ProseMirror pre code {\r
+  background: none;\r
+  color: var(--notion-text);\r
+  padding: 0;\r
+  display: block;\r
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;\r
+  font-size: 14px;\r
+  line-height: 1.5;\r
+}\r
+\r
+/* Code Block Wrapper */\r
+.code-block-wrapper {\r
+  margin: 12px 0;\r
+}\r
+\r
+.code-block-container {\r
+  background-color: var(--notion-code-bg);\r
+  border-radius: 4px;\r
+  overflow: hidden;\r
+  min-height: auto;\r
+  height: auto;\r
+}\r
+\r
+/* Code Block Header with Language Label */\r
+.code-block-header {\r
+  display: flex;\r
+  justify-content: space-between;\r
+  align-items: center;\r
+  padding: 6px 12px;\r
+  background-color: var(--notion-code-header-bg);\r
+  font-size: 12px;\r
+  font-weight: 500;\r
+  color: var(--notion-text);\r
+  opacity: 0.8;\r
+}\r
+\r
+.language-selector {\r
+  position: relative;\r
+}\r
+\r
+.language-toggle {\r
+  background: none;\r
+  border: none;\r
+  cursor: pointer;\r
+  padding: 2px 6px;\r
+  border-radius: 4px;\r
+  display: flex;\r
+  align-items: center;\r
+  gap: 4px;\r
+  transition: background-color 0.2s ease;\r
+}\r
+\r
+.language-toggle:hover {\r
+  background-color: rgba(0, 0, 0, 0.05);\r
+}\r
+\r
+.code-language {\r
+  background-color: var(--notion-active);\r
+  color: white;\r
+  padding: 2px 8px;\r
+  border-radius: 12px;\r
+  font-size: 11px;\r
+  font-weight: 600;\r
+  text-transform: uppercase;\r
+  letter-spacing: 0.5px;\r
+}\r
+\r
+.dropdown-arrow {\r
+  font-size: 10px;\r
+  color: #666;\r
+  transition: transform 0.2s ease;\r
+}\r
+\r
+.language-toggle:hover .dropdown-arrow {\r
+  transform: translateY(1px);\r
+}\r
+\r
+.language-dropdown {\r
+  position: absolute;\r
+  top: 100%;\r
+  left: 0;\r
+  background: var(--notion-suggestion-bg);\r
+  border: 1px solid var(--notion-border);\r
+  border-radius: 6px;\r
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\r
+  max-height: 200px;\r
+  overflow-y: auto;\r
+  z-index: 1000;\r
+  min-width: 80px;\r
+  margin-top: 4px;\r
+}\r
+\r
+.language-option {\r
+  background: none;\r
+  border: none;\r
+  padding: 6px 12px;\r
+  font-size: 11px;\r
+  font-weight: 500;\r
+  text-align: left;\r
+  cursor: pointer;\r
+  width: 100%;\r
+  transition: background-color 0.2s ease;\r
+  color: var(--notion-text);\r
+}\r
+\r
+.language-option:hover {\r
+  background-color: var(--notion-button-hover);\r
+}\r
+\r
+.language-option.selected {\r
+  background-color: var(--notion-active);\r
+  color: white;\r
+}\r
+\r
+.code-block-content {\r
+  padding: 12px;\r
+  overflow-x: auto;\r
+  margin: 0;\r
+  background: none;\r
+  border: none;\r
+}\r
+\r
+.code-block-content pre {\r
+  margin: 0;\r
+  padding: 0;\r
+  background: none;\r
+  border: none;\r
+  overflow-x: auto;\r
+  white-space: pre;\r
+  word-wrap: normal;\r
+}\r
+\r
+/* Syntax Highlighting Colors */\r
+.hljs-comment,\r
+.hljs-quote {\r
+  color: #6a737d;\r
+  font-style: italic;\r
+}\r
+\r
+.hljs-keyword,\r
+.hljs-selector-tag,\r
+.hljs-literal,\r
+.hljs-type,\r
+.hljs-addition {\r
+  color: #d73a49;\r
+}\r
+\r
+.hljs-number,\r
+.hljs-string,\r
+.hljs-doctag,\r
+.hljs-regexp {\r
+  color: #032f62;\r
+}\r
+\r
+.hljs-title,\r
+.hljs-section,\r
+.hljs-name,\r
+.hljs-selector-id,\r
+.hljs-selector-class {\r
+  color: #6f42c1;\r
+}\r
+\r
+.hljs-variable,\r
+.hljs-template-variable,\r
+.hljs-attribute {\r
+  color: #e36209;\r
+}\r
+\r
+.hljs-symbol,\r
+.hljs-bullet,\r
+.hljs-link,\r
+.hljs-meta {\r
+  color: #005cc5;\r
+}\r
+\r
+.hljs-built_in,\r
+.hljs-builtin-name {\r
+  color: #22863a;\r
+}\r
+\r
+.hljs-deletion {\r
+  color: #b31d28;\r
+  background-color: #ffeef0;\r
+}\r
+\r
+.hljs-emphasis {\r
+  font-style: italic;\r
+}\r
+\r
+.hljs-strong {\r
+  font-weight: bold;\r
+}\r
+\r
+/* Basic Table Styles */\r
+.ProseMirror table {\r
+  border-collapse: collapse;\r
+  margin: 24px 0;\r
+  width: 100%;\r
+  table-layout: fixed;\r
+}\r
+\r
+.ProseMirror table td,\r
+.ProseMirror table th {\r
+  border: 1px solid var(--notion-border);\r
+  padding: 8px 12px;\r
+  text-align: left;\r
+  vertical-align: top;\r
+  position: relative;\r
+}\r
+\r
+.ProseMirror table th {\r
+  background-color: var(--notion-toolbar-bg);\r
+  font-weight: 600;\r
+}\r
+\r
+/* Table Column Resize Handles */\r
+.ProseMirror .tableWrapper {\r
+  position: relative;\r
+}\r
+\r
+.ProseMirror .column-resize-handle {\r
+  position: absolute;\r
+  top: 0;\r
+  bottom: 0;\r
+  width: 4px;\r
+  background-color: var(--notion-active);\r
+  cursor: col-resize;\r
+  z-index: 20;\r
+  opacity: 0;\r
+  transition: opacity 0.2s ease;\r
+}\r
+\r
+.ProseMirror .column-resize-handle:hover,\r
+.ProseMirror .column-resize-handle.active {\r
+  opacity: 1;\r
+}\r
+\r
+.ProseMirror.resize-cursor {\r
+  cursor: col-resize;\r
+  cursor: -webkit-col-resize;\r
+}\r
+\r
+.ProseMirror img {\r
+  max-width: 100%;\r
+  height: auto;\r
+  border-radius: 4px;\r
+}\r
+\r
+.ProseMirror a {\r
+  color: var(--notion-active);\r
+  text-decoration: none;\r
+}\r
+\r
+.ProseMirror a:hover {\r
+  text-decoration: underline;\r
+}\r
+\r
+.ProseMirror .task-item {\r
+  display: flex;\r
+  align-items: flex-start;\r
+  gap: 8px;\r
+}\r
+\r
+.ProseMirror .task-item input[type="checkbox"] {\r
+  margin-top: 4px;\r
+}\r
+\r
+.suggestion-menu {\r
+  background: var(--vscode-quickInput-background);\r
+  border: 1px solid var(--vscode-quickInput-border);\r
+  border-radius: 6px;\r
+  box-shadow: 0 4px 12px var(--vscode-widget-shadow);\r
+  max-height: 300px;\r
+  overflow-y: auto;\r
+  z-index: 1000;\r
+  min-width: 280px;\r
+  width: auto;\r
+}\r
+\r
+.suggestion-item {\r
+  display: flex;\r
+  align-items: center;\r
+  gap: 12px;\r
+  padding: 10px 16px;\r
+  cursor: pointer;\r
+}\r
+\r
+.suggestion-item:hover {\r
+  background-color: var(--notion-suggestion-hover);\r
+}\r
+\r
+.suggestion-item.selected {\r
+  background-color: var(--vscode-list-activeSelectionBackground);\r
+  color: var(--vscode-list-activeSelectionForeground);\r
+}\r
+\r
+.suggestion-item.selected .suggestion-title {\r
+  color: var(--vscode-list-activeSelectionForeground);\r
+}\r
+\r
+.suggestion-icon {\r
+  font-size: 16px;\r
+  width: 20px;\r
+  text-align: center;\r
+}\r
+\r
+.suggestion-title {\r
+  font-weight: 500;\r
+  font-size: 14px;\r
+  color: var(--notion-text);\r
+}\r
+\r
+/* Mermaid Diagram Styles */\r
+.mermaid-diagram-wrapper {\r
+  margin: 16px 0;\r
+  border: 1px solid var(--vscode-input-border);\r
+  border-radius: 6px;\r
+  overflow: hidden;\r
+}\r
+\r
+.mermaid-diagram-container {\r
+  background: var(--vscode-editor-background);\r
+}\r
+\r
+.mermaid-header {\r
+  display: flex;\r
+  justify-content: space-between;\r
+  align-items: center;\r
+  padding: 8px 12px;\r
+  background-color: var(--vscode-titleBar-activeBackground);\r
+  border-bottom: 1px solid var(--vscode-input-border);\r
+}\r
+\r
+.mermaid-label {\r
+  font-size: 14px;\r
+  font-weight: 500;\r
+  color: var(--vscode-titleBar-activeForeground);\r
+}\r
+\r
+.mermaid-actions {\r
+  display: flex;\r
+  gap: 8px;\r
+}\r
+\r
+.mermaid-toggle-btn {\r
+  background: var(--vscode-button-background);\r
+  color: var(--vscode-button-foreground);\r
+  border: none;\r
+  border-radius: 4px;\r
+  padding: 4px 12px;\r
+  font-size: 12px;\r
+  font-weight: 500;\r
+  cursor: pointer;\r
+  transition: all 0.2s ease;\r
+}\r
+\r
+.mermaid-toggle-btn:hover {\r
+  background: var(--vscode-button-hoverBackground);\r
+  transform: translateY(-1px);\r
+}\r
+\r
+.mermaid-zoom-btn {\r
+  background: var(--vscode-button-secondaryBackground);\r
+  color: var(--vscode-button-secondaryForeground);\r
+  border: 1px solid var(--vscode-input-border);\r
+  border-radius: 4px;\r
+  padding: 4px 8px;\r
+  font-size: 12px;\r
+  font-weight: 500;\r
+  cursor: pointer;\r
+  transition: all 0.2s ease;\r
+  min-width: 32px;\r
+}\r
+\r
+.mermaid-zoom-btn:hover:not(:disabled) {\r
+  background-color: var(--vscode-button-secondaryHoverBackground);\r
+  border-color: var(--vscode-button-background);\r
+}\r
+\r
+.mermaid-zoom-btn:disabled {\r
+  opacity: 0.5;\r
+  cursor: not-allowed;\r
+}\r
+\r
+.mermaid-fullscreen-btn {\r
+  background: var(--vscode-button-secondaryBackground);\r
+  color: var(--vscode-button-secondaryForeground);\r
+  border: 1px solid var(--vscode-input-border);\r
+  border-radius: 4px;\r
+  padding: 4px 8px;\r
+  font-size: 12px;\r
+  font-weight: 500;\r
+  cursor: pointer;\r
+  transition: all 0.2s ease;\r
+  min-width: 32px;\r
+}\r
+\r
+.mermaid-fullscreen-btn:hover {\r
+  background-color: var(--vscode-button-secondaryHoverBackground);\r
+  border-color: var(--vscode-button-background);\r
+}\r
+\r
+/* 全屏模式下的样式 */\r
+.mermaid-diagram-container:fullscreen {\r
+  background: white;\r
+  padding: 20px;\r
+  display: flex;\r
+  flex-direction: column;\r
+  align-items: center;\r
+  justify-content: center;\r
+}\r
+\r
+.mermaid-diagram-container:fullscreen .mermaid-header {\r
+  position: fixed;\r
+  top: 0;\r
+  left: 0;\r
+  right: 0;\r
+  z-index: 1000;\r
+}\r
+\r
+.mermaid-diagram-container:fullscreen .mermaid-content {\r
+  flex: 1;\r
+  display: flex;\r
+  align-items: center;\r
+  justify-content: center;\r
+  width: 100%;\r
+  height: 100%;\r
+}\r
+\r
+.mermaid-diagram-container:fullscreen .mermaid-diagram svg {\r
+  max-width: 90vw;\r
+  max-height: 90vh;\r
+}\r
+\r
+.mermaid-editor {\r
+  padding: 12px;\r
+}\r
+\r
+.mermaid-code-editor {\r
+  width: 100%;\r
+  min-height: 200px;\r
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;\r
+  font-size: 14px;\r
+  line-height: 1.5;\r
+  border: 1px solid var(--notion-border);\r
+  border-radius: 4px;\r
+  padding: 12px;\r
+  resize: none;\r
+  background-color: var(--notion-code-bg);\r
+  color: var(--notion-text);\r
+}\r
+\r
+.mermaid-code-editor:focus {\r
+  outline: none;\r
+  border-color: var(--notion-active);\r
+  box-shadow: 0 0 0 2px rgba(35, 131, 226, 0.1);\r
+}\r
+\r
+.mermaid-content {\r
+  padding: 12px;\r
+  min-height: 100px;\r
+  display: flex;\r
+  justify-content: center;\r
+  align-items: center;\r
+  overflow: hidden;\r
+  position: relative;\r
+  touch-action: none;\r
+  user-select: none;\r
+}\r
+\r
+.mermaid-diagram {\r
+  width: 100%;\r
+  display: flex;\r
+  justify-content: center;\r
+}\r
+\r
+.mermaid-diagram svg {\r
+  max-width: 100%;\r
+  height: auto;\r
+}\r
+\r
+.mermaid-loading {\r
+  padding: 20px;\r
+  text-align: center;\r
+  color: #666;\r
+  font-size: 14px;\r
+}\r
+\r
+.mermaid-error {\r
+  padding: 20px;\r
+  text-align: center;\r
+  color: #d32f2f;\r
+  background-color: #ffebee;\r
+  border-radius: 4px;\r
+  margin: 12px;\r
+  font-size: 14px;\r
+}\r
+\r
+/* Mermaid Fullscreen Styles */\r
+.mermaid-fullscreen-overlay {\r
+  position: fixed;\r
+  top: 0;\r
+  left: 0;\r
+  right: 0;\r
+  bottom: 0;\r
+  background: #000000;\r
+  z-index: 9999;\r
+  display: flex;\r
+  flex-direction: column;\r
+  align-items: center;\r
+  justify-content: center;\r
+}\r
+\r
+/* Light theme background for Mermaid fullscreen */\r
+.vscode-light .mermaid-fullscreen-overlay,\r
+.vscode-high-contrast-light .mermaid-fullscreen-overlay {\r
+  background: #ffffff;\r
+}\r
+\r
+.mermaid-fullscreen-controls {\r
+  position: fixed;\r
+  top: 20px;\r
+  right: 20px;\r
+  display: flex;\r
+  gap: 12px;\r
+  align-items: center;\r
+  z-index: 10000;\r
+}\r
+\r
+.mermaid-fullscreen-close {\r
+  background: rgba(255, 255, 255, 0.1);\r
+  color: white;\r
+  border: 1px solid rgba(255, 255, 255, 0.3);\r
+  border-radius: 50%;\r
+  width: 40px;\r
+  height: 40px;\r
+  display: flex;\r
+  align-items: center;\r
+  justify-content: center;\r
+  cursor: pointer;\r
+  font-size: 18px;\r
+  font-weight: bold;\r
+  transition: all 0.2s ease;\r
+  backdrop-filter: blur(10px);\r
+}\r
+\r
+.mermaid-fullscreen-close:hover {\r
+  background: rgba(255, 255, 255, 0.2);\r
+  border-color: rgba(255, 255, 255, 0.5);\r
+  transform: scale(1.1);\r
+}\r
+\r
+/* Light theme controls */\r
+.vscode-light .mermaid-fullscreen-close,\r
+.vscode-high-contrast-light .mermaid-fullscreen-close {\r
+  background: rgba(0, 0, 0, 0.1);\r
+  color: #333;\r
+  border: 1px solid rgba(0, 0, 0, 0.3);\r
+}\r
+\r
+.vscode-light .mermaid-fullscreen-close:hover,\r
+.vscode-high-contrast-light .mermaid-fullscreen-close:hover {\r
+  background: rgba(0, 0, 0, 0.2);\r
+  border-color: rgba(0, 0, 0, 0.5);\r
+}\r
+\r
+.mermaid-fullscreen-zoom-controls {\r
+  display: flex;\r
+  gap: 8px;\r
+  background: rgba(255, 255, 255, 0.1);\r
+  border-radius: 20px;\r
+  padding: 8px;\r
+  backdrop-filter: blur(10px);\r
+  border: 1px solid rgba(255, 255, 255, 0.2);\r
+}\r
+\r
+/* Light theme zoom controls */\r
+.vscode-light .mermaid-fullscreen-zoom-controls,\r
+.vscode-high-contrast-light .mermaid-fullscreen-zoom-controls {\r
+  background: rgba(0, 0, 0, 0.1);\r
+  border: 1px solid rgba(0, 0, 0, 0.2);\r
+}\r
+\r
+.mermaid-fullscreen-zoom-controls button {\r
+  background: rgba(255, 255, 255, 0.9);\r
+  color: #333;\r
+  border: none;\r
+  border-radius: 50%;\r
+  width: 36px;\r
+  height: 36px;\r
+  display: flex;\r
+  align-items: center;\r
+  justify-content: center;\r
+  cursor: pointer;\r
+  font-size: 16px;\r
+  font-weight: bold;\r
+  transition: all 0.2s ease;\r
+}\r
+\r
+.mermaid-fullscreen-zoom-controls button:hover {\r
+  background: white;\r
+  transform: scale(1.1);\r
+}\r
+\r
+.mermaid-fullscreen-container {\r
+  position: relative;\r
+  max-width: 90vw;\r
+  max-height: 90vh;\r
+  touch-action: none;\r
+  user-select: none;\r
+}\r
+\r
+.mermaid-fullscreen-content {\r
+  display: flex;\r
+  align-items: center;\r
+  justify-content: center;\r
+  width: 100%;\r
+  height: 100%;\r
+}\r
+\r
+.mermaid-fullscreen-diagram {\r
+  display: flex;\r
+  align-items: center;\r
+  justify-content: center;\r
+}\r
+\r
+.mermaid-fullscreen-diagram svg {\r
+  max-width: 100%;\r
+  max-height: 100%;\r
+}\r
+\r
+.mermaid-fullscreen-loading {\r
+  color: white;\r
+  font-size: 16px;\r
+  text-align: center;\r
+  padding: 40px;\r
+}\r
+\r
+.mermaid-fullscreen-error {\r
+  color: #ff6b6b;\r
+  background: rgba(255, 107, 107, 0.1);\r
+  border: 1px solid rgba(255, 107, 107, 0.3);\r
+  border-radius: 8px;\r
+  padding: 20px;\r
+  text-align: center;\r
+  font-size: 14px;\r
+  max-width: 400px;\r
+}\r
+\r
+/* Floating Toolbar */\r
+.floating-toolbar {\r
+  position: absolute;\r
+  z-index: 1000;\r
+  pointer-events: auto;\r
+}\r
+\r
+.floating-toolbar-content {\r
+  display: flex;\r
+  gap: 2px;\r
+  background: var(--notion-suggestion-bg);\r
+  border: 1px solid var(--notion-border);\r
+  border-radius: 6px;\r
+  padding: 4px;\r
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);\r
+  backdrop-filter: blur(10px);\r
+}\r
+\r
+.floating-toolbar-btn {\r
+  background: none;\r
+  border: none;\r
+  border-radius: 4px;\r
+  padding: 6px 8px;\r
+  font-size: 12px;\r
+  font-weight: 500;\r
+  cursor: pointer;\r
+  color: var(--notion-text);\r
+  transition: all 0.2s ease;\r
+  min-width: 32px;\r
+}\r
+\r
+.floating-toolbar-btn:hover {\r
+  background-color: var(--notion-button-hover);\r
+}\r
+\r
+.floating-toolbar-btn.active {\r
+  background-color: var(--notion-active);\r
+  color: white;\r
+}\r
+\r
+/* Bubble Menu Styles */\r
+.bubble-menu {\r
+  z-index: 1001;\r
+}\r
+\r
+.bubble-menu-content {\r
+  display: flex;\r
+  gap: 2px;\r
+  background: var(--vscode-editorWidget-background);\r
+  border: 1px solid var(--vscode-editorWidget-border);\r
+  border-radius: 6px;\r
+  padding: 4px;\r
+  box-shadow: 0 4px 12px var(--vscode-widget-shadow);\r
+}\r
+\r
+.bubble-menu-btn {\r
+  background: none;\r
+  border: none;\r
+  border-radius: 4px;\r
+  padding: 6px 8px;\r
+  font-size: 12px;\r
+  font-weight: 500;\r
+  cursor: pointer;\r
+  color: var(--vscode-editorWidget-foreground);\r
+  transition: all 0.2s ease;\r
+  min-width: 32px;\r
+}\r
+\r
+.bubble-menu-btn:hover {\r
+  background-color: var(--vscode-toolbar-hoverBackground);\r
+}\r
+\r
+.bubble-menu-btn.active {\r
+  background-color: var(--vscode-button-background);\r
+  color: var(--vscode-button-foreground);\r
 }@font-face{font-display:block;font-family:KaTeX_AMS;font-style:normal;font-weight:400;src:url(/KaTeX_AMS-Regular.woff2) format("woff2"),url(/KaTeX_AMS-Regular.woff) format("woff"),url(/KaTeX_AMS-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Caligraphic;font-style:normal;font-weight:700;src:url(/KaTeX_Caligraphic-Bold.woff2) format("woff2"),url(/KaTeX_Caligraphic-Bold.woff) format("woff"),url(/KaTeX_Caligraphic-Bold.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Caligraphic;font-style:normal;font-weight:400;src:url(/KaTeX_Caligraphic-Regular.woff2) format("woff2"),url(/KaTeX_Caligraphic-Regular.woff) format("woff"),url(/KaTeX_Caligraphic-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Fraktur;font-style:normal;font-weight:700;src:url(/KaTeX_Fraktur-Bold.woff2) format("woff2"),url(/KaTeX_Fraktur-Bold.woff) format("woff"),url(/KaTeX_Fraktur-Bold.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Fraktur;font-style:normal;font-weight:400;src:url(/KaTeX_Fraktur-Regular.woff2) format("woff2"),url(/KaTeX_Fraktur-Regular.woff) format("woff"),url(/KaTeX_Fraktur-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Main;font-style:normal;font-weight:700;src:url(/KaTeX_Main-Bold.woff2) format("woff2"),url(/KaTeX_Main-Bold.woff) format("woff"),url(/KaTeX_Main-Bold.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Main;font-style:italic;font-weight:700;src:url(/KaTeX_Main-BoldItalic.woff2) format("woff2"),url(/KaTeX_Main-BoldItalic.woff) format("woff"),url(/KaTeX_Main-BoldItalic.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Main;font-style:italic;font-weight:400;src:url(/KaTeX_Main-Italic.woff2) format("woff2"),url(/KaTeX_Main-Italic.woff) format("woff"),url(/KaTeX_Main-Italic.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Main;font-style:normal;font-weight:400;src:url(/KaTeX_Main-Regular.woff2) format("woff2"),url(/KaTeX_Main-Regular.woff) format("woff"),url(/KaTeX_Main-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Math;font-style:italic;font-weight:700;src:url(/KaTeX_Math-BoldItalic.woff2) format("woff2"),url(/KaTeX_Math-BoldItalic.woff) format("woff"),url(/KaTeX_Math-BoldItalic.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Math;font-style:italic;font-weight:400;src:url(/KaTeX_Math-Italic.woff2) format("woff2"),url(/KaTeX_Math-Italic.woff) format("woff"),url(/KaTeX_Math-Italic.ttf) format("truetype")}@font-face{font-display:block;font-family:"KaTeX_SansSerif";font-style:normal;font-weight:700;src:url(/KaTeX_SansSerif-Bold.woff2) format("woff2"),url(/KaTeX_SansSerif-Bold.woff) format("woff"),url(/KaTeX_SansSerif-Bold.ttf) format("truetype")}@font-face{font-display:block;font-family:"KaTeX_SansSerif";font-style:italic;font-weight:400;src:url(/KaTeX_SansSerif-Italic.woff2) format("woff2"),url(/KaTeX_SansSerif-Italic.woff) format("woff"),url(/KaTeX_SansSerif-Italic.ttf) format("truetype")}@font-face{font-display:block;font-family:"KaTeX_SansSerif";font-style:normal;font-weight:400;src:url(/KaTeX_SansSerif-Regular.woff2) format("woff2"),url(/KaTeX_SansSerif-Regular.woff) format("woff"),url(/KaTeX_SansSerif-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Script;font-style:normal;font-weight:400;src:url(/KaTeX_Script-Regular.woff2) format("woff2"),url(/KaTeX_Script-Regular.woff) format("woff"),url(/KaTeX_Script-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Size1;font-style:normal;font-weight:400;src:url(/KaTeX_Size1-Regular.woff2) format("woff2"),url(/KaTeX_Size1-Regular.woff) format("woff"),url(/KaTeX_Size1-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Size2;font-style:normal;font-weight:400;src:url(/KaTeX_Size2-Regular.woff2) format("woff2"),url(/KaTeX_Size2-Regular.woff) format("woff"),url(/KaTeX_Size2-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Size3;font-style:normal;font-weight:400;src:url(data:font/woff2;base64,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) format("woff2"),url(/KaTeX_Size3-Regular.woff) format("woff"),url(/KaTeX_Size3-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Size4;font-style:normal;font-weight:400;src:url(/KaTeX_Size4-Regular.woff2) format("woff2"),url(/KaTeX_Size4-Regular.woff) format("woff"),url(/KaTeX_Size4-Regular.ttf) format("truetype")}@font-face{font-display:block;font-family:KaTeX_Typewriter;font-style:normal;font-weight:400;src:url(/KaTeX_Typewriter-Regular.woff2) format("woff2"),url(/KaTeX_Typewriter-Regular.woff) format("woff"),url(/KaTeX_Typewriter-Regular.ttf) format("truetype")}.katex{font:normal 1.21em KaTeX_Main,Times New Roman,serif;line-height:1.2;text-indent:0;text-rendering:auto}.katex *{-ms-high-contrast-adjust:none!important;border-color:currentColor}.katex .katex-version:after{content:"0.16.25"}.katex .katex-mathml{clip:rect(1px,1px,1px,1px);border:0;height:1px;overflow:hidden;padding:0;position:absolute;width:1px}.katex .katex-html>.newline{display:block}.katex .base{position:relative;white-space:nowrap;width:-webkit-min-content;width:-moz-min-content;width:min-content}.katex .base,.katex .strut{display:inline-block}.katex .textbf{font-weight:700}.katex .textit{font-style:italic}.katex .textrm{font-family:KaTeX_Main}.katex .textsf{font-family:KaTeX_SansSerif}.katex .texttt{font-family:KaTeX_Typewriter}.katex .mathnormal{font-family:KaTeX_Math;font-style:italic}.katex .mathit{font-family:KaTeX_Main;font-style:italic}.katex .mathrm{font-style:normal}.katex .mathbf{font-family:KaTeX_Main;font-weight:700}.katex .boldsymbol{font-family:KaTeX_Math;font-style:italic;font-weight:700}.katex .amsrm,.katex .mathbb,.katex .textbb{font-family:KaTeX_AMS}.katex .mathcal{font-family:KaTeX_Caligraphic}.katex .mathfrak,.katex .textfrak{font-family:KaTeX_Fraktur}.katex .mathboldfrak,.katex .textboldfrak{font-family:KaTeX_Fraktur;font-weight:700}.katex .mathtt{font-family:KaTeX_Typewriter}.katex .mathscr,.katex .textscr{font-family:KaTeX_Script}.katex .mathsf,.katex .textsf{font-family:KaTeX_SansSerif}.katex .mathboldsf,.katex .textboldsf{font-family:KaTeX_SansSerif;font-weight:700}.katex .mathitsf,.katex .mathsfit,.katex .textitsf{font-family:KaTeX_SansSerif;font-style:italic}.katex .mainrm{font-family:KaTeX_Main;font-style:normal}.katex .vlist-t{border-collapse:collapse;display:inline-table;table-layout:fixed}.katex .vlist-r{display:table-row}.katex .vlist{display:table-cell;position:relative;vertical-align:bottom}.katex .vlist>span{display:block;height:0;position:relative}.katex .vlist>span>span{display:inline-block}.katex .vlist>span>.pstrut{overflow:hidden;width:0}.katex .vlist-t2{margin-right:-2px}.katex .vlist-s{display:table-cell;font-size:1px;min-width:2px;vertical-align:bottom;width:2px}.katex .vbox{align-items:baseline;display:inline-flex;flex-direction:column}.katex .hbox{width:100%}.katex .hbox,.katex .thinbox{display:inline-flex;flex-direction:row}.katex .thinbox{max-width:0;width:0}.katex .msupsub{text-align:left}.katex .mfrac>span>span{text-align:center}.katex .mfrac .frac-line{border-bottom-style:solid;display:inline-block;width:100%}.katex .hdashline,.katex .hline,.katex .mfrac .frac-line,.katex .overline .overline-line,.katex .rule,.katex .underline .underline-line{min-height:1px}.katex .mspace{display:inline-block}.katex .clap,.katex .llap,.katex .rlap{position:relative;width:0}.katex .clap>.inner,.katex .llap>.inner,.katex .rlap>.inner{position:absolute}.katex .clap>.fix,.katex .llap>.fix,.katex .rlap>.fix{display:inline-block}.katex .llap>.inner{right:0}.katex .clap>.inner,.katex .rlap>.inner{left:0}.katex .clap>.inner>span{margin-left:-50%;margin-right:50%}.katex .rule{border:0 solid;display:inline-block;position:relative}.katex .hline,.katex .overline .overline-line,.katex .underline .underline-line{border-bottom-style:solid;display:inline-block;width:100%}.katex .hdashline{border-bottom-style:dashed;display:inline-block;width:100%}.katex .sqrt>.root{margin-left:.2777777778em;margin-right:-.5555555556em}.katex .fontsize-ensurer.reset-size1.size1,.katex .sizing.reset-size1.size1{font-size:1em}.katex .fontsize-ensurer.reset-size1.size2,.katex .sizing.reset-size1.size2{font-size:1.2em}.katex .fontsize-ensurer.reset-size1.size3,.katex .sizing.reset-size1.size3{font-size:1.4em}.katex .fontsize-ensurer.reset-size1.size4,.katex .sizing.reset-size1.size4{font-size:1.6em}.katex .fontsize-ensurer.reset-size1.size5,.katex .sizing.reset-size1.size5{font-size:1.8em}.katex .fontsize-ensurer.reset-size1.size6,.katex .sizing.reset-size1.size6{font-size:2em}.katex .fontsize-ensurer.reset-size1.size7,.katex .sizing.reset-size1.size7{font-size:2.4em}.katex .fontsize-ensurer.reset-size1.size8,.katex .sizing.reset-size1.size8{font-size:2.88em}.katex .fontsize-ensurer.reset-size1.size9,.katex .sizing.reset-size1.size9{font-size:3.456em}.katex .fontsize-ensurer.reset-size1.size10,.katex .sizing.reset-size1.size10{font-size:4.148em}.katex .fontsize-ensurer.reset-size1.size11,.katex .sizing.reset-size1.size11{font-size:4.976em}.katex .fontsize-ensurer.reset-size2.size1,.katex .sizing.reset-size2.size1{font-size:.8333333333em}.katex .fontsize-ensurer.reset-size2.size2,.katex .sizing.reset-size2.size2{font-size:1em}.katex .fontsize-ensurer.reset-size2.size3,.katex .sizing.reset-size2.size3{font-size:1.1666666667em}.katex .fontsize-ensurer.reset-size2.size4,.katex .sizing.reset-size2.size4{font-size:1.3333333333em}.katex .fontsize-ensurer.reset-size2.size5,.katex .sizing.reset-size2.size5{font-size:1.5em}.katex .fontsize-ensurer.reset-size2.size6,.katex .sizing.reset-size2.size6{font-size:1.6666666667em}.katex .fontsize-ensurer.reset-size2.size7,.katex .sizing.reset-size2.size7{font-size:2em}.katex .fontsize-ensurer.reset-size2.size8,.katex .sizing.reset-size2.size8{font-size:2.4em}.katex .fontsize-ensurer.reset-size2.size9,.katex .sizing.reset-size2.size9{font-size:2.88em}.katex .fontsize-ensurer.reset-size2.size10,.katex .sizing.reset-size2.size10{font-size:3.4566666667em}.katex .fontsize-ensurer.reset-size2.size11,.katex .sizing.reset-size2.size11{font-size:4.1466666667em}.katex .fontsize-ensurer.reset-size3.size1,.katex .sizing.reset-size3.size1{font-size:.7142857143em}.katex .fontsize-ensurer.reset-size3.size2,.katex .sizing.reset-size3.size2{font-size:.8571428571em}.katex .fontsize-ensurer.reset-size3.size3,.katex .sizing.reset-size3.size3{font-size:1em}.katex .fontsize-ensurer.reset-size3.size4,.katex .sizing.reset-size3.size4{font-size:1.1428571429em}.katex .fontsize-ensurer.reset-size3.size5,.katex .sizing.reset-size3.size5{font-size:1.2857142857em}.katex .fontsize-ensurer.reset-size3.size6,.katex .sizing.reset-size3.size6{font-size:1.4285714286em}.katex .fontsize-ensurer.reset-size3.size7,.katex .sizing.reset-size3.size7{font-size:1.7142857143em}.katex .fontsize-ensurer.reset-size3.size8,.katex .sizing.reset-size3.size8{font-size:2.0571428571em}.katex .fontsize-ensurer.reset-size3.size9,.katex .sizing.reset-size3.size9{font-size:2.4685714286em}.katex .fontsize-ensurer.reset-size3.size10,.katex .sizing.reset-size3.size10{font-size:2.9628571429em}.katex .fontsize-ensurer.reset-size3.size11,.katex .sizing.reset-size3.size11{font-size:3.5542857143em}.katex .fontsize-ensurer.reset-size4.size1,.katex .sizing.reset-size4.size1{font-size:.625em}.katex .fontsize-ensurer.reset-size4.size2,.katex .sizing.reset-size4.size2{font-size:.75em}.katex .fontsize-ensurer.reset-size4.size3,.katex .sizing.reset-size4.size3{font-size:.875em}.katex .fontsize-ensurer.reset-size4.size4,.katex .sizing.reset-size4.size4{font-size:1em}.katex .fontsize-ensurer.reset-size4.size5,.katex .sizing.reset-size4.size5{font-size:1.125em}.katex .fontsize-ensurer.reset-size4.size6,.katex .sizing.reset-size4.size6{font-size:1.25em}.katex .fontsize-ensurer.reset-size4.size7,.katex .sizing.reset-size4.size7{font-size:1.5em}.katex .fontsize-ensurer.reset-size4.size8,.katex .sizing.reset-size4.size8{font-size:1.8em}.katex .fontsize-ensurer.reset-size4.size9,.katex .sizing.reset-size4.size9{font-size:2.16em}.katex .fontsize-ensurer.reset-size4.size10,.katex .sizing.reset-size4.size10{font-size:2.5925em}.katex .fontsize-ensurer.reset-size4.size11,.katex .sizing.reset-size4.size11{font-size:3.11em}.katex .fontsize-ensurer.reset-size5.size1,.katex .sizing.reset-size5.size1{font-size:.5555555556em}.katex .fontsize-ensurer.reset-size5.size2,.katex .sizing.reset-size5.size2{font-size:.6666666667em}.katex .fontsize-ensurer.reset-size5.size3,.katex .sizing.reset-size5.size3{font-size:.7777777778em}.katex .fontsize-ensurer.reset-size5.size4,.katex .sizing.reset-size5.size4{font-size:.8888888889em}.katex .fontsize-ensurer.reset-size5.size5,.katex .sizing.reset-size5.size5{font-size:1em}.katex .fontsize-ensurer.reset-size5.size6,.katex .sizing.reset-size5.size6{font-size:1.1111111111em}.katex .fontsize-ensurer.reset-size5.size7,.katex .sizing.reset-size5.size7{font-size:1.3333333333em}.katex .fontsize-ensurer.reset-size5.size8,.katex .sizing.reset-size5.size8{font-size:1.6em}.katex .fontsize-ensurer.reset-size5.size9,.katex .sizing.reset-size5.size9{font-size:1.92em}.katex .fontsize-ensurer.reset-size5.size10,.katex .sizing.reset-size5.size10{font-size:2.3044444444em}.katex .fontsize-ensurer.reset-size5.size11,.katex .sizing.reset-size5.size11{font-size:2.7644444444em}.katex .fontsize-ensurer.reset-size6.size1,.katex .sizing.reset-size6.size1{font-size:.5em}.katex .fontsize-ensurer.reset-size6.size2,.katex .sizing.reset-size6.size2{font-size:.6em}.katex .fontsize-ensurer.reset-size6.size3,.katex .sizing.reset-size6.size3{font-size:.7em}.katex .fontsize-ensurer.reset-size6.size4,.katex .sizing.reset-size6.size4{font-size:.8em}.katex .fontsize-ensurer.reset-size6.size5,.katex .sizing.reset-size6.size5{font-size:.9em}.katex .fontsize-ensurer.reset-size6.size6,.katex .sizing.reset-size6.size6{font-size:1em}.katex .fontsize-ensurer.reset-size6.size7,.katex .sizing.reset-size6.size7{font-size:1.2em}.katex .fontsize-ensurer.reset-size6.size8,.katex .sizing.reset-size6.size8{font-size:1.44em}.katex .fontsize-ensurer.reset-size6.size9,.katex .sizing.reset-size6.size9{font-size:1.728em}.katex .fontsize-ensurer.reset-size6.size10,.katex .sizing.reset-size6.size10{font-size:2.074em}.katex .fontsize-ensurer.reset-size6.size11,.katex .sizing.reset-size6.size11{font-size:2.488em}.katex .fontsize-ensurer.reset-size7.size1,.katex .sizing.reset-size7.size1{font-size:.4166666667em}.katex .fontsize-ensurer.reset-size7.size2,.katex .sizing.reset-size7.size2{font-size:.5em}.katex .fontsize-ensurer.reset-size7.size3,.katex .sizing.reset-size7.size3{font-size:.5833333333em}.katex .fontsize-ensurer.reset-size7.size4,.katex .sizing.reset-size7.size4{font-size:.6666666667em}.katex .fontsize-ensurer.reset-size7.size5,.katex .sizing.reset-size7.size5{font-size:.75em}.katex .fontsize-ensurer.reset-size7.size6,.katex .sizing.reset-size7.size6{font-size:.8333333333em}.katex .fontsize-ensurer.reset-size7.size7,.katex .sizing.reset-size7.size7{font-size:1em}.katex .fontsize-ensurer.reset-size7.size8,.katex .sizing.reset-size7.size8{font-size:1.2em}.katex .fontsize-ensurer.reset-size7.size9,.katex .sizing.reset-size7.size9{font-size:1.44em}.katex .fontsize-ensurer.reset-size7.size10,.katex .sizing.reset-size7.size10{font-size:1.7283333333em}.katex .fontsize-ensurer.reset-size7.size11,.katex .sizing.reset-size7.size11{font-size:2.0733333333em}.katex .fontsize-ensurer.reset-size8.size1,.katex .sizing.reset-size8.size1{font-size:.3472222222em}.katex .fontsize-ensurer.reset-size8.size2,.katex .sizing.reset-size8.size2{font-size:.4166666667em}.katex .fontsize-ensurer.reset-size8.size3,.katex .sizing.reset-size8.size3{font-size:.4861111111em}.katex .fontsize-ensurer.reset-size8.size4,.katex .sizing.reset-size8.size4{font-size:.5555555556em}.katex .fontsize-ensurer.reset-size8.size5,.katex .sizing.reset-size8.size5{font-size:.625em}.katex .fontsize-ensurer.reset-size8.size6,.katex .sizing.reset-size8.size6{font-size:.6944444444em}.katex .fontsize-ensurer.reset-size8.size7,.katex .sizing.reset-size8.size7{font-size:.8333333333em}.katex .fontsize-ensurer.reset-size8.size8,.katex .sizing.reset-size8.size8{font-size:1em}.katex .fontsize-ensurer.reset-size8.size9,.katex .sizing.reset-size8.size9{font-size:1.2em}.katex .fontsize-ensurer.reset-size8.size10,.katex .sizing.reset-size8.size10{font-size:1.4402777778em}.katex .fontsize-ensurer.reset-size8.size11,.katex .sizing.reset-size8.size11{font-size:1.7277777778em}.katex .fontsize-ensurer.reset-size9.size1,.katex .sizing.reset-size9.size1{font-size:.2893518519em}.katex .fontsize-ensurer.reset-size9.size2,.katex .sizing.reset-size9.size2{font-size:.3472222222em}.katex .fontsize-ensurer.reset-size9.size3,.katex .sizing.reset-size9.size3{font-size:.4050925926em}.katex .fontsize-ensurer.reset-size9.size4,.katex .sizing.reset-size9.size4{font-size:.462962963em}.katex .fontsize-ensurer.reset-size9.size5,.katex .sizing.reset-size9.size5{font-size:.5208333333em}.katex .fontsize-ensurer.reset-size9.size6,.katex .sizing.reset-size9.size6{font-size:.5787037037em}.katex .fontsize-ensurer.reset-size9.size7,.katex .sizing.reset-size9.size7{font-size:.6944444444em}.katex .fontsize-ensurer.reset-size9.size8,.katex .sizing.reset-size9.size8{font-size:.8333333333em}.katex .fontsize-ensurer.reset-size9.size9,.katex .sizing.reset-size9.size9{font-size:1em}.katex .fontsize-ensurer.reset-size9.size10,.katex .sizing.reset-size9.size10{font-size:1.2002314815em}.katex .fontsize-ensurer.reset-size9.size11,.katex .sizing.reset-size9.size11{font-size:1.4398148148em}.katex .fontsize-ensurer.reset-size10.size1,.katex .sizing.reset-size10.size1{font-size:.2410800386em}.katex .fontsize-ensurer.reset-size10.size2,.katex .sizing.reset-size10.size2{font-size:.2892960463em}.katex .fontsize-ensurer.reset-size10.size3,.katex .sizing.reset-size10.size3{font-size:.337512054em}.katex .fontsize-ensurer.reset-size10.size4,.katex .sizing.reset-size10.size4{font-size:.3857280617em}.katex .fontsize-ensurer.reset-size10.size5,.katex .sizing.reset-size10.size5{font-size:.4339440694em}.katex .fontsize-ensurer.reset-size10.size6,.katex .sizing.reset-size10.size6{font-size:.4821600771em}.katex .fontsize-ensurer.reset-size10.size7,.katex .sizing.reset-size10.size7{font-size:.5785920926em}.katex .fontsize-ensurer.reset-size10.size8,.katex .sizing.reset-size10.size8{font-size:.6943105111em}.katex .fontsize-ensurer.reset-size10.size9,.katex .sizing.reset-size10.size9{font-size:.8331726133em}.katex .fontsize-ensurer.reset-size10.size10,.katex .sizing.reset-size10.size10{font-size:1em}.katex .fontsize-ensurer.reset-size10.size11,.katex .sizing.reset-size10.size11{font-size:1.1996142719em}.katex .fontsize-ensurer.reset-size11.size1,.katex .sizing.reset-size11.size1{font-size:.2009646302em}.katex .fontsize-ensurer.reset-size11.size2,.katex .sizing.reset-size11.size2{font-size:.2411575563em}.katex .fontsize-ensurer.reset-size11.size3,.katex .sizing.reset-size11.size3{font-size:.2813504823em}.katex .fontsize-ensurer.reset-size11.size4,.katex .sizing.reset-size11.size4{font-size:.3215434084em}.katex .fontsize-ensurer.reset-size11.size5,.katex .sizing.reset-size11.size5{font-size:.3617363344em}.katex .fontsize-ensurer.reset-size11.size6,.katex .sizing.reset-size11.size6{font-size:.4019292605em}.katex .fontsize-ensurer.reset-size11.size7,.katex .sizing.reset-size11.size7{font-size:.4823151125em}.katex .fontsize-ensurer.reset-size11.size8,.katex .sizing.reset-size11.size8{font-size:.578778135em}.katex .fontsize-ensurer.reset-size11.size9,.katex .sizing.reset-size11.size9{font-size:.6945337621em}.katex .fontsize-ensurer.reset-size11.size10,.katex .sizing.reset-size11.size10{font-size:.8336012862em}.katex .fontsize-ensurer.reset-size11.size11,.katex .sizing.reset-size11.size11{font-size:1em}.katex .delimsizing.size1{font-family:KaTeX_Size1}.katex .delimsizing.size2{font-family:KaTeX_Size2}.katex .delimsizing.size3{font-family:KaTeX_Size3}.katex .delimsizing.size4{font-family:KaTeX_Size4}.katex .delimsizing.mult .delim-size1>span{font-family:KaTeX_Size1}.katex .delimsizing.mult .delim-size4>span{font-family:KaTeX_Size4}.katex .nulldelimiter{display:inline-block;width:.12em}.katex .delimcenter,.katex .op-symbol{position:relative}.katex .op-symbol.small-op{font-family:KaTeX_Size1}.katex .op-symbol.large-op{font-family:KaTeX_Size2}.katex .accent>.vlist-t,.katex .op-limits>.vlist-t{text-align:center}.katex .accent .accent-body{position:relative}.katex .accent .accent-body:not(.accent-full){width:0}.katex .overlay{display:block}.katex .mtable .vertical-separator{display:inline-block;min-width:1px}.katex .mtable .arraycolsep{display:inline-block}.katex .mtable .col-align-c>.vlist-t{text-align:center}.katex .mtable .col-align-l>.vlist-t{text-align:left}.katex .mtable .col-align-r>.vlist-t{text-align:right}.katex .svg-align{text-align:left}.katex svg{fill:currentColor;stroke:currentColor;fill-rule:nonzero;fill-opacity:1;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:block;height:inherit;position:absolute;width:100%}.katex svg path{stroke:none}.katex img{border-style:none;max-height:none;max-width:none;min-height:0;min-width:0}.katex .stretchy{display:block;overflow:hidden;position:relative;width:100%}.katex .stretchy:after,.katex .stretchy:before{content:""}.katex .hide-tail{overflow:hidden;position:relative;width:100%}.katex .halfarrow-left{left:0;overflow:hidden;position:absolute;width:50.2%}.katex .halfarrow-right{overflow:hidden;position:absolute;right:0;width:50.2%}.katex .brace-left{left:0;overflow:hidden;position:absolute;width:25.1%}.katex .brace-center{left:25%;overflow:hidden;position:absolute;width:50%}.katex .brace-right{overflow:hidden;position:absolute;right:0;width:25.1%}.katex .x-arrow-pad{padding:0 .5em}.katex .cd-arrow-pad{padding:0 .55556em 0 .27778em}.katex .mover,.katex .munder,.katex .x-arrow{text-align:center}.katex .boxpad{padding:0 .3em}.katex .fbox,.katex .fcolorbox{border:.04em solid;box-sizing:border-box}.katex .cancel-pad{padding:0 .2em}.katex .cancel-lap{margin-left:-.2em;margin-right:-.2em}.katex .sout{border-bottom-style:solid;border-bottom-width:.08em}.katex .angl{border-right:.049em solid;border-top:.049em solid;box-sizing:border-box;margin-right:.03889em}.katex .anglpad{padding:0 .03889em}.katex .eqn-num:before{content:"(" counter(katexEqnNo) ")";counter-increment:katexEqnNo}.katex .mml-eqn-num:before{content:"(" counter(mmlEqnNo) ")";counter-increment:mmlEqnNo}.katex .mtr-glue{width:50%}.katex .cd-vert-arrow{display:inline-block;position:relative}.katex .cd-label-left{display:inline-block;position:absolute;right:calc(50% + .3em);text-align:left}.katex .cd-label-right{display:inline-block;left:calc(50% + .3em);position:absolute;text-align:right}.katex-display{display:block;margin:1em 0;text-align:center}.katex-display>.katex{display:block;text-align:center;white-space:nowrap}.katex-display>.katex>.katex-html{display:block;position:relative}.katex-display>.katex>.katex-html>.tag{position:absolute;right:0}.katex-display.leqno>.katex>.katex-html>.tag{left:0;right:auto}.katex-display.fleqn>.katex{padding-left:2em;text-align:left}body{counter-reset:katexEqnNo mmlEqnNo}
 /*$vite$:1*/`;
   document.head.appendChild(__vite_style__);
@@ -42055,146 +42055,146 @@ ${renderedContent}
   });
   const getSuggestionItems = ({}) => [
     {
-      title: "标题 1",
-      description: "大号标题",
+      title: "Heading 1",
+      description: "Large heading",
       icon: "heading1",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).setNode("heading", { level: 1 }).run();
       },
-      keywords: ["h1", "heading1", "title", "标题", "大标题"]
+      keywords: ["h1", "heading1", "title", "large heading"]
     },
     {
-      title: "标题 2",
-      description: "中号标题",
+      title: "Heading 2",
+      description: "Medium heading",
       icon: "heading2",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).setNode("heading", { level: 2 }).run();
       },
-      keywords: ["h2", "heading2", "subtitle", "副标题", "中标题"]
+      keywords: ["h2", "heading2", "subtitle", "medium heading"]
     },
     {
-      title: "标题 3",
-      description: "小号标题",
+      title: "Heading 3",
+      description: "Small heading",
       icon: "heading3",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).setNode("heading", { level: 3 }).run();
       },
-      keywords: ["h3", "heading3", "small title", "小标题"]
+      keywords: ["h3", "heading3", "small heading"]
     },
     {
-      title: "文本",
-      description: "普通段落",
+      title: "Text",
+      description: "Normal paragraph",
       icon: "paragraph",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).setParagraph().run();
       },
-      keywords: ["p", "paragraph", "文本", "段落"]
+      keywords: ["p", "paragraph", "text"]
     },
     {
-      title: "粗体",
-      description: "加粗文本",
+      title: "Bold",
+      description: "Bold text",
       icon: "bold",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleBold().run();
       },
-      keywords: ["bold", "粗体", "加粗"]
+      keywords: ["bold", "strong"]
     },
     {
-      title: "斜体",
-      description: "斜体文本",
+      title: "Italic",
+      description: "Italic text",
       icon: "italic",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleItalic().run();
       },
-      keywords: ["italic", "斜体"]
+      keywords: ["italic", "em"]
     },
     {
-      title: "代码",
-      description: "内联代码",
+      title: "Code",
+      description: "Inline code",
       icon: "code",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleCode().run();
       },
-      keywords: ["code", "inline code", "代码", "内联代码"]
+      keywords: ["code", "inline code"]
     },
     {
-      title: "代码块",
-      description: "代码块",
+      title: "Code Block",
+      description: "Code block",
       icon: "codeblock",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleCodeBlock().run();
       },
-      keywords: ["codeblock", "代码块"]
+      keywords: ["codeblock", "code block"]
     },
     {
-      title: "引用",
-      description: "引用块",
+      title: "Quote",
+      description: "Quote block",
       icon: "quote",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleBlockquote().run();
       },
-      keywords: ["quote", "blockquote", "引用"]
+      keywords: ["quote", "blockquote"]
     },
     {
-      title: "无序列表",
-      description: "项目符号列表",
+      title: "Bullet List",
+      description: "Bullet list",
       icon: "bulletlist",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleBulletList().run();
       },
-      keywords: ["ul", "bullet list", "无序列表", "项目符号"]
+      keywords: ["ul", "bullet list", "unordered list"]
     },
     {
-      title: "有序列表",
-      description: "数字列表",
+      title: "Ordered List",
+      description: "Numbered list",
       icon: "orderedlist",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleOrderedList().run();
       },
-      keywords: ["ol", "ordered list", "有序列表", "数字列表"]
+      keywords: ["ol", "ordered list", "numbered list"]
     },
     {
-      title: "任务列表",
-      description: "复选框列表",
+      title: "Task List",
+      description: "Checkbox list",
       icon: "tasklist",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).toggleTaskList().run();
       },
-      keywords: ["task list", "todo", "任务列表", "待办事项"]
+      keywords: ["task list", "todo", "checklist"]
     },
     {
-      title: "表格",
-      description: "插入表格",
+      title: "Table",
+      description: "Insert table",
       icon: "table",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
       },
-      keywords: ["table", "表格"]
+      keywords: ["table"]
     },
     {
-      title: "图片",
-      description: "插入图片",
+      title: "Image",
+      description: "Insert image",
       icon: "image",
       command: ({ editor, range: range2 }) => {
         return { type: "image", editor, range: range2 };
       },
-      keywords: ["image", "img", "图片"]
+      keywords: ["image", "img", "picture"]
     },
     {
-      title: "链接",
-      description: "插入链接",
+      title: "Link",
+      description: "Insert link",
       icon: "link",
       command: ({ editor, range: range2 }) => {
-        const url = window.prompt("请输入链接地址:");
+        const url = window.prompt("Enter link URL:");
         if (url) {
           editor.chain().focus().deleteRange(range2).setLink({ href: url }).run();
         }
       },
-      keywords: ["link", "url", "链接"]
+      keywords: ["link", "url"]
     },
     {
-      title: "Mermaid 图表",
-      description: "插入 Mermaid 图表",
+      title: "Mermaid Diagram",
+      description: "Insert Mermaid diagram",
       icon: "mermaid",
       command: ({ editor, range: range2 }) => {
         editor.chain().focus().deleteRange(range2).insertContent({
@@ -42202,30 +42202,30 @@ ${renderedContent}
           content: [
             {
               type: "text",
-              text: "graph TD\n  A[开始] --> B[处理数据]\n  B --> C{决策}\n  C -->|是| D[成功]\n  C -->|否| E[失败]\n  D --> F[结束]\n  E --> F"
+              text: "graph TD\n  A[Start] --> B[Process Data]\n  B --> C{Decision}\n  C -->|Yes| D[Success]\n  C -->|No| E[Failure]\n  D --> F[End]\n  E --> F"
             }
           ]
         }).run();
       },
-      keywords: ["mermaid", "diagram", "chart", "图表", "流程图"]
+      keywords: ["mermaid", "diagram", "chart", "flowchart"]
     },
     {
-      title: "行内数学公式",
-      description: "插入行内数学公式",
+      title: "Inline Math",
+      description: "Insert inline math formula",
       icon: "math",
       command: ({ editor, range: range2 }) => {
         return { type: "math", editor, range: range2, mathType: "inline" };
       },
-      keywords: ["math", "formula", "latex", "数学", "公式", "inline", "行内"]
+      keywords: ["math", "formula", "latex", "inline"]
     },
     {
-      title: "块级数学公式",
-      description: "插入块级数学公式",
+      title: "Block Math",
+      description: "Insert block math formula",
       icon: "math",
       command: ({ editor, range: range2 }) => {
         return { type: "math", editor, range: range2, mathType: "block" };
       },
-      keywords: ["math", "formula", "latex", "数学", "公式", "block", "块级"]
+      keywords: ["math", "formula", "latex", "block"]
     }
   ];
   const filterItems = (items, query) => {
@@ -42237,8 +42237,8 @@ ${renderedContent}
     isOpen,
     onClose,
     onConfirm,
-    title: title2 = "插入图片",
-    placeholder = "请输入图片 URL"
+    title: title2 = "Insert Image",
+    placeholder = "Enter image URL"
   }) => {
     const [url, setUrl] = reactExports$1.useState("");
     const [error2, setError] = reactExports$1.useState("");
@@ -42251,7 +42251,7 @@ ${renderedContent}
     const handleSubmit = (e3) => {
       e3.preventDefault();
       if (!url.trim()) {
-        setError("请输入有效的图片 URL");
+        setError("Please enter a valid image URL");
         return;
       }
       try {
@@ -42259,7 +42259,7 @@ ${renderedContent}
         onConfirm(url.trim());
         onClose();
       } catch {
-        setError("请输入有效的 URL 地址");
+        setError("Please enter a valid URL");
       }
     };
     const handleKeyDown2 = (e3) => {
@@ -42350,7 +42350,7 @@ ${renderedContent}
                         cursor: "pointer",
                         fontSize: "14px"
                       },
-                      children: "取消"
+                      children: "Cancel"
                     }
                   ),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -42366,7 +42366,7 @@ ${renderedContent}
                         cursor: "pointer",
                         fontSize: "14px"
                       },
-                      children: "确认"
+                      children: "Confirm"
                     }
                   )
                 ] })
@@ -42408,8 +42408,8 @@ ${renderedContent}
     isOpen,
     onClose,
     onConfirm,
-    title: title2 = "插入公式",
-    placeholder = "请输入 LaTeX 公式",
+    title: title2 = "Insert Formula",
+    placeholder = "Enter LaTeX formula",
     initialValue = "",
     mathType = "inline"
   }) => {
@@ -42424,7 +42424,7 @@ ${renderedContent}
     const handleSubmit = (e3) => {
       e3.preventDefault();
       if (!formula.trim()) {
-        setError("请输入有效的公式");
+        setError("Please enter a valid formula");
         return;
       }
       onConfirm(formula.trim());
@@ -42528,7 +42528,7 @@ ${renderedContent}
                     color: "#666",
                     marginTop: "8px"
                   }, children: [
-                    "支持 LaTeX 语法，例如: ",
+                    "Supports LaTeX syntax, e.g.: ",
                     /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: "E = mc^2" }),
                     ", ",
                     /* @__PURE__ */ jsxRuntimeExports.jsx("code", { children: "\\sum_{i=1}^n i" })
@@ -42553,7 +42553,7 @@ ${renderedContent}
                         cursor: "pointer",
                         fontSize: "14px"
                       },
-                      children: "取消"
+                      children: "Cancel"
                     }
                   ),
                   /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -42569,7 +42569,7 @@ ${renderedContent}
                         cursor: "pointer",
                         fontSize: "14px"
                       },
-                      children: "确认"
+                      children: "Confirm"
                     }
                   )
                 ] })
@@ -43230,7 +43230,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleBold().run(),
             className: `notion-button ${editor.isActive("bold") ? "notion-button-active" : ""}`,
-            title: "粗体 (Ctrl+B)",
+            title: "Bold (Ctrl+B)",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Bold, { size: 16 })
           }
         ),
@@ -43239,7 +43239,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleItalic().run(),
             className: `notion-button ${editor.isActive("italic") ? "notion-button-active" : ""}`,
-            title: "斜体 (Ctrl+I)",
+            title: "Italic (Ctrl+I)",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Italic, { size: 16 })
           }
         ),
@@ -43248,7 +43248,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleUnderline().run(),
             className: `notion-button ${editor.isActive("underline") ? "notion-button-active" : ""}`,
-            title: "下划线 (Ctrl+U)",
+            title: "Underline (Ctrl+U)",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Underline, { size: 16 })
           }
         ),
@@ -43257,7 +43257,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleStrike().run(),
             className: `notion-button ${editor.isActive("strike") ? "notion-button-active" : ""}`,
-            title: "删除线",
+            title: "Strikethrough",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Strikethrough, { size: 16 })
           }
         )
@@ -43268,7 +43268,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleCode().run(),
             className: `notion-button ${editor.isActive("code") ? "notion-button-active" : ""}`,
-            title: "内联代码",
+            title: "Inline Code",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Code, { size: 16 })
           }
         ),
@@ -43277,7 +43277,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleHighlight().run(),
             className: `notion-button ${editor.isActive("highlight") ? "notion-button-active" : ""}`,
-            title: "高亮",
+            title: "Highlight",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Highlighter, { size: 16 })
           }
         )
@@ -43288,7 +43288,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().setParagraph().run(),
             className: `notion-button ${editor.isActive("paragraph") ? "notion-button-active" : ""}`,
-            title: "段落",
+            title: "Paragraph",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Type$3, { size: 16 })
           }
         ),
@@ -43297,7 +43297,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
             className: `notion-button ${editor.isActive("heading", { level: 1 }) ? "notion-button-active" : ""}`,
-            title: "标题 1",
+            title: "Heading 1",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Heading1, { size: 16 })
           }
         ),
@@ -43306,7 +43306,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
             className: `notion-button ${editor.isActive("heading", { level: 2 }) ? "notion-button-active" : ""}`,
-            title: "标题 2",
+            title: "Heading 2",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Heading2, { size: 16 })
           }
         ),
@@ -43315,7 +43315,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
             className: `notion-button ${editor.isActive("heading", { level: 3 }) ? "notion-button-active" : ""}`,
-            title: "标题 3",
+            title: "Heading 3",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Heading3, { size: 16 })
           }
         )
@@ -43326,7 +43326,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleBulletList().run(),
             className: `notion-button ${editor.isActive("bulletList") ? "notion-button-active" : ""}`,
-            title: "无序列表",
+            title: "Bullet List",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(List$1, { size: 16 })
           }
         ),
@@ -43335,7 +43335,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleOrderedList().run(),
             className: `notion-button ${editor.isActive("orderedList") ? "notion-button-active" : ""}`,
-            title: "有序列表",
+            title: "Ordered List",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(ListOrdered, { size: 16 })
           }
         ),
@@ -43344,7 +43344,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleTaskList().run(),
             className: `notion-button ${editor.isActive("taskList") ? "notion-button-active" : ""}`,
-            title: "任务列表",
+            title: "Task List",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(SquareCheck, { size: 16 })
           }
         ),
@@ -43353,7 +43353,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleBlockquote().run(),
             className: `notion-button ${editor.isActive("blockquote") ? "notion-button-active" : ""}`,
-            title: "引用",
+            title: "Quote",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Quote, { size: 16 })
           }
         )
@@ -43364,7 +43364,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().toggleCodeBlock().run(),
             className: `notion-button ${editor.isActive("codeBlock") ? "notion-button-active" : ""}`,
-            title: "代码块",
+            title: "Code Block",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(CodeXml, { size: 16 })
           }
         ),
@@ -43373,7 +43373,7 @@ ${renderedContent}
           {
             onClick: () => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
             className: `notion-button ${editor.isActive("table") ? "notion-button-active" : ""}`,
-            title: "表格",
+            title: "Table",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Table, { size: 16 })
           }
         ),
@@ -43382,7 +43382,7 @@ ${renderedContent}
           {
             onClick: () => setShowImageDialog(true),
             className: "notion-button",
-            title: "插入图片",
+            title: "Insert Image",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Image$2, { size: 16 })
           }
         ),
@@ -43394,7 +43394,7 @@ ${renderedContent}
               setShowMathDialog(true);
             },
             className: "notion-button",
-            title: "插入行内数学公式",
+            title: "Insert Inline Math",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Sigma, { size: 16 })
           }
         ),
@@ -43406,7 +43406,7 @@ ${renderedContent}
               setShowMathDialog(true);
             },
             className: "notion-button",
-            title: "插入块级数学公式",
+            title: "Insert Block Math",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(SquareSigma, { size: 16 })
           }
         ),
@@ -43414,13 +43414,13 @@ ${renderedContent}
           "button",
           {
             onClick: () => {
-              const url = window.prompt("请输入链接 URL:");
+              const url = window.prompt("Enter link URL:");
               if (url) {
                 editor.chain().focus().setLink({ href: url }).run();
               }
             },
             className: `notion-button ${editor.isActive("link") ? "notion-button-active" : ""}`,
-            title: "插入链接",
+            title: "Insert Link",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { size: 16 })
           }
         ),
@@ -43433,13 +43433,13 @@ ${renderedContent}
                 content: [
                   {
                     type: "text",
-                    text: "graph TD\n  A[开始] --> B[处理数据]\n  B --> C{决策}\n  C -->|是| D[成功]\n  C -->|否| E[失败]\n  D --> F[结束]\n  E --> F"
+                    text: "graph TD\n  A[Start] --> B[Process Data]\n  B --> C{Decision}\n  C -->|Yes| D[Success]\n  C -->|No| E[Failure]\n  D --> F[End]\n  E --> F"
                   }
                 ]
               }).run();
             },
             className: "notion-button",
-            title: "插入 Mermaid 图表",
+            title: "Insert Mermaid Diagram",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(Workflow, { size: 16 })
           }
         )
@@ -43452,8 +43452,8 @@ ${renderedContent}
           onConfirm: (url) => {
             editor.chain().focus().setImage({ src: url }).run();
           },
-          title: "插入图片",
-          placeholder: "请输入图片 URL"
+          title: "Insert Image",
+          placeholder: "Enter image URL"
         }
       ),
       /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -43468,8 +43468,8 @@ ${renderedContent}
               editor.chain().focus().insertBlockMath({ latex: formula }).run();
             }
           },
-          title: mathType === "inline" ? "插入行内数学公式" : "插入块级数学公式",
-          placeholder: "请输入 LaTeX 公式",
+          title: mathType === "inline" ? "Insert Inline Math" : "Insert Block Math",
+          placeholder: "Enter LaTeX formula",
           mathType
         }
       )
@@ -43543,7 +43543,7 @@ ${renderedContent}
         {
           className: "toc-toggle-btn",
           onClick: toggleCollapse,
-          title: isCollapsed ? "展开目录" : "折叠目录",
+          title: isCollapsed ? "Expand TOC" : "Collapse TOC",
           style: { display: isCollapsed ? "block" : "none" },
           children: /* @__PURE__ */ jsxRuntimeExports.jsx(List$1, { size: 16 })
         }
@@ -43554,11 +43554,11 @@ ${renderedContent}
           {
             className: "toc-collapse-btn",
             onClick: toggleCollapse,
-            title: "折叠目录",
+            title: "Collapse TOC",
             children: /* @__PURE__ */ jsxRuntimeExports.jsx(ChevronRight, { size: 16 })
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toc-content", children: tocItems.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toc-empty", children: "暂无标题" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "toc-list", children: tocItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toc-content", children: tocItems.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "toc-empty", children: "No headings" }) : /* @__PURE__ */ jsxRuntimeExports.jsx("ul", { className: "toc-list", children: tocItems.map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "li",
           {
             className: `toc-item toc-level-${item.level} ${activeItemId === item.id ? "toc-item-active" : ""}`,
@@ -43619,7 +43619,7 @@ ${renderedContent}
           value: query,
           onChange: (e3) => setQuery(e3.target.value),
           onKeyDown: handleKeyDown2,
-          placeholder: "搜索...",
+          placeholder: "Search...",
           className: "search-input"
         }
       ),
@@ -43627,7 +43627,7 @@ ${renderedContent}
         currentMatch,
         "/",
         totalMatches
-      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "no-matches", children: "无结果" }) }),
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "no-matches", children: "No results" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "search-actions", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
@@ -43635,7 +43635,7 @@ ${renderedContent}
             type: "button",
             className: "search-nav-btn",
             onClick: () => onNavigate("prev"),
-            title: "上一个 (Shift+Enter)",
+            title: "Previous (Shift+Enter)",
             disabled: totalMatches === 0,
             children: "↑"
           }
@@ -43646,7 +43646,7 @@ ${renderedContent}
             type: "button",
             className: "search-nav-btn",
             onClick: () => onNavigate("next"),
-            title: "下一个 (Enter)",
+            title: "Next (Enter)",
             disabled: totalMatches === 0,
             children: "↓"
           }
@@ -43657,7 +43657,7 @@ ${renderedContent}
             type: "button",
             className: "search-close-btn",
             onClick: onClose,
-            title: "关闭 (ESC)",
+            title: "Close (ESC)",
             children: "×"
           }
         )
@@ -68114,7 +68114,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleBold().run(),
                 className: `bubble-menu-btn ${editor.isActive("bold") ? "active" : ""}`,
-                title: "粗体",
+                title: "Bold",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Bold, { size: 14 })
               }
             ),
@@ -68123,7 +68123,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleItalic().run(),
                 className: `bubble-menu-btn ${editor.isActive("italic") ? "active" : ""}`,
-                title: "斜体",
+                title: "Italic",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Italic, { size: 14 })
               }
             ),
@@ -68132,7 +68132,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleUnderline().run(),
                 className: `bubble-menu-btn ${editor.isActive("underline") ? "active" : ""}`,
-                title: "下划线",
+                title: "Underline",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Underline, { size: 14 })
               }
             ),
@@ -68141,7 +68141,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleStrike().run(),
                 className: `bubble-menu-btn ${editor.isActive("strike") ? "active" : ""}`,
-                title: "删除线",
+                title: "Strikethrough",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Strikethrough, { size: 14 })
               }
             ),
@@ -68150,7 +68150,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleCode().run(),
                 className: `bubble-menu-btn ${editor.isActive("code") ? "active" : ""}`,
-                title: "内联代码",
+                title: "Inline Code",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Code, { size: 14 })
               }
             ),
@@ -68159,7 +68159,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleHighlight().run(),
                 className: `bubble-menu-btn ${editor.isActive("highlight") ? "active" : ""}`,
-                title: "高亮",
+                title: "Highlight",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Highlighter, { size: 14 })
               }
             ),
@@ -68167,13 +68167,13 @@ $$`;
               "button",
               {
                 onClick: () => {
-                  const url = window.prompt("请输入链接 URL:");
+                  const url = window.prompt("Enter link URL:");
                   if (url) {
                     editor.chain().focus().setLink({ href: url }).run();
                   }
                 },
                 className: `bubble-menu-btn ${editor.isActive("link") ? "active" : ""}`,
-                title: "链接",
+                title: "Link",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Link, { size: 14 })
               }
             ),
@@ -68182,7 +68182,7 @@ $$`;
               {
                 onClick: () => setShowImageDialog(true),
                 className: "bubble-menu-btn",
-                title: "插入图片",
+                title: "Insert Image",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Image$2, { size: 14 })
               }
             ),
@@ -68191,7 +68191,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleBlockquote().run(),
                 className: `bubble-menu-btn ${editor.isActive("blockquote") ? "active" : ""}`,
-                title: "引用",
+                title: "Quote",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(Quote, { size: 14 })
               }
             ),
@@ -68200,7 +68200,7 @@ $$`;
               {
                 onClick: () => editor.chain().focus().toggleCodeBlock().run(),
                 className: `bubble-menu-btn ${editor.isActive("codeBlock") ? "active" : ""}`,
-                title: "代码块",
+                title: "Code Block",
                 children: /* @__PURE__ */ jsxRuntimeExports.jsx(CodeXml, { size: 14 })
               }
             )
@@ -68213,8 +68213,8 @@ $$`;
               onConfirm: (url) => {
                 editor.chain().focus().setImage({ src: url }).run();
               },
-              title: "插入图片",
-              placeholder: "请输入图片 URL"
+              title: "Insert Image",
+              placeholder: "Enter image URL"
             }
           )
         ]

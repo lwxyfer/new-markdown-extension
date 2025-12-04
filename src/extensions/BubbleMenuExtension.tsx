@@ -32,75 +32,75 @@ const BubbleMenuExtension: React.FC<BubbleMenuProps> = ({ editor }) => {
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`bubble-menu-btn ${editor.isActive('bold') ? 'active' : ''}`}
-          title="粗体"
+          title="Bold"
         >
           <Bold size={14} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`bubble-menu-btn ${editor.isActive('italic') ? 'active' : ''}`}
-          title="斜体"
+          title="Italic"
         >
           <Italic size={14} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={`bubble-menu-btn ${editor.isActive('underline') ? 'active' : ''}`}
-          title="下划线"
+          title="Underline"
         >
           <Underline size={14} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={`bubble-menu-btn ${editor.isActive('strike') ? 'active' : ''}`}
-          title="删除线"
+          title="Strikethrough"
         >
           <Strikethrough size={14} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={`bubble-menu-btn ${editor.isActive('code') ? 'active' : ''}`}
-          title="内联代码"
+          title="Inline Code"
         >
           <Code size={14} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           className={`bubble-menu-btn ${editor.isActive('highlight') ? 'active' : ''}`}
-          title="高亮"
+          title="Highlight"
         >
           <Highlighter size={14} />
         </button>
         <button
           onClick={() => {
-            const url = window.prompt('请输入链接 URL:')
+            const url = window.prompt('Enter link URL:')
             if (url) {
               editor.chain().focus().setLink({ href: url }).run()
             }
           }}
           className={`bubble-menu-btn ${editor.isActive('link') ? 'active' : ''}`}
-          title="链接"
+          title="Link"
         >
           <Link size={14} />
         </button>
         <button
           onClick={() => setShowImageDialog(true)}
           className="bubble-menu-btn"
-          title="插入图片"
+          title="Insert Image"
         >
           <Image size={14} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={`bubble-menu-btn ${editor.isActive('blockquote') ? 'active' : ''}`}
-          title="引用"
+          title="Quote"
         >
           <Quote size={14} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={`bubble-menu-btn ${editor.isActive('codeBlock') ? 'active' : ''}`}
-          title="代码块"
+          title="Code Block"
         >
           <Code2 size={14} />
         </button>
@@ -112,8 +112,8 @@ const BubbleMenuExtension: React.FC<BubbleMenuProps> = ({ editor }) => {
         onConfirm={(url) => {
           editor.chain().focus().setImage({ src: url }).run()
         }}
-        title="插入图片"
-        placeholder="请输入图片 URL"
+        title="Insert Image"
+        placeholder="Enter image URL"
       />
     </BubbleMenu>
   )

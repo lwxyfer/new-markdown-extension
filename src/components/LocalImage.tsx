@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ReactNodeViewProps, NodeViewWrapper } from '@tiptap/react'
 
-// 使用全局的 vscode API，已在其他文件中声明
+// Use global vscode API, declared in other files
 
-// 全局缓存，避免重复转换
+// Global cache to avoid repeated conversions
 const imageUrlCache = new Map<string, string>()
 
 const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
@@ -18,7 +18,7 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
   const hasProcessedRef = useRef(false)
 
   useEffect(() => {
-    // 避免重复处理
+    // Avoid duplicate processing
     if (hasProcessedRef.current) {
       return
     }
@@ -27,7 +27,7 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
     const processImageSrc = async () => {
       console.log('🖼️ Processing image source:', src)
 
-      // 检查缓存
+      // Check cache
       if (imageUrlCache.has(src)) {
         console.log('🖼️ Using cached URL:', imageUrlCache.get(src))
         setImageUrl(imageUrlCache.get(src)!)
@@ -35,29 +35,29 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
         return
       }
 
-      // 如果是 data URL 或网络 URL，直接使用
+      // If it's a data URL or network URL, use directly
       if (src.startsWith('data:') || src.startsWith('http')) {
         console.log('🖼️ Using direct URL:', src)
         setImageUrl(src)
         return
       }
 
-      // 处理相对路径或本地文件路径
+      // Handle relative paths or local file paths
       if (src.startsWith('./') || src.startsWith('/') || src.startsWith('file://') || /^[a-zA-Z]:\\|^\//.test(src)) {
         console.log('🖼️ Sending path conversion request:', src)
         setIsConverting(true)
-        // 发送消息给扩展，请求转换图片路径
+        // Send message to extension requesting path conversion
         vscode.postMessage({
           type: 'convertImagePath',
           path: src
         })
 
-        // 不设置原始路径，避免403错误，等待转换结果
-        // 此时 imageUrl 保持为空，显示占位符
+        // Don't set original path to avoid 403 errors, wait for conversion result
+        // imageUrl remains empty, showing placeholder
         return
       }
 
-      // 其他情况直接使用
+      // For other cases, use directly
       console.log('🖼️ Using source directly:', src)
       setImageUrl(src)
     }
@@ -65,7 +65,7 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
     processImageSrc()
   }, [src])
 
-  // 监听来自扩展的图片路径转换结果
+  // Listen for image path conversion results from extension
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const message = event.data
@@ -73,7 +73,7 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
       if (message.type === 'imagePathConverted' && message.originalPath === src) {
         console.log('🖼️ Image path converted:', src, '->', message.convertedPath)
 
-        // 检查转换后的路径是否与原始路径相同（表示转换失败）
+        // Check if converted path is same as original (indicates conversion failed)
         if (message.convertedPath === src) {
           console.log('❌ Image path conversion failed, using placeholder')
           setHasError(true)
@@ -82,11 +82,11 @@ const LocalImage: React.FC<ReactNodeViewProps> = ({ node }) => {
           return
         }
 
-        // 缓存转换结果
+        // Cache conversion result
         imageUrlCache.set(src, message.convertedPath)
         setImageUrl(message.convertedPath)
         setIsConverting(false)
-        // 保持 loading 状态，等待图片实际加载结果
+        // Keep loading state, wait for actual image load result
       }
     }
 

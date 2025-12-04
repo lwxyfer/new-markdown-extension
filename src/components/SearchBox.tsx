@@ -63,7 +63,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="搜索..."
+          placeholder="Search..."
           className="search-input"
         />
 
@@ -73,7 +73,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
               {currentMatch}/{totalMatches}
             </span>
           ) : (
-            <span className="no-matches">无结果</span>
+            <span className="no-matches">No results</span>
           )}
         </div>
 
@@ -82,7 +82,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             type="button"
             className="search-nav-btn"
             onClick={() => onNavigate('prev')}
-            title="上一个 (Shift+Enter)"
+            title="Previous (Shift+Enter)"
             disabled={totalMatches === 0}
           >
             ↑
@@ -91,7 +91,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             type="button"
             className="search-nav-btn"
             onClick={() => onNavigate('next')}
-            title="下一个 (Enter)"
+            title="Next (Enter)"
             disabled={totalMatches === 0}
           >
             ↓
@@ -100,7 +100,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
             type="button"
             className="search-close-btn"
             onClick={onClose}
-            title="关闭 (ESC)"
+            title="Close (ESC)"
           >
             ×
           </button>

@@ -34,21 +34,21 @@ export const SearchHighlightExtension = Extension.create<SearchHighlightOptions>
         state: {
           init: () => DecorationSet.empty,
           apply: (tr, oldState) => {
-            // 检查是否有搜索相关的元数据
+            // Check if there is search-related metadata
             const searchMeta = tr.getMeta('searchHighlight')
 
             let searchQuery = extension.options.searchQuery
             let currentMatchIndex = extension.options.currentMatchIndex
             let searchResults = extension.options.searchResults
 
-            // 如果存在元数据，使用元数据中的值
+            // If metadata exists, use values from metadata
             if (searchMeta) {
               searchQuery = searchMeta.searchQuery || searchQuery
               currentMatchIndex = searchMeta.currentMatchIndex ?? currentMatchIndex
               searchResults = searchMeta.searchResults || searchResults
             }
 
-            // 如果文档没有变化且没有搜索元数据，返回旧状态
+            // If document has not changed and there is no search metadata, return old state
             if (!tr.docChanged && !searchMeta) {
               return oldState
             }

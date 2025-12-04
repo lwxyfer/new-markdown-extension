@@ -2,7 +2,7 @@ import { Image } from '@tiptap/extension-image'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import LinkedImageComponent from '../components/LinkedImage'
 
-// 自定义链接图片扩展，处理 [![text](img)](link) 格式
+// Custom linked image extension to handle [![text](img)](link) format
 export const LinkedImageExtension = Image.extend({
   name: 'linkedImage',
 
@@ -32,7 +32,7 @@ export const LinkedImageExtension = Image.extend({
       href: {
         default: null,
         parseHTML: element => {
-          // 如果是 a 标签包裹的 img，提取 href
+          // If wrapped in an a tag, extract href
           const parent = element.parentElement
           if (parent?.tagName === 'A') {
             return parent.getAttribute('href')
@@ -65,7 +65,7 @@ export const LinkedImageExtension = Image.extend({
           const img = node as HTMLElement
           const parent = img.parentElement
 
-          // 如果是 a 标签包裹的 img，创建 linkedImage 节点
+          // If img is wrapped in an a tag, create linkedImage node
           if (parent?.tagName === 'A' && parent.hasAttribute('href')) {
             return {
               src: img.getAttribute('src'),
@@ -76,7 +76,7 @@ export const LinkedImageExtension = Image.extend({
             }
           }
 
-          // 处理普通图片
+          // Handle normal image
           return {
             src: img.getAttribute('src'),
             alt: img.getAttribute('alt'),
@@ -91,7 +91,7 @@ export const LinkedImageExtension = Image.extend({
     const { href, ...imgAttributes } = HTMLAttributes
 
     if (href) {
-      // 渲染为 a 标签包裹 img
+      // Render as img wrapped in a tag
       return [
         'a',
         {
@@ -103,7 +103,7 @@ export const LinkedImageExtension = Image.extend({
       ]
     }
 
-    // 普通图片
+    // Normal image
     return ['img', imgAttributes]
   },
 })

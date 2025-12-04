@@ -3,146 +3,146 @@ import { SuggestionItem } from '../types/types'
 
 export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => [
   {
-    title: '标题 1',
-    description: '大号标题',
+    title: 'Heading 1',
+    description: 'Large heading',
     icon: 'heading1',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run()
     },
-    keywords: ['h1', 'heading1', 'title', '标题', '大标题']
+    keywords: ['h1', 'heading1', 'title', 'large heading']
   },
   {
-    title: '标题 2',
-    description: '中号标题',
+    title: 'Heading 2',
+    description: 'Medium heading',
     icon: 'heading2',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run()
     },
-    keywords: ['h2', 'heading2', 'subtitle', '副标题', '中标题']
+    keywords: ['h2', 'heading2', 'subtitle', 'medium heading']
   },
   {
-    title: '标题 3',
-    description: '小号标题',
+    title: 'Heading 3',
+    description: 'Small heading',
     icon: 'heading3',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run()
     },
-    keywords: ['h3', 'heading3', 'small title', '小标题']
+    keywords: ['h3', 'heading3', 'small heading']
   },
   {
-    title: '文本',
-    description: '普通段落',
+    title: 'Text',
+    description: 'Normal paragraph',
     icon: 'paragraph',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).setParagraph().run()
     },
-    keywords: ['p', 'paragraph', '文本', '段落']
+    keywords: ['p', 'paragraph', 'text']
   },
   {
-    title: '粗体',
-    description: '加粗文本',
+    title: 'Bold',
+    description: 'Bold text',
     icon: 'bold',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBold().run()
     },
-    keywords: ['bold', '粗体', '加粗']
+    keywords: ['bold', 'strong']
   },
   {
-    title: '斜体',
-    description: '斜体文本',
+    title: 'Italic',
+    description: 'Italic text',
     icon: 'italic',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleItalic().run()
     },
-    keywords: ['italic', '斜体']
+    keywords: ['italic', 'em']
   },
   {
-    title: '代码',
-    description: '内联代码',
+    title: 'Code',
+    description: 'Inline code',
     icon: 'code',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleCode().run()
     },
-    keywords: ['code', 'inline code', '代码', '内联代码']
+    keywords: ['code', 'inline code']
   },
   {
-    title: '代码块',
-    description: '代码块',
+    title: 'Code Block',
+    description: 'Code block',
     icon: 'codeblock',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
     },
-    keywords: ['codeblock', '代码块']
+    keywords: ['codeblock', 'code block']
   },
   {
-    title: '引用',
-    description: '引用块',
+    title: 'Quote',
+    description: 'Quote block',
     icon: 'quote',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run()
     },
-    keywords: ['quote', 'blockquote', '引用']
+    keywords: ['quote', 'blockquote']
   },
   {
-    title: '无序列表',
-    description: '项目符号列表',
+    title: 'Bullet List',
+    description: 'Bullet list',
     icon: 'bulletlist',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run()
     },
-    keywords: ['ul', 'bullet list', '无序列表', '项目符号']
+    keywords: ['ul', 'bullet list', 'unordered list']
   },
   {
-    title: '有序列表',
-    description: '数字列表',
+    title: 'Ordered List',
+    description: 'Numbered list',
     icon: 'orderedlist',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run()
     },
-    keywords: ['ol', 'ordered list', '有序列表', '数字列表']
+    keywords: ['ol', 'ordered list', 'numbered list']
   },
   {
-    title: '任务列表',
-    description: '复选框列表',
+    title: 'Task List',
+    description: 'Checkbox list',
     icon: 'tasklist',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run()
     },
-    keywords: ['task list', 'todo', '任务列表', '待办事项']
+    keywords: ['task list', 'todo', 'checklist']
   },
   {
-    title: '表格',
-    description: '插入表格',
+    title: 'Table',
+    description: 'Insert table',
     icon: 'table',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
     },
-    keywords: ['table', '表格']
+    keywords: ['table']
   },
   {
-    title: '图片',
-    description: '插入图片',
+    title: 'Image',
+    description: 'Insert image',
     icon: 'image',
     command: ({ editor, range }) => {
       return { type: 'image', editor, range }
     },
-    keywords: ['image', 'img', '图片']
+    keywords: ['image', 'img', 'picture']
   },
   {
-    title: '链接',
-    description: '插入链接',
+    title: 'Link',
+    description: 'Insert link',
     icon: 'link',
     command: ({ editor, range }) => {
-      const url = window.prompt('请输入链接地址:')
+      const url = window.prompt('Enter link URL:')
       if (url) {
         editor.chain().focus().deleteRange(range).setLink({ href: url }).run()
       }
     },
-    keywords: ['link', 'url', '链接']
+    keywords: ['link', 'url']
   },
   {
-    title: 'Mermaid 图表',
-    description: '插入 Mermaid 图表',
+    title: 'Mermaid Diagram',
+    description: 'Insert Mermaid diagram',
     icon: 'mermaid',
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).insertContent({
@@ -150,32 +150,32 @@ export const getSuggestionItems = ({}: { editor: Editor }): SuggestionItem[] => 
         content: [
           {
             type: 'text',
-            text: 'graph TD\n  A[开始] --> B[处理数据]\n  B --> C{决策}\n  C -->|是| D[成功]\n  C -->|否| E[失败]\n  D --> F[结束]\n  E --> F'
+            text: 'graph TD\n  A[Start] --> B[Process Data]\n  B --> C{Decision}\n  C -->|Yes| D[Success]\n  C -->|No| E[Failure]\n  D --> F[End]\n  E --> F'
           }
         ]
       }).run()
     },
-    keywords: ['mermaid', 'diagram', 'chart', '图表', '流程图']
+    keywords: ['mermaid', 'diagram', 'chart', 'flowchart']
   },
   {
-    title: '行内数学公式',
-    description: '插入行内数学公式',
+    title: 'Inline Math',
+    description: 'Insert inline math formula',
     icon: 'math',
     command: ({ editor, range }) => {
-      // 返回特殊类型，由 SuggestionMenu 处理
+      // Return special type to be handled by SuggestionMenu
       return { type: 'math', editor, range, mathType: 'inline' }
     },
-    keywords: ['math', 'formula', 'latex', '数学', '公式', 'inline', '行内']
+    keywords: ['math', 'formula', 'latex', 'inline']
   },
   {
-    title: '块级数学公式',
-    description: '插入块级数学公式',
+    title: 'Block Math',
+    description: 'Insert block math formula',
     icon: 'math',
     command: ({ editor, range }) => {
-      // 返回特殊类型，由 SuggestionMenu 处理
+      // Return special type to be handled by SuggestionMenu
       return { type: 'math', editor, range, mathType: 'block' }
     },
-    keywords: ['math', 'formula', 'latex', '数学', '公式', 'block', '块级']
+    keywords: ['math', 'formula', 'latex', 'block']
   }
 ]
 

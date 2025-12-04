@@ -42,28 +42,28 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`notion-button ${editor.isActive('bold') ? 'notion-button-active' : ''}`}
-          title="粗体 (Ctrl+B)"
+          title="Bold (Ctrl+B)"
         >
           <Bold size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`notion-button ${editor.isActive('italic') ? 'notion-button-active' : ''}`}
-          title="斜体 (Ctrl+I)"
+          title="Italic (Ctrl+I)"
         >
           <Italic size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={`notion-button ${editor.isActive('underline') ? 'notion-button-active' : ''}`}
-          title="下划线 (Ctrl+U)"
+          title="Underline (Ctrl+U)"
         >
           <Underline size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={`notion-button ${editor.isActive('strike') ? 'notion-button-active' : ''}`}
-          title="删除线"
+          title="Strikethrough"
         >
           <Strikethrough size={16} />
         </button>
@@ -73,14 +73,14 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
         <button
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={`notion-button ${editor.isActive('code') ? 'notion-button-active' : ''}`}
-          title="内联代码"
+          title="Inline Code"
         >
           <Code size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           className={`notion-button ${editor.isActive('highlight') ? 'notion-button-active' : ''}`}
-          title="高亮"
+          title="Highlight"
         >
           <Highlighter size={16} />
         </button>
@@ -90,28 +90,28 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
         <button
           onClick={() => editor.chain().focus().setParagraph().run()}
           className={`notion-button ${editor.isActive('paragraph') ? 'notion-button-active' : ''}`}
-          title="段落"
+          title="Paragraph"
         >
           <Type size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           className={`notion-button ${editor.isActive('heading', { level: 1 }) ? 'notion-button-active' : ''}`}
-          title="标题 1"
+          title="Heading 1"
         >
           <Heading1 size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className={`notion-button ${editor.isActive('heading', { level: 2 }) ? 'notion-button-active' : ''}`}
-          title="标题 2"
+          title="Heading 2"
         >
           <Heading2 size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           className={`notion-button ${editor.isActive('heading', { level: 3 }) ? 'notion-button-active' : ''}`}
-          title="标题 3"
+          title="Heading 3"
         >
           <Heading3 size={16} />
         </button>
@@ -121,28 +121,28 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
         <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={`notion-button ${editor.isActive('bulletList') ? 'notion-button-active' : ''}`}
-          title="无序列表"
+          title="Bullet List"
         >
           <List size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={`notion-button ${editor.isActive('orderedList') ? 'notion-button-active' : ''}`}
-          title="有序列表"
+          title="Ordered List"
         >
           <ListOrdered size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleTaskList().run()}
           className={`notion-button ${editor.isActive('taskList') ? 'notion-button-active' : ''}`}
-          title="任务列表"
+          title="Task List"
         >
           <SquareCheck size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={`notion-button ${editor.isActive('blockquote') ? 'notion-button-active' : ''}`}
-          title="引用"
+          title="Quote"
         >
           <Quote size={16} />
         </button>
@@ -152,21 +152,21 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
         <button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={`notion-button ${editor.isActive('codeBlock') ? 'notion-button-active' : ''}`}
-          title="代码块"
+          title="Code Block"
         >
           <Code2 size={16} />
         </button>
         <button
           onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
           className={`notion-button ${editor.isActive('table') ? 'notion-button-active' : ''}`}
-          title="表格"
+          title="Table"
         >
           <Table size={16} />
         </button>
         <button
           onClick={() => setShowImageDialog(true)}
           className="notion-button"
-          title="插入图片"
+          title="Insert Image"
         >
           <Image size={16} />
         </button>
@@ -176,7 +176,7 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
             setShowMathDialog(true)
           }}
           className="notion-button"
-          title="插入行内数学公式"
+          title="Insert Inline Math"
         >
           <Sigma size={16} />
         </button>
@@ -186,19 +186,19 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
             setShowMathDialog(true)
           }}
           className="notion-button"
-          title="插入块级数学公式"
+          title="Insert Block Math"
         >
           <SquareSigma size={16} />
         </button>
         <button
           onClick={() => {
-            const url = window.prompt('请输入链接 URL:')
+            const url = window.prompt('Enter link URL:')
             if (url) {
               editor.chain().focus().setLink({ href: url }).run()
             }
           }}
           className={`notion-button ${editor.isActive('link') ? 'notion-button-active' : ''}`}
-          title="插入链接"
+          title="Insert Link"
         >
           <Link size={16} />
         </button>
@@ -209,13 +209,13 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
               content: [
                 {
                   type: 'text',
-                  text: 'graph TD\n  A[开始] --> B[处理数据]\n  B --> C{决策}\n  C -->|是| D[成功]\n  C -->|否| E[失败]\n  D --> F[结束]\n  E --> F'
+                  text: 'graph TD\n  A[Start] --> B[Process Data]\n  B --> C{Decision}\n  C -->|Yes| D[Success]\n  C -->|No| E[Failure]\n  D --> F[End]\n  E --> F'
                 }
               ]
             }).run()
           }}
           className="notion-button"
-          title="插入 Mermaid 图表"
+          title="Insert Mermaid Diagram"
         >
           <Workflow size={16} />
         </button>
@@ -227,8 +227,8 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
         onConfirm={(url) => {
           editor.chain().focus().setImage({ src: url }).run()
         }}
-        title="插入图片"
-        placeholder="请输入图片 URL"
+        title="Insert Image"
+        placeholder="Enter image URL"
       />
 
       <FormulaDialog
@@ -241,8 +241,8 @@ const MenuBar: React.FC<MenuBarProps> = ({ editor }) => {
             editor.chain().focus().insertBlockMath({ latex: formula }).run()
           }
         }}
-        title={mathType === 'inline' ? '插入行内数学公式' : '插入块级数学公式'}
-        placeholder="请输入 LaTeX 公式"
+        title={mathType === 'inline' ? 'Insert Inline Math' : 'Insert Block Math'}
+        placeholder="Enter LaTeX formula"
         mathType={mathType}
       />
 

@@ -43,12 +43,12 @@ class MarkdownEditorProvider {
     async resolveCustomTextEditor(document, webviewPanel, _token) {
         console.log(`🔧 Resolving custom editor for: ${document.uri.toString()}`);
         // Setup initial content for the webview
-        // 构建允许访问的资源根目录
+        // Build allowed resource root directories
         const localResourceRoots = [
             vscode.Uri.joinPath(this.context.extensionUri, 'dist'),
             vscode.Uri.joinPath(this.context.extensionUri, 'assets'),
         ];
-        // 添加工作区文件夹
+        // Add workspace folders
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (workspaceFolders) {
             workspaceFolders.forEach(folder => {
@@ -56,7 +56,7 @@ class MarkdownEditorProvider {
             });
         }
         else {
-            // 如果没有工作区，添加文档所在目录
+            // If no workspace, add document's directory
             const documentDir = vscode.Uri.joinPath(document.uri, '..');
             localResourceRoots.push(documentDir);
         }
