@@ -44,6 +44,10 @@
   font-size: 1.3em;
 }
 
+.ProseMirror h4 {
+  font-size: 1.1em;
+}
+
 .ProseMirror ul,
 .ProseMirror ol {
   margin: 0 0 1em 0;
