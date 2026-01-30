@@ -20,7 +20,7 @@ export const MarkdownInputRule = Extension.create({
         const { $from } = selection
 
         // 获取段落开始到光标位置的内容
-        const paragraphStart = $from.start
+        const paragraphStart = $from.start()
         const from = $from.pos
 
         if (from <= paragraphStart) {

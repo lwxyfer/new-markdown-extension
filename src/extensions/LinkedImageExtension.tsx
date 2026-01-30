@@ -12,13 +12,14 @@ export const LinkedImageExtension = Image.extend({
 
   addAttributes() {
     return {
+      // @ts-ignore
       ...this.parent?.(),
       src: {
         default: null,
-        parseHTML: element => {
+        parseHTML: (element: HTMLElement) => {
           return element.getAttribute('src')
         },
-        renderHTML: attributes => {
+        renderHTML: (attributes: { src: string | null; alt?: string; title?: string }) => {
           if (!attributes.src) {
             return {}
           }
@@ -31,7 +32,7 @@ export const LinkedImageExtension = Image.extend({
       },
       href: {
         default: null,
-        parseHTML: element => {
+        parseHTML: (element: HTMLElement) => {
           // 如果是 a 标签包裹的 img，提取 href
           const parent = element.parentElement
           if (parent?.tagName === 'A') {
@@ -39,7 +40,7 @@ export const LinkedImageExtension = Image.extend({
           }
           return null
         },
-        renderHTML: attributes => {
+        renderHTML: (attributes: { href: string | null }) => {
           if (!attributes.href) {
             return {}
           }
@@ -61,7 +62,7 @@ export const LinkedImageExtension = Image.extend({
     return [
       {
         tag: 'img',
-        getAttrs: node => {
+        getAttrs: (node: HTMLElement) => {
           const img = node as HTMLElement
           const parent = img.parentElement
 
@@ -87,7 +88,7 @@ export const LinkedImageExtension = Image.extend({
     ]
   },
 
-  renderHTML({ node, HTMLAttributes }) {
+  renderHTML({ node, HTMLAttributes }: { node: any; HTMLAttributes: Record<string, any> }) {
     const { href, ...imgAttributes } = HTMLAttributes
 
     if (href) {
