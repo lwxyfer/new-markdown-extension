@@ -29,6 +29,7 @@ import { MathematicsExtension } from '../extensions/MathematicsExtension'
 import { SearchHighlightExtension } from '../extensions/SearchHighlightExtension'
 import { KeyboardShortcutsExtension } from '../extensions/KeyboardShortcutsExtension'
 import { ParagraphBehaviorExtension } from '../extensions/ParagraphBehaviorExtension'
+import { MarkdownInputRule } from '../extensions/MarkdownInputRule'
 import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { isReadyMessage } from '../core/messageTypes'
 
@@ -74,6 +75,7 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
         },
       }),
       ParagraphBehaviorExtension,
+      MarkdownInputRule,
       KeyboardShortcutsExtension,
       CodeBlockExtension,
       Table.configure({
