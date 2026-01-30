@@ -27,6 +27,8 @@ import BubbleMenuExtension from '../extensions/BubbleMenuExtension'
 import { LinkedImageExtension } from '../extensions/LinkedImageExtension'
 import { MathematicsExtension } from '../extensions/MathematicsExtension'
 import { SearchHighlightExtension } from '../extensions/SearchHighlightExtension'
+import { KeyboardShortcutsExtension } from '../extensions/KeyboardShortcutsExtension'
+import { ParagraphBehaviorExtension } from '../extensions/ParagraphBehaviorExtension'
 import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { isReadyMessage } from '../core/messageTypes'
 
@@ -45,7 +47,7 @@ interface VSCodeMarkdownEditorProps {
 
 const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialContent }) => {
   const [isLoading, setIsLoading] = useState(true)
-  const [isTocCollapsed, setIsTocCollapsed] = useState(false)
+  const [isTocCollapsed, setIsTocCollapsed] = useState(true)
   const [tocItems, setTocItems] = useState<any[]>([])
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -58,12 +60,21 @@ const VSCodeMarkdownEditor: React.FC<VSCodeMarkdownEditorProps> = ({ initialCont
     extensions: [
       StarterKit.configure({
         codeBlock: false,
+        paragraph: false, // 禁用默认 paragraph，使用自定义的
         heading: {
           HTMLAttributes: {
             class: 'heading',
           },
         },
+        hardBreak: {
+          keepMarks: false,
+          HTMLAttributes: {
+            class: 'hard-break',
+          },
+        },
       }),
+      ParagraphBehaviorExtension,
+      KeyboardShortcutsExtension,
       CodeBlockExtension,
       Table.configure({
         resizable: true,
