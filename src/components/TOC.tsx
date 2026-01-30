@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Editor } from '@tiptap/react'
 import { List, ChevronRight } from 'lucide-react'
 
@@ -9,16 +9,20 @@ interface TOCProps {
 }
 
 const TOC: React.FC<TOCProps> = ({ editor, tocItems, onToggle }) => {
-  // 有标题数据时默认展开，无标题时默认折叠
-  const [isCollapsed, setIsCollapsed] = useState(tocItems.length === 0)
+  // 无论有无标题，默认折叠
+  const [isCollapsed, setIsCollapsed] = useState(true)
   const [activeItemId, setActiveItemId] = useState<string | null>(null)
+  const prevTocItemsLength = useRef(tocItems.length)
 
   // 监听标题数据变化，当从无标题变为有标题时自动展开
   useEffect(() => {
-    if (tocItems.length > 0 && isCollapsed) {
+    // 只有当标题从无变为有时才自动展开
+    if (prevTocItemsLength.current === 0 && tocItems.length > 0 && isCollapsed) {
       setIsCollapsed(false)
       onToggle?.(false)
     }
+    // 更新引用值
+    prevTocItemsLength.current = tocItems.length
   }, [tocItems.length, isCollapsed, onToggle])
 
   useEffect(() => {

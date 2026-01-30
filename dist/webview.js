@@ -43037,6 +43037,7 @@ ${renderedContent}
     const actualSetSelectedIndex = hasExternalSetSelectedIndex ? setSelectedIndex : setInternalSelectedIndex;
     const actualSelectedIndex = hasExternalSetSelectedIndex ? selectedIndex : internalSelectedIndex;
     reactExports$1.useEffect(() => {
+      if (items.length === 0) return;
       const handleKeyDown2 = (event2) => {
         if (event2.key === "ArrowUp") {
           event2.preventDefault();
@@ -43476,13 +43477,15 @@ ${renderedContent}
     ] });
   };
   const TOC = ({ editor, tocItems, onToggle }) => {
-    const [isCollapsed, setIsCollapsed] = reactExports$1.useState(tocItems.length === 0);
+    const [isCollapsed, setIsCollapsed] = reactExports$1.useState(true);
     const [activeItemId, setActiveItemId] = reactExports$1.useState(null);
+    const prevTocItemsLength = reactExports$1.useRef(tocItems.length);
     reactExports$1.useEffect(() => {
-      if (tocItems.length > 0 && isCollapsed) {
+      if (prevTocItemsLength.current === 0 && tocItems.length > 0 && isCollapsed) {
         setIsCollapsed(false);
         onToggle == null ? void 0 : onToggle(false);
       }
+      prevTocItemsLength.current = tocItems.length;
     }, [tocItems.length, isCollapsed, onToggle]);
     reactExports$1.useEffect(() => {
       if (!editor || tocItems.length === 0) return;
@@ -49586,6 +49589,14 @@ ${renderedContent}
     }
     return originalFence(tokens2, idx, options, env, self2);
   };
+  const originalParagraph = md.renderer.rules.paragraph;
+  md.renderer.rules.paragraph = (tokens2, idx, options, env, self2) => {
+    const token2 = tokens2[idx];
+    if (!token2.content || token2.content.trim() === "") {
+      return "<p></p>";
+    }
+    return originalParagraph(tokens2, idx, options, env, self2);
+  };
   const originalInline = md.renderer.rules.inline;
   md.renderer.rules.inline = (tokens2, idx, options, env, self2) => {
     const token2 = tokens2[idx];
@@ -49925,7 +49936,7 @@ $$`;
     });
     console.log("🔄 [htmlToMarkdown] After manual processing:");
     console.log("📄 Processed HTML:", processedHtml);
-    const result = processedHtml.replace(/<p><br><br class="ProseMirror-trailingBreak"><\/p>/g, "").replace(/<p><br class="ProseMirror-trailingBreak"><\/p>/g, "").replace(/<p[^>]*><br[^>]*><\/p>/g, "").replace(/<\/div><p><br><br class="ProseMirror-trailingBreak"><\/p><div/g, "</div><div").replace(/<a[^>]*data-github-badge[^>]*>.*?<\/a>\s*<br>\s*<a[^>]*data-github-badge[^>]*>/g, (match2) => {
+    const result = processedHtml.replace(/<p><br><br class="ProseMirror-trailingBreak"><\/p>/g, "").replace(/<p><br class="ProseMirror-trailingBreak"><\/p>/g, "").replace(/<\/div><p><br><br class="ProseMirror-trailingBreak"><\/p><div/g, "</div><div").replace(/<a[^>]*data-github-badge[^>]*>.*?<\/a>\s*<br>\s*<a[^>]*data-github-badge[^>]*>/g, (match2) => {
       return match2.replace(/<br>/g, "");
     }).replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/g, (_match, level, content) => {
       const hashes = "#".repeat(parseInt(level));
@@ -83491,12 +83502,74 @@ $$`;
       };
     }
   });
+  const KeyboardShortcutsExtension = Extension.create({
+    name: "keyboardShortcuts",
+    addKeyboardShortcuts() {
+      return {
+        "Enter": ({ editor }) => {
+          console.log("KeyboardShortcutsExtension: Enter key pressed");
+          const { state: state2 } = editor;
+          const { selection: selection2 } = state2;
+          const { $from } = selection2;
+          const isEmptyParagraph = $from.parent.type.name === "paragraph" && $from.parent.content.size === 0;
+          const isAtStartOfParagraph = $from.parentOffset === 0;
+          if (isEmptyParagraph && isAtStartOfParagraph) {
+            console.log("KeyboardShortcutsExtension: Empty paragraph at start, creating new paragraph");
+            const result2 = editor.commands.splitBlock({ keepMarks: false });
+            return result2;
+          }
+          const result = editor.commands.splitBlock({ keepMarks: false });
+          return result;
+        },
+        "Shift-Enter": ({ editor }) => {
+          console.log("KeyboardShortcutsExtension: Shift+Enter key pressed");
+          return editor.commands.setHardBreak();
+        }
+      };
+    }
+  });
+  const ParagraphBehaviorExtension = Paragraph.extend({
+    addKeyboardShortcuts() {
+      return {
+        "Enter": ({ editor }) => {
+          const { state: state2 } = editor;
+          const { selection: selection2 } = state2;
+          const { $from, $to } = selection2;
+          const isEmptyParagraph = $from.parent.type.name === "paragraph" && $from.parent.content.size === 0;
+          const isAtStartOfParagraph = $from.parentOffset === 0 && $from.index($from.depth) === 0;
+          const isAtEndOfParagraph = $to.parentOffset === $from.parent.content.size;
+          console.log("Enter key pressed:", {
+            isEmptyParagraph,
+            isAtStartOfParagraph,
+            isAtEndOfParagraph,
+            parentType: $from.parent.type.name,
+            parentContentSize: $from.parent.content.size,
+            parentOffset: $from.parentOffset
+          });
+          const result = editor.commands.splitBlock({ keepMarks: false });
+          if (result) {
+            editor.commands.insertContent("​");
+          } else if (isEmptyParagraph) {
+            const paraResult = editor.commands.createParagraphNear();
+            if (paraResult) {
+              editor.commands.insertContent("​");
+            }
+            return paraResult;
+          }
+          return result;
+        },
+        "Shift-Enter": ({ editor }) => {
+          return editor.commands.setHardBreak();
+        }
+      };
+    }
+  });
   function isReadyMessage(message) {
     return message.type === "ready";
   }
   const VSCodeMarkdownEditor = ({ initialContent: initialContent2 }) => {
     const [isLoading, setIsLoading] = reactExports$1.useState(true);
-    const [isTocCollapsed, setIsTocCollapsed] = reactExports$1.useState(false);
+    const [isTocCollapsed, setIsTocCollapsed] = reactExports$1.useState(true);
     const [tocItems, setTocItems] = reactExports$1.useState([]);
     const [isSearchOpen, setIsSearchOpen] = reactExports$1.useState(false);
     const [searchQuery, setSearchQuery] = reactExports$1.useState("");
@@ -83508,12 +83581,22 @@ $$`;
       extensions: [
         StarterKit.configure({
           codeBlock: false,
+          paragraph: false,
+          // 禁用默认 paragraph，使用自定义的
           heading: {
             HTMLAttributes: {
               class: "heading"
             }
+          },
+          hardBreak: {
+            keepMarks: false,
+            HTMLAttributes: {
+              class: "hard-break"
+            }
           }
         }),
+        ParagraphBehaviorExtension,
+        KeyboardShortcutsExtension,
         CodeBlockExtension,
         Table$1.configure({
           resizable: true

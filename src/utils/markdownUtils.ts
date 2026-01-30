@@ -27,6 +27,20 @@ md.renderer.rules.fence = (tokens, idx, options, env, self) => {
   return originalFence!(tokens, idx, options, env, self)
 }
 
+// 保存原始的段落渲染规则
+const originalParagraph = md.renderer.rules.paragraph
+
+// 自定义段落渲染规则以保留空段落
+md.renderer.rules.paragraph = (tokens, idx, options, env, self) => {
+  const token = tokens[idx]
+  // 如果段落内容为空，仍然渲染空段落
+  if (!token.content || token.content.trim() === '') {
+    return '<p></p>'
+  }
+  // 否则使用原始渲染规则
+  return originalParagraph!(tokens, idx, options, env, self)
+}
+
 // 保存原始的 inline 渲染规则
 const originalInline = md.renderer.rules.inline
 
@@ -509,10 +523,10 @@ export const htmlToMarkdown = (html: string): string => {
   // 直接返回手动处理的结果，跳过 HTML 清理
   // 因为我们已经手动处理了所有数学公式
   const result = processedHtml
-    // 移除尾部空白元素
+    // 移除尾部空白元素（只移除包含 ProseMirror-trailingBreak 的段落）
     .replace(/<p><br><br class="ProseMirror-trailingBreak"><\/p>/g, '')
     .replace(/<p><br class="ProseMirror-trailingBreak"><\/p>/g, '')
-    .replace(/<p[^>]*><br[^>]*><\/p>/g, '')
+    // 保留普通的空段落 <p><br></p>，它们表示用户创建的空行
     // 移除组件之间的尾部空白
     .replace(/<\/div><p><br><br class="ProseMirror-trailingBreak"><\/p><div/g, '</div><div')
     // 处理图片链接之间的 br 标签 - 完全移除

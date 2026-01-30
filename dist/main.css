@@ -18,6 +18,7 @@
 
 .ProseMirror p {
   margin: 0 0 1em 0;
+  min-height: 1.6em;
 }
 
 .ProseMirror h1,
@@ -473,13 +474,20 @@
   padding: 0 !important;
 }
 
-/* 隐藏空的段落 */
-.ProseMirror p:empty,
-.ProseMirror p:has(> br:only-child),
-.ProseMirror p:has(> .ProseMirror-trailingBreak) {
+/* 隐藏尾部空白元素 */
+.ProseMirror .ProseMirror-trailingBreak {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+}
+
+/* 空段落只显示为一个换行的高度 */
+.ProseMirror p > br:only-child {
+  display: block;
+  margin: 0;
+  padding: 0;
+  height: 1.6em;
+  content: '';
 }

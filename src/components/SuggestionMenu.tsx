@@ -62,6 +62,9 @@ const SuggestionMenu: React.FC<SuggestionMenuProps> = ({ items, command, selecte
   const actualSelectedIndex = hasExternalSetSelectedIndex ? selectedIndex : internalSelectedIndex
 
   useEffect(() => {
+    // 只有在有菜单项时才添加键盘事件监听器
+    if (items.length === 0) return
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowUp') {
         event.preventDefault()
